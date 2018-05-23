@@ -6344,9 +6344,9 @@ ts-simple-ast@^0.86.0:
     object-assign "^4.1.1"
     typescript "2.6.1"
 
-ts-smart-logger@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/ts-smart-logger/-/ts-smart-logger-0.0.4.tgz#1bac7e34ed54d3b9a01ee0ff6aa8853e8e6882d3"
+ts-smart-logger@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ts-smart-logger/-/ts-smart-logger-0.1.0.tgz#e7919ee96eacd5760b444ac69a523341deec438b"
 
 tsickle@^0.21.0:
   version "0.21.6"
