@@ -3984,7 +3984,7 @@ machine@^10.3.1:
     rttc "^7.2.1"
     switchback "^2.0.0"
 
-machine@^13.0.0-11, machine@^13.0.0-17:
+machine@^13.0.0-11:
   version "13.0.0-24"
   resolved "https://registry.yarnpkg.com/machine/-/machine-13.0.0-24.tgz#50b0fa4a71db571fcddda5b1c5e2605a83144087"
   dependencies:
@@ -3994,6 +3994,16 @@ machine@^13.0.0-11, machine@^13.0.0-17:
     include-all "^1.0.5"
     rttc "^9.8.1"
     switchback "^2.0.1"
+
+machine@^15.0.0:
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/machine/-/machine-15.0.1.tgz#e7fe47c0208ff35b752bba45d4b887de704eee00"
+  dependencies:
+    "@sailshq/lodash" "^3.10.2"
+    anchor "^1.2.0"
+    flaverr "^1.7.0"
+    parley "^3.1.0"
+    rttc "^10.0.0-3"
 
 machine@^15.0.0-19, machine@^15.0.0-21, machine@^15.0.0-5:
   version "15.0.0-24"
@@ -5639,13 +5649,13 @@ sails-hook-sockets@^1.5.2:
     uid2 "0.0.3"
 
 sails-mongo@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/sails-mongo/-/sails-mongo-1.0.0.tgz#e72d44daad68697a5ded12a7cc9141b981a66654"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/sails-mongo/-/sails-mongo-1.0.1.tgz#ce005749b629439654e2b027dea4d30e0c69abc6"
   dependencies:
     "@sailshq/lodash" "^3.10.2"
     async "2.0.1"
     flaverr "1.1.1"
-    machine "^13.0.0-17"
+    machine "^15.0.0"
     mongodb "2.2.25"
     qs "6.4.0"
 
