@@ -1956,9 +1956,13 @@ ejs-cli@^2.0.1:
     mkdirp "^0.5.1"
     optimist "~0.5.2"
 
-ejs@2.5.7, ejs@2.x:
+ejs@2.5.7:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.5.7.tgz#cc872c168880ae3c7189762fd5ffc00896c9518a"
+
+ejs@2.6.1, ejs@2.x:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
 
 electron-to-chromium@^1.3.30:
   version "1.3.41"
