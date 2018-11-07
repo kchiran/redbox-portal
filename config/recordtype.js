@@ -292,25 +292,6 @@ module.exports.recordtype = {
     hooks: {
       onCreate: {
         pre: [
-          //Transition workflow from queued to reviewing. TODO: Condition needs to be changed to check when staging location set
-          {
-            function: 'sails.services.triggerservice.transitionWorkflow',
-            options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'queued') && _.isEqual(metadata.embargoByDate, '')  %>",
-              "targetWorkflowStageName": "reviewing",
-              "targetWorkflowStageLabel": "Reviewing",
-              "targetForm": "dataPublication-1.0-reviewing"
-            }
-          },
-          {
-            function: 'sails.services.triggerservice.transitionWorkflow',
-            options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'queued') && _.isEqual(metadata.embargoByDate, true) %>",
-              "targetWorkflowStageName": "embargoed",
-              "targetWorkflowStageLabel": "Embargoed",
-              "targetForm": "dataPublication-1.0-embargoed"
-            }
-          },
           // Set the notification state for draft publications
           {
             function: 'sails.services.recordsservice.updateNotificationLog',
@@ -325,6 +306,17 @@ module.exports.recordtype = {
           }
         ],
         post: [
+          // push the dataset to the staging web server
+          // this needs to be defined here for the case when the user goes straight
+          // to reviewing without saving first 
+          {
+            function: 'sails.services.publicationservice.exportDataset',
+            options: {
+              triggerCondition: "<%= record.workflow.stage=='reviewing' %>",
+              site: 'staging'
+            }
+          },
+ 
           // `Email "data publication is staged" notification to FNCI, DM, Supervisor with link to landing page on Staging`
           {
             function: 'sails.services.emailservice.sendRecordNotification',
@@ -386,35 +378,6 @@ module.exports.recordtype = {
       // Update configuration
       onUpdate: {
         pre: [
-          //Transition workflow from queued to reviewing. TODO: Condition needs to be changed to check when staging location set
-          {
-            function: 'sails.services.triggerservice.transitionWorkflow',
-            options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'queued') && _.isEqual(metadata.embargoByDate, '') %>",
-              "targetWorkflowStageName": "reviewing",
-              "targetWorkflowStageLabel": "Reviewing",
-              "targetForm": "dataPublication-1.0-reviewing"
-            }
-          },
-          {
-            function: 'sails.services.triggerservice.transitionWorkflow',
-            options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'queued') && _.isEqual(metadata.embargoByDate, true) %>",
-              "targetWorkflowStageName": "embargoed",
-              "targetWorkflowStageLabel": "Embargoed",
-              "targetForm": "dataPublication-1.0-embargoed"
-            }
-          },
-          //Transition workflow from publishing to published. TODO: Condition needs to be changed to check when published location set
-          {
-            function: 'sails.services.triggerservice.transitionWorkflow',
-            options: {
-              "triggerCondition": "<%= workflow.stage == 'publishing'%>",
-              "targetWorkflowStageName": "published",
-              "targetWorkflowStageLabel": "Published",
-              "targetForm": "dataPublication-1.0-published"
-            }
-          },
           // Set the notification state for draft publications
           {
             function: 'sails.services.recordsservice.updateNotificationLog',
@@ -429,6 +392,7 @@ module.exports.recordtype = {
           }
         ],
         post: [
+          // push the dataset to the staging web server
           {
             function: 'sails.services.publicationservice.exportDataset',
             options: {
