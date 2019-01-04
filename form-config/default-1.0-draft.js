@@ -288,16 +288,23 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'RepeatableContainer',
-                  compClass: 'RepeatableTextfieldComponent',
+                  class: 'RepeatableVocab',
+                  compClass: 'RepeatableVocabComponent',
                   definition: {
                     name: 'foaf:fundedBy_vivo:Grant',
                     label: '@dmpt-foaf:fundedBy_vivo:Grant',
                     help: '@dmpt-foaf:fundedBy_vivo:Grant-help',
+                    forceClone: ['lookupService', 'completerService'],
                     fields: [{
-                      class: 'TextField',
+                      class: 'VocabField',
                       definition: {
-                        type: 'text'
+                        disableEditAfterSelect: false,
+                        vocabId: '\"Research Activities\"',
+                        sourceType: 'mint',
+                        fieldNames: ['dc_title', 'grant_number', 'foaf_name', 'dc_identifier', 'known_ids', 'repository_name'],
+                        searchFields: 'grant_number,dc_title',
+                        titleFieldArr: ['grant_number', 'dc_title'],
+                        stringLabelToField: 'dc_title'
                       }
                     }],
                     publish: {
@@ -308,20 +315,6 @@ module.exports = {
                           },
                           {
                             'dc_title': 'dc_title'
-                          }
-                        ]
-                      }
-                    },
-                    subscribe: {
-                      title: {
-                        onItemSelect: [{
-                            action: 'reset'
-                          },
-                          {
-                            action: 'utilityService.splitArrayStringsToArray',
-                            field: 'folio',
-                            regex: ',|;',
-                            flags: 'i'
                           }
                         ]
                       }

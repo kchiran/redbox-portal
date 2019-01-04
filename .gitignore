@@ -40,8 +40,8 @@
 ################################################
 
 config/local.js
-
-
+devdata/redbox1/*
+devdata/redbox2/*
 
 
 
