@@ -26,6 +26,7 @@ declare var Form: Model;
 declare var RecordType: Model;
 declare var WorkflowStep: Model;
 declare var _this;
+declare var _;
 
 export module Services {
   /**
@@ -52,12 +53,11 @@ export module Services {
       let formDefs = [];
       return super.getObservable(startQ)
       .flatMap(form => {
-        sails.log.verbose("Found : ");
-        sails.log.verbose(form);
         if (!form || form.length == 0) {
           sails.log.verbose("Bootstrapping form definitions..");
           // only bootstrap the form for this workflow step
           _.forOwn(sails.config.form.forms, (formDef, formName) => {
+            sails.log.verbose(formName);
             if (formName == workflowStep.config.form){
               formDefs.push(formName);
             }
@@ -66,6 +66,8 @@ export module Services {
           sails.log.verbose(JSON.stringify(formDefs));
           return Observable.from(formDefs);
         } else {
+          sails.log.verbose("Found : ");
+          sails.log.verbose(form);
           sails.log.verbose("Not Bootstrapping form definitions... ");
           return Observable.of(null);
         }

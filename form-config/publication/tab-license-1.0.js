@@ -30,7 +30,7 @@ module.exports = [
                   label: "@dmpt-select:Empty"
               },
               {
-                  "value": "http://creativecommons.org/licenses/by/3.0/au",
+                  value: "http://creativecommons.org/licenses/by/3.0/au",
                   label: "CC BY: Attribution 3.0 AU"
               },
               {

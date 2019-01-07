@@ -5,19 +5,19 @@
 // import the common publication tabs
 //
 var _ = require('lodash');
-var mainViewOnly = require('../form-config/publication/header-view-only-1.0.js');
-var mainTab = require('../form-config/publication/tab-main-1.0.js');
+var mainViewOnly = require('./publication/header-view-only-1.0.js');
+var mainTab = require('./publication/tab-main-1.0.js');
 // Non-draft specific footer
-var footer = require('../form-config/publication/footer-non-draft-1.0.js');
+var footer = require('./publication/footer-non-draft-1.0.js');
 // Start building the main tab and child tabs...
-var startTab = require('../form-config/publication/tab-start-1.0.js');
-var coverageTab = require('../form-config/publication/tab-coverage-1.0.js');
-var dataTab = require('../form-config/publication/tab-data-1.0.js');
-var supplementsTab = require('../form-config/publication/tab-supplements-1.0.js');
-var licenseTab = require('../form-config/publication/tab-license-1.0.js');
-var citationTab = require('../form-config/publication/tab-citation-1.0.js');
-var submitTab = require('../form-config/publication/tab-submit-1.0.js');
-var reviewerTab = require('../form-config/publication/tab-reviewer-1.0.js');
+var startTab = require('./publication/tab-start-1.0.js');
+var coverageTab = require('./publication/tab-coverage-1.0.js');
+var dataTab = require('./publication/tab-data-1.0.js');
+var supplementsTab = require('./publication/tab-supplements-1.0.js');
+var licenseTab = require('./publication/tab-license-1.0.js');
+var citationTab = require('./publication/tab-citation-1.0.js');
+var submitTab = require('./publication/tab-submit-1.0.js');
+var reviewerTab = require('./publication/tab-reviewer-1.0.js');
 mainTab[0].definition.fields = _.concat(startTab, coverageTab, dataTab, supplementsTab, licenseTab, citationTab, submitTab, reviewerTab);
 // now buid the main elements of the form....
 var fields = _.concat(mainViewOnly, mainTab, footer);

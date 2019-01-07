@@ -1,0 +1,24 @@
+/* add typography
+
+don't need this one. Couldnt get a light version so using png instead */
+/* @font-face{font-family:'NB International';
+src:url("http://www.uts.edu.au/themes/uts_theme/src/vendor/neubauberlin/nb_international_pro_regular-webfont.woff2") format("woff2"),
+url("http://www.uts.edu.au/themes/uts_theme/src/vendor/neubauberlin/nb_international_pro_regular-webfont.woff") format("woff");font-weight:normal;
+*/
+
+@font-face{
+  font-family:'NB Akademie Std';
+  src:url("nb_akademie_std_regular-webfont.woff2") format("woff2"),
+  url("nb_akademie_std_regular-webfont.woff") format("woff");font-weight:normal;
+}
+/* rc:url("http://www.uts.edu.au/themes/uts_theme/src/vendor/neubauberlin/nb_akademie_std_regular-webfont.woff2") format("woff2"),
+  url("http://www.uts.edu.au/themes/uts_theme/src/vendor/neubauberlin/nb_akademie_std_regular-webfont.woff") format("woff");font-weight:normal;
+*/
+@font-face{font-family:'NB Akademie Std';
+src:url("nb_akademie_std_bold-webfont.woff2") format("woff2"),
+url("nb_akademie_std_bold-webfont.woff") format("woff");font-weight:bold;
+}
+/*
+src:url("http://www.uts.edu.au/themes/uts_theme/src/vendor/neubauberlin/nb_akademie_std_bold-webfont.woff2") format("woff2"),
+url("http://www.uts.edu.au/themes/uts_theme/src/vendor/neubauberlin/nb_akademie_std_bold-webfont.woff") format("woff");font-weight:bold;
+*/
