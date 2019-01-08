@@ -1178,7 +1178,8 @@ module.exports = {
               prevLabel: "@tab-nav-previous",
               nextLabel: "@tab-nav-next",
               targetTabContainerId: "mainTab",
-              cssClasses: 'btn btn-primary'
+              cssClasses: 'btn btn-primary',
+              endDisplayMode: 'hidden'
             }
           },
           {

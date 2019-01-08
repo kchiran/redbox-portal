@@ -117,10 +117,19 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'Container',
+                  compClass: 'TextBlockComponent',
+                  editOnly: true,
+                  definition: {
+                    value: 'TIP: If there is a Research Data Management Plan (RDMP) for the data, choose it here to pre-fill form.  Else, complete Project details below.',
+                    type: 'h5'
+                  }
+                },
+                {
                   class: 'RelatedObjectSelector',
                   compClass: 'RelatedObjectSelectorComponent',
                   definition: {
-                    label: 'TIP: If there is a Research Data Management Plan (RDMP) for the data, choose it here to pre-fill form.  Else, complete Project details below.',
+                    label: 'Related Project',
                     name: 'rdmp',
                     help: '@dataRecord-chooseRDMP-help',
                     recordType: 'rdmp',
@@ -815,6 +824,7 @@ module.exports = {
                     name: "disposalDate",
                     label: "@dataRecord-disposalDate",
                     help: '@dataRecord-disposalDate-help',
+                    required: true,
                     datePickerOpts: {
                       format: 'dd/mm/yyyy',
                       startView: 2,
@@ -943,7 +953,8 @@ module.exports = {
               prevLabel: "@tab-nav-previous",
               nextLabel: "@tab-nav-next",
               targetTabContainerId: "mainTab",
-              cssClasses: 'btn btn-primary'
+              cssClasses: 'btn btn-primary',
+              endDisplayMode: 'hidden'
             }
           },
           {
