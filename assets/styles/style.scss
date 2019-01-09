@@ -43,6 +43,10 @@ $maincontent-heading-text-branding-color:  #000;
           border-radius: 0 !important;
 }
 
+* {
+    margin: 0;
+}
+
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_glyphicons";
 @import "../../node_modules/font-awesome-sass/assets/stylesheets/_font-awesome";
