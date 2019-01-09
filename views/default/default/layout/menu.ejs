@@ -13,7 +13,7 @@
         <ul class="nav navbar-nav">
           <% if (req.isAuthenticated()) {
             %>
-            <li class="active"><a href="<%= BrandingService.getBrandAndPortalPath(req) %>/researcher/home"><%= TranslationService.t('menu-home')%></a></li>
+            <li class=""><a href="<%= BrandingService.getBrandAndPortalPath(req) %>/researcher/home"><%= TranslationService.t('menu-home')%></a></li>
 
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= TranslationService.t('menu-plan-nav')%>
@@ -65,7 +65,7 @@
             </form>
           </li>
           <%  } else { %>
-            <li class="active"><a href="<%= BrandingService.getBrandAndPortalPath(req) %>/home"><%= TranslationService.t('menu-home') %></a></li>
+            <li class=""><a href="<%= BrandingService.getBrandAndPortalPath(req) %>/home"><%= TranslationService.t('menu-home') %></a></li>
           <% } %>
 
         </ul>
