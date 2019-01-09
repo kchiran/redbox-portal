@@ -523,6 +523,7 @@
   "@dataPublication-embargoNote": "Embargo note",
   "@dataPublication-publish-metadata-only": "Publish metadata only (no data)?",
   "@dataPublication-publish-metadata-only-help": "Publishing only the metadata (or description) of your data allows you to publicise its availability to other researchers while retaining control of who you release it to.",
+  "@dataPublication-geolocation": "Geospatial Location",
   "attachment-not-found": "Attachment not found for this record.",
   "@dataRecord-aim-project-name": "Project Name",
   "@dataRecord-keywords-required": "Keyword must not be blank.",
