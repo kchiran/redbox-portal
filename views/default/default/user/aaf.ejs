@@ -1,11 +1,9 @@
 <div class="row">
-    <div class="col-md-offset-5 col-md-3">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span class="panel-title"><%= TranslationService.t('aaf-title') %></span>
-        </div>
-        <div class="panel-body">
-          <a href='<%=sails.config.auth[branding].aaf.loginUrl%>'><img src='/images/aaf_service_223x54.png' alt="<%= TranslationService.t('aaf-logo-alt-text') %>"/></a>
+    <div class="col-md-offset-4 col-md-4">
+      <div class="aaf-login-box">
+        <p><%= TranslationService.t('aaf-title') %></p>
+        <div class="aaf-login">
+          <a class="aaf-login-a" href='<%=sails.config.auth[branding].aaf.loginUrl%>'><%= TranslationService.t('aaf-login') %></a>
         </div>
       </div>
     </div>
