@@ -1,6 +1,5 @@
-<div class="mainmenu-area">
+<div class="mainmenu-area navbar">
   <div class="container">
-    <div class="row">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                       <span class="sr-only"><%= TranslationService.t('menu-toggle')%></span>
@@ -54,23 +53,21 @@
               <a href="<%= BrandingService.getBrandAndPortalPath(req) %>/admin"><%= TranslationService.t('menu-admin')%></a>
             </li>
           <% } %>
-          <li class="dropdown">
-            <form class="nav-search-bar form-inline" method="get" action="<%= BrandingService.getBrandAndPortalPath(req) %>/record/search" name="form">
-              <div class="input-group">
-                <input name="q" type="text" class="form-control" placeholder="<%= TranslationService.t('record-search-basic-search-placeholder') %>" aria-label="<%= TranslationService.t('record-search-basic-search-placeholder') %>">
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button" onClick="form.submit()"><%= TranslationService.t("record-search-basic-search") %></button>
-                </span>
-              </div>
-            </form>
-          </li>
           <%  } else { %>
             <li class=""><a href="<%= BrandingService.getBrandAndPortalPath(req) %>/home"><%= TranslationService.t('menu-home') %></a></li>
           <% } %>
 
         </ul>
-
-      </div>
+        <% if (req.isAuthenticated()) { %>
+        <form class="navbar-form navbar-right" method="get" action="<%= BrandingService.getBrandAndPortalPath(req) %>/record/search" name="form">
+          <div class="input-group">
+            <input name="q" type="text" class="form-control" placeholder="<%= TranslationService.t('record-search-basic-search-placeholder') %>" aria-label="<%= TranslationService.t('record-search-basic-search-placeholder') %>">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="button" onClick="form.submit()"><%= TranslationService.t("record-search-basic-search") %></button>
+            </span>
+          </div>
+        </form>
+      <% } %>
     </div>
-  </div>
+</div>
 </div>

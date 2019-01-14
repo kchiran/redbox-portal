@@ -2,7 +2,7 @@ $font-family-code: 'NB Akademie Std';
 
 $a-color:#000;
 
-$branding-primary: #b1101a;
+$branding-primary: #ff2305;
 $branding-secondary: #500005;
 
 /* The branding areas colours */
@@ -24,7 +24,7 @@ $main-menu-active-item-background-color: #222;
 
 /* The text colour and background colour of an unfocused main menu item*/
 $mainmenu-inactive-item-color: darkgray;
-$mainmenu-inactive-item-background-color:#222222;
+$mainmenu-inactive-item-background-color: #222222;
 
 /* The text colour and background-color of a selected main menu item */
 $mainmenu-selected-item-color: #000;
@@ -35,7 +35,7 @@ $mainmenu-selected-item-hover-color: #0f4beb;
 $footer-bottom-area-branding-background-color: #000;
 $footer-bottom-area-branding-color: #fff;
 
-$maincontent-heading-text-branding-color:  #000;
+$maincontent-heading-text-branding-color: #000;
 
 @mixin border-radius($radius) {
 	border-radius: $radius !important;
@@ -44,14 +44,14 @@ $maincontent-heading-text-branding-color:  #000;
 }
 
 @mixin font-smoothing($value: antialiased) {
-  @if $value == antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  @else {
-    -webkit-font-smoothing: subpixel-antialiased;
-    -moz-osx-font-smoothing: auto;
-  }
+	@if $value == antialiased {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	@else {
+		-webkit-font-smoothing: subpixel-antialiased;
+		-moz-osx-font-smoothing: auto;
+	}
 }
 
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
@@ -61,7 +61,6 @@ $maincontent-heading-text-branding-color:  #000;
 @import "uts-fonts";
 //@import "theme";
 @import "uts-theme";
-
 
 @import "responsive";
 @import "uppy";
