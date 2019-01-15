@@ -121,7 +121,7 @@ module.exports = {
                   compClass: 'TextBlockComponent',
                   editOnly: true,
                   definition: {
-                    value: 'TIP: If there is a Research Data Management Plan (RDMP) for the data, choose it here to pre-fill form.  Else, complete Project details below.',
+                    value: '@dataRecord-related-tip',
                     type: 'h5'
                   }
                 },
@@ -129,7 +129,7 @@ module.exports = {
                   class: 'RelatedObjectSelector',
                   compClass: 'RelatedObjectSelectorComponent',
                   definition: {
-                    label: 'Related Project',
+                    label: '@dataRecord-related',
                     name: 'rdmp',
                     help: '@dataRecord-chooseRDMP-help',
                     recordType: 'rdmp',
