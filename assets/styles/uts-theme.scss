@@ -166,14 +166,6 @@ button, .button {
   z-index: 999;
 }
 
-/*
-.logo h1 {
-font-size: 50px;
-margin: 0px 0;
-font-family: 'NB International',Arial,sans-serif;
-}
-*/
-
 .logo h1 a {
   color: $logo-link-color-branding;
 }
@@ -187,36 +179,58 @@ font-family: 'NB International',Arial,sans-serif;
   color: #ffffff;
 }
 
+.navbar-nav, .navbar-form, .logo h1 {
+  font-family: $font-family-headings-code,Arial,sans-serif;
+}
+
 .mainmenu-area ul.navbar-nav li a {
-  /* font-family: 'NB Akademie Std',Arial,sans-serif; */
   font-size: 16px;
   font-weight: 200;
-  padding: 20px;
-  color: white;
+  color: $panel-branding-color;
   padding-left: 30px;
   padding-right: 30px;
 }
 
 .mainmenu-area ul.navbar-nav li.active a {
   background-color: #222;
-  color: white;
+  color: $panel-branding-color;
+}
+
+.dropdown-menu {
+  background-color: $main-menu-active-item-background-color;
+}
+
+.mainmenu-area ul.navbar-nav li a:active {
+  color: $main-menu-active-item-color;
 }
 
 .mainmenu-area ul.dropdown-menu li a {
   background-color: $main-menu-active-item-background-color;
   color: $main-menu-active-item-color;
+  padding: 10px 30px;
+  cursor: pointer;
 }
 
 .mainmenu-area ul.navbar-nav li:hover a,
 .mainmenu-area ul.navbar-nav li.active a {
+  background-color: $main-menu-active-item-background-color;
+  color: $main-menu-active-item-color;
 }
 
 .mainmenu-area .nav > li > a:focus {
-  color: $mainmenu-selected-item-color
+  color: $mainmenu-selected-item-color;
+  background-color: $main-menu-active-item-background-color;
 }
 
 .mainmenu-area .nav > li > a:hover {
-  background-color: $mainmenu-selected-item-hover-color
+  background-color: $mainmenu-selected-item-hover-color;
+  color: $mainmenu-selected-item-hover-color;
+}
+
+.mainmenu-area ul.dropdown-menu li a:hover {
+  text-decoration: underline;
+  text-decoration-color: $mainmenu-selected-item-hover-color;
+  color: $mainmenu-selected-item-hover-color;
 }
 
 /* over ride left nav */

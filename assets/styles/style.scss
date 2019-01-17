@@ -1,4 +1,5 @@
 $font-family-code: 'NB Akademie Std';
+$font-family-headings-code: 'NB International Std';
 
 $a-color:#000;
 
@@ -13,17 +14,18 @@ $panel-branding-background-color: $branding-primary;
 $panel-branding-color: #fff;
 
 $mainmenu-branding-background-color: #000000;
+$main-menu-item-color: #ebebeb;
 
 $header-branding-link-color: #888;
 $header-branding-background-color: #ffffff;//#f4f4f4;
 $logo-link-color-branding: #000000;//#999;
 
 /* The text colour and background colour of focused main menu item */
-$main-menu-active-item-color: darkgray;
-$main-menu-active-item-background-color: #222;
+$main-menu-active-item-color: #222;
+$main-menu-active-item-background-color: #ebebeb;
 
 /* The text colour and background colour of an unfocused main menu item*/
-$mainmenu-inactive-item-color: darkgray;
+$mainmenu-inactive-item-color: #ccc;
 $mainmenu-inactive-item-background-color: #222222;
 
 /* The text colour and background-color of a selected main menu item */
