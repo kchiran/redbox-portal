@@ -1,4 +1,5 @@
 {
+  "help-alt-text": "Help",
   "dashboard-heading": "{stage} {recordTypeName}",
   "dashboard-heading-one-step": "{recordTypeName}",
   "create-plan": "Create a plan",
