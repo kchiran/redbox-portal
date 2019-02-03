@@ -42,7 +42,7 @@
 config/local.js
 devdata/redbox1/*
 devdata/redbox2/*
-
+config/env/keys.json
 
 
 ################################################

@@ -356,6 +356,14 @@ module.exports = {
               id: "people",
               label: "@dmpt-people-tab",
               fields: [{
+                  class: 'Container',
+                  compClass: 'TextBlockComponent',
+                  definition: {
+                    value: '@dmpt-people-tab',
+                    type: 'h3'
+                  }
+                },
+                {
                   class: 'ContributorField',
                   showHeader: true,
                   showRole: false,
