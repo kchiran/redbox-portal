@@ -1124,10 +1124,6 @@ module.exports = {
                         label: "@dmpt-select:Empty"
                       },
                       {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-personal-equipment",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-personal-equipment"
-                      },
-                      {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
                         value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
                       },
