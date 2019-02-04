@@ -274,25 +274,6 @@ module.exports = [
               }
             }
           }
-        },
-        {
-          class: 'ANDSVocab',
-          compClass: 'ANDSVocabComponent',
-          definition: {
-            label: "@dmpt-project-anzsrcSeo",
-            help: "@dmpt-project-anzsrcSeo-help",
-            name: "dc:subject_anzsrc:seo",
-            vocabId: 'anzsrc-seo',
-            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
-            subscribe: {
-              'dataRecordGetter': {
-                onValueUpdate: [{
-                  action: 'utilityService.getPropertyFromObject',
-                  field: 'dc:subject_anzsrc:seo'
-                }]
-              }
-            }
-          }
         }
       ]
     }
