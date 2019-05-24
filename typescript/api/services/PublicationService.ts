@@ -60,9 +60,9 @@ export module Services {
   	public exportDataset(oid, record, options): Observable<any> {
    		if( this.metTriggerCondition(oid, record, options) === "true") {
 
-   			sails.log.info("Called exportDataset on update");
-      	sails.log.info("oid: " + oid);
-      	sails.log.info("options: " + JSON.stringify(options));
+   			sails.log.debug("Called exportDataset on update");
+      	sails.log.debug("oid: " + oid);
+      	sails.log.debug("options: " + JSON.stringify(options));
 				const site = sails.config.datapubs.sites[options['site']];
 				if( ! site ) {
 					sails.log.error("Unknown publication site " + options['site']);
@@ -76,11 +76,11 @@ export module Services {
 
 				if( ! drid ) {
 					sails.log.error("Couldn't find dataRecord or id for data pub " + oid);
-					sails.log.info(JSON.stringify(record));
+					sails.log.debug(JSON.stringify(record));
 					return Observable.of(null)
 				}
 
-				sails.log.info("Got data record: " + drid);
+				sails.log.debug("Got data record: " + drid);
 
 				const attachments = md['dataLocations'].filter(
 					(a) => a['type'] === 'attachment'
@@ -89,7 +89,7 @@ export module Services {
 				const dir = path.join(site['dir'], oid);
 				try {
 
-					sails.log.info("making dataset dir: " + dir);
+					sails.log.debug("making dataset dir: " + dir);
 					fs.mkdirSync(dir);
 				} catch(e) {
 					sails.log.error("Couldn't create dataset dir " + dir);
@@ -99,17 +99,17 @@ export module Services {
 					return Observable.of(null);
 				}
 
-				sails.log.info("Going to write attachments");
+				sails.log.debug("Going to write attachments");
 
 				// build a list of observables, each of which writes out an
 				// attachment
 
 				const obs = attachments.map((a) => {
-					sails.log.info("building attachment observable " + a['name']);
+					sails.log.debug("building attachment observable " + a['name']);
 					return RecordsService.getDatastream(drid, a['fileId']).
 						flatMap(ds => {
 							const filename = path.join(dir, a['name']);
-							sails.log.info("about to write " + filename);
+							sails.log.debug("about to write " + filename);
 							return Observable.fromPromise(this.writeData(ds.body, filename))
 								.catch(err => {
 									sails.log.error("Error writing attachment " + a['fileId']);
@@ -139,7 +139,7 @@ export module Services {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
 					fs.writeFile(fn, buffer, () => {
-						sails.log.info("wrote to " + fn);
+						sails.log.debug("wrote to " + fn);
 						resolve(true)
 					});
 				} catch(e) {
@@ -160,11 +160,11 @@ export module Services {
 		private writeDatastream(stream: any, fn: string): Promise<boolean> {
 			return new Promise<boolean>( (resolve, reject) => {
   			var wstream = fs.createWriteStream(fn);
-  			sails.log.info("start writeDatastream " + fn);
+  			sails.log.debug("start writeDatastream " + fn);
   			stream.pipe(wstream);
   			stream.end();
 				wstream.on('finish', () => {
-					sails.log.info("finished writeDatastream " + fn);
+					sails.log.debug("finished writeDatastream " + fn);
 					resolve(true);
 				});
 				wstream.on('error', (e) => {
@@ -204,13 +204,13 @@ export module Services {
 					try {
 						const jsonld_h = new jsonld();
 						const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-						sails.log.info(`Building CATALOG.json with jsonld_h`);
+						sails.log.debug(`Building CATALOG.json with jsonld_h`);
 						sails.log.silly(`catalog = ${JSON.stringify(catalog)}`);
-						sails.log.info(`Writing CATALOG.json to ${catalog_json}`);
+						sails.log.debug(`Writing CATALOG.json to ${catalog_json}`);
 						fs.writeFileSync(catalog_json, JSON.stringify(catalog, null, 2));
 						const index = new Index();
 						index.init(catalog, dir, false);
-						sails.log.info(`Writing CATALOG.html`);
+						sails.log.debug(`Writing CATALOG.html`);
 						index.make_index_html("text_citation", "zip_path"); //writeFileSync
 						return Observable.of({});
 					} catch (error) {

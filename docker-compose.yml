@@ -26,16 +26,16 @@ services:
          - rbportal
     entrypoint: /bin/bash -c "cd /opt/redbox-portal && node app.js"
 
-  # nginx:
-  #   image: nginx
-  #   ports:
-  #     - "8080:8080"
-  #   restart: always
-  #   volumes:
-  #     - "/mnt/data/publication:/usr/share/nginx/html"
-  #     - "/mnt/nginx.conf:/etc/nginx/conf.d"
-  #   expose:
-  #     - "8080"
+  nginx:
+    image: nginx
+    ports:
+      - "8080:8080"
+    restart: always
+    volumes:
+      - "/mnt/data/publication:/usr/share/nginx/html"
+      - "/mnt/nginx.conf:/etc/nginx/conf.d"
+    expose:
+      - "8080"
 
 
   redbox:
