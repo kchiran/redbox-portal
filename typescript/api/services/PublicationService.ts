@@ -24,6 +24,7 @@ import 'rxjs/add/operator/toPromise';
 import * as request from "request-promise";
 import * as ejs from 'ejs';
 import * as fs from 'graceful-fs';
+import fse = require('fs-extra');
 import path = require('path');
 
 
@@ -101,7 +102,7 @@ export module Services {
 
 				sails.log.debug("Going to write attachments");
 
-				// build a list of observables, each of which writes out an
+				// build a list of observables, each of which loads and writes out an
 				// attachment
 
 				const obs = attachments.map((a) => {
@@ -184,10 +185,18 @@ export module Services {
 		}
 
 
+		private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
+			sails.log.debug(`Writing HTML to ${outdir} / ${indexfile}`);
+			await fse.ensureDir(outdir);
+			await fse.writeFile(path.join(outdir, indexfile), html);
+		}
+
+
 		private makeDataCrate(oid: string, dir: string, metadata: Object): Observable<any> {
 
 			const owner = 'TODO@shouldnt.the.owner.come.from.the.datapub';
 			const approver = 'TODO@get.the.logged-in.user';
+			const index = new Index();
 
 			return Observable.of({})
 				.flatMap(() => {
@@ -198,28 +207,27 @@ export module Services {
 						'owner': owner,
 						'approver': approver
 					}))
-				}).flatMap((catalog) => {
-					// the following writes out the CATALOG.json and CATALOG.html, and it's all
-					// sync because of legacy code in calcyte.
-					try {
-						const jsonld_h = new jsonld();
-						const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-						sails.log.debug(`Building CATALOG.json with jsonld_h`);
-						sails.log.silly(`catalog = ${JSON.stringify(catalog)}`);
-						sails.log.debug(`Writing CATALOG.json to ${catalog_json}`);
-						fs.writeFileSync(catalog_json, JSON.stringify(catalog, null, 2));
-						const index = new Index();
-						index.init(catalog, dir, false);
-						sails.log.debug(`Writing CATALOG.html`);
-						index.make_index_html("text_citation", "zip_path"); //writeFileSync
-						return Observable.of({});
-					} catch (error) {
-						sails.log.error("Error (inside) while creating DataCrate");
-						sails.log.error(error.name);
-						sails.log.error(error.message);
-						sails.log.error(error.stack);
-						return Observable.of(null);
-					}
+				}).flatMap(async (catalog) => {
+
+					const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
+					await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
+
+					index.init_pure({
+						catalog_json: catalog,
+						multiple_files: true
+					});
+
+					const template_ejs = await index.load_template();
+
+					sails.log.debug(`Writing CATALOG.html`);
+					
+					return index.make_index_pure("text_citation", "zip_path");
+				}).flatMap(async (pages) => {
+					const html_filename = index.html_file_name;
+					return Observable.merge(pages.map((p) => {
+						const outdir = path.join(dir, p.path);
+						return Observable.fromPromise(this.writeCatalogHTML(outdir, html_filename, p.html))
+					}))
 				}).catch(error => {
 					sails.log.error("Error (outside) while creating DataCrate");
 					sails.log.error(error.name);
