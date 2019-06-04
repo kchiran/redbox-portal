@@ -194,7 +194,7 @@
   "@dmpt-vivo:Dataset_redbox:DataStructureStandard": "List any vocabularies to be used (e.g. ANZLIC, ISO, LCSH, ANZSCO etc)",
   "@dmpt-vivo:Dataset_redbox:DataStructureStandard-help": "Provide details of any standards, schema or data structure approaches applied to your research data to ensure that it is stored in a well organised and logical manner.",
   "@dmpt-people-tab": "People",
-  "@dmpt-people-tab-ci": "First-named chief investigator",
+  "@dmpt-people-tab-ci": "First-named chief investigator / UTS Supervisor",
   "@dmpt-people-tab-ci-role": "Chief Investigator",
   "@dmpt-people-tab-data-manager": "Data manager",
   "@dmpt-people-tab-contrib": "Contributors",
