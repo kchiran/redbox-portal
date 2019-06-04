@@ -610,54 +610,64 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'ContributorField',
-                  showHeader: true,
+                  class: 'RepeatableContributor',
+                  compClass: 'RepeatableContributorComponent',
                   definition: {
-                    name: 'contributor_supervisor',
-                    required: false,
-                    label: '@dmpt-people-tab-supervisor',
-                    help: '@dmpt-people-tab-supervisor-help',
-                    role: "@dmpt-people-tab-supervisor-role",
-                    freeText: false,
-                    forceLookupOnly: true,
-                    vocabId: 'Parties AND repository_name:People',
-                    sourceType: 'mint',
-                    fieldNames: [{
-                        'text_full_name': 'text_full_name'
-                      }, {
-                        'full_name_honorific': 'text_full_name_honorific'
-                      }, {
-                        'email': 'Email[0]'
-                      },
-                      {
-                        'given_name': 'Given_Name[0]'
-                      },
-                      {
-                        'family_name': 'Family_Name[0]'
-                      },
-                      {
-                        'honorific': 'Honorific[0]'
-                      },
-                      {
-                        'full_name_family_name_first': 'dc_title'
+                    name: "contributor_supervisors",
+                    skipClone: ['showHeader', 'initialValue'],
+                    forceClone: [{
+                      field: 'vocabField',
+                      skipClone: ['injector']
+                    }],
+                    fields: [{
+                      class: 'ContributorField',
+                      showHeader: true,
+                      definition: {
+                        required: false,
+                        label: '@dmpt-people-tab-supervisor',
+                        help: '@dmpt-people-tab-supervisor-help',
+                        role: "@dmpt-people-tab-supervisor-role",
+                        freeText: false,
+                        vocabId: 'Parties AND repository_name:People',
+                        sourceType: 'mint',
+                        fieldNames: [{
+                            'text_full_name': 'text_full_name'
+                          }, {
+                            'full_name_honorific': 'text_full_name_honorific'
+                          }, {
+                            'email': 'Email[0]'
+                          },
+                          {
+                            'given_name': 'Given_Name[0]'
+                          },
+                          {
+                            'family_name': 'Family_Name[0]'
+                          },
+                          {
+                            'honorific': 'Honorific[0]'
+                          },
+                          {
+                            'full_name_family_name_first': 'dc_title'
+                          }
+                        ],
+                        searchFields: 'autocomplete_given_name,autocomplete_family_name,autocomplete_full_name,autocomplete_full_name_honorific',
+                        titleFieldArr: ['text_full_name'],
+                        titleFieldDelim: '',
+                        nameColHdr: '@dmpt-people-tab-name-hdr',
+                        emailColHdr: '@dmpt-people-tab-email-hdr',
+                        orcidColHdr: '@dmpt-people-tab-orcid-hdr',
+                        publish: {
+                          onValueUpdate: {
+                            modelEventSource: 'valueChanges'
+                          }
+                        }
                       }
-                    ],
-                    searchFields: 'autocomplete_given_name,autocomplete_family_name,autocomplete_full_name',
-                    titleFieldArr: ['text_full_name'],
-                    titleFieldDelim: '',
-                    nameColHdr: '@dmpt-people-tab-name-hdr',
-                    emailColHdr: '@dmpt-people-tab-email-hdr',
-                    orcidColHdr: '@dmpt-people-tab-orcid-hdr',
-                    publish: {
-                      onValueUpdate: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
+                    }],
                     subscribe: {
                       'rdmpGetter': {
                         onValueUpdate: [{
                           action: 'utilityService.getPropertyFromObject',
-                          field: 'contributor_supervisor'
+                          field: 'contributor_supervisors'
                         }]
                       }
                     }

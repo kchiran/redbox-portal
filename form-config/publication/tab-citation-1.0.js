@@ -74,7 +74,7 @@ module.exports = [
               'dataRecordGetter': {
                 onValueUpdate: [{
                   action: 'utilityService.getPropertyFromObjectConcat',
-                  field: ['contributor_ci', 'contributor_data_manager', 'contributors', 'contributor_supervisor']
+                  field: ['contributor_ci', 'contributor_data_manager', 'contributors', 'contributor_supervisors']
                 }]
               }
             }
@@ -203,12 +203,12 @@ module.exports = [
           class: 'HiddenValue',
           compClass: 'HiddenValueComponent',
           definition: {
-            name: 'contributor_supervisor',
+            name: 'contributor_supervisors',
             subscribe: {
               'dataRecordGetter': {
                 onValueUpdate: [{
                   action: 'utilityService.getPropertyFromObject',
-                  field: 'contributor_supervisor'
+                  field: 'contributor_supervisors'
                 }]
               }
             }
