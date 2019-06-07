@@ -426,7 +426,6 @@ export class Toggle extends FieldBase<boolean> {
   }
 
   setToggle() {
-    console.log(this.options.valueCheck === this.options['checkedWhen']);
     if(this.options.valueCheck && this.options['checkedWhen']) {
       return this.options.valueCheck === this.options['checkedWhen'];
     } else {
