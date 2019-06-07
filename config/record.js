@@ -50,6 +50,11 @@ module.exports.record = {
       source: 'request',
       type: 'user',
       field: 'username'
+    },
+    '@user_edupersonscopedaffiliation': {
+      source: 'request',
+      type: 'user',
+      field: 'edupersonscopedaffiliation'
     }
   },
   export: {

@@ -415,7 +415,16 @@ export class Toggle extends FieldBase<boolean> {
   constructor(options: any, injector: any) {
     super(options, injector);
     this.type = options['type'] || 'checkbox';
-    this.value = options['value'] || false;
+    this.value = this.setToggle();
+  }
+
+  setToggle() {
+    console.log(this.options.valueCheck === this.options['checkedWhen']);
+    if(this.options.valueCheck && this.options['checkedWhen']) {
+      return this.options.valueCheck === this.options['checkedWhen'];
+    } else {
+      return this.options['value'] || false;
+    }
   }
 }
 

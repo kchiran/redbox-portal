@@ -139,6 +139,19 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'Toggle',
+                  compClass: 'ToggleComponent',
+                  variableSubstitutionFields: ['valueCheck'],
+                  definition: {
+                    valueCheck: '@user_edupersonscopedaffiliation',
+                    name: 'project-hdr',
+                    checkedWhen: 'student@uts.edu.au',
+                    label: '@dmpt-project-hdr',
+                    help: '@dmpt-project-hdr-help',
+                    controlType: 'checkbox'
+                  }
+                },
+                {
                   class: 'TextArea',
                   compClass: 'TextAreaComponent',
                   definition: {
@@ -835,25 +848,49 @@ module.exports = {
                 {
                   class: 'SelectionField',
                   compClass: 'DropdownFieldComponent',
+                  variableSubstitutionFields: ['selectFor'],
                   definition: {
+                    selectFor: '@user_edupersonscopedaffiliation',
+                    defaultSelect: 'staff@uts.edu.au',
                     name: 'dc:rightsHolder_dc:name',
                     label: '@dmpt-dc:rightsHolder_dc:name',
-                    help: '@dmpt-dc:rightsHolder_dc:name-help',
-                    options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
+                    help: [{
+                      key: 'staff@uts.edu.au',
+                      value: '@dmpt-dc:rightsHolder_dc:name-help'
+                    },{
+                      key: 'student@uts.edu.au',
+                      value: '@dmpt-dc:rightsHolder_dc:name-student-help'
+                    }],
+                    options: [
+                      {
+                        key: 'student@uts.edu.au',
+                        value:[{
+                            value: "", label: "@dmpt-select:Empty"
+                          },{
+                            value: "myUni", label: "@dmpt-dc:rightsHolder_dc:name-myUni"
+                          },{
+                            value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
+                          },{
+                            value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
+                          },{
+                            value: "studentJoint", label: "@dmpt-dc:rightsHolder_dc:name-studentJoint"
+                          },{
+                            value: "others", label: "@dmpt-dc:rightsHolder_dc:name-others"
+                          }
+                        ]
                       },
                       {
-                        value: "myUni",
-                        label: "@dmpt-dc:rightsHolder_dc:name-myUni"
-                      },
-                      {
-                        value: "myUnjount",
-                        label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
-                      },
-                      {
-                        value: "student",
-                        label: "@dmpt-dc:rightsHolder_dc:name-student"
+                        key: 'staff@uts.edu.au',
+                        value:[{
+                            value: "", label: "@dmpt-select:Empty"
+                          },{
+                            value: "myUni", label: "@dmpt-dc:rightsHolder_dc:name-myUni"
+                          },{
+                            value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
+                          },{
+                            value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
+                          }
+                        ]
                       }
                     ],
                     required: true,
