@@ -107,20 +107,13 @@ export class FieldBase<T> {
     this.name = options.name || '';
     this.id = options.id || '';
     this.label = this.getTranslated(options.label, '');
-    if(options.selectFor) {
+    if(options.selectFor && options.defaultSelect) {
       if(_.isArray(options.help)) {
         const newHelp = _.defaultTo(
           _.find(options.help, f => f.key === options.selectFor),
           _.find(options.help, f => f.key === options.defaultSelect)
         );
         options.help = newHelp.value;
-      }
-      if(options['options']) {
-        const newOptions = _.defaultTo(
-          _.find(options['options'], f => f.key === options.selectFor),
-          _.find(options['options'], f => f.key === options.defaultSelect)
-        );
-        options['options'] = newOptions.value;
       }
     }
     this.help = this.getTranslated(options.help, undefined);
