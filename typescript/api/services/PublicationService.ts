@@ -26,6 +26,7 @@ import * as ejs from 'ejs';
 import * as fs from 'graceful-fs';
 import fse = require('fs-extra');
 import path = require('path');
+import ofcl = require('ofcl');
 
 
 import { Index, jsonld } from 'calcyte';
@@ -58,6 +59,15 @@ export module Services {
 
 
 
+    // exportDataset is the main point of entry. It returns an Observable
+    // which writes out the record's attachments, creates a DataCrate for
+    // them and imports them into the required repository (staging or
+    // public)
+
+    // in the current version, if the target directory has not yet been 
+    // initialised, it initalised an ocfl repository there. A future
+    // release should leave this to boostrap or deployment.
+
   	public exportDataset(oid, record, options): Observable<any> {
    		if( this.metTriggerCondition(oid, record, options) === "true") {
 
@@ -83,29 +93,83 @@ export module Services {
 
 				sails.log.debug("Got data record: " + drid);
 
-				const attachments = md['dataLocations'].filter(
-					(a) => a['type'] === 'attachment'
-				);
+				// start an Observable to get/initialise the repository, then call createNewObjectContent
+				// content on it with a callback which will actually write out the attachments and
+				// make a datacrate. Once that's done, updates the URL in the data record.
 
-				const dir = path.join(site['dir'], oid);
-				try {
+				// the interplay between Promises and Observables here is too convoluted and needs
+				// refactoring.
 
-					sails.log.debug("making dataset dir: " + dir);
-					fs.mkdirSync(dir);
-				} catch(e) {
-					sails.log.error("Couldn't create dataset dir " + dir);
-					sails.log.error(e.name);
-					sails.log.error(e.message);
-					sails.log.error(e.stack);
-					return Observable.of(null);
-				}
+				return this.getRepository(options['site'])
+					.flatMap((repository) => {
+						return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
+							await this.writeDataCrate(md, dir)
+						}
+					}).flatMap(() => {
+						return this.updateUrl(oid, record, site['url']);
+					});
 
+    	} else {
+//     		sails.log.info(`Not sending for: ${oid}, condition not met: ${_.get(options, "triggerCondition", "")}`);
+    		return Observable.of(null);
+   		}
+  	}
+
+
+  	// this initialises the repository if it can't load it, which
+  	// is a bit rough and ready. FIXME - this should be done in 
+  	// deployment or at least bootstrapping the server
+
+  	public getRepository(site): Observable<any> {
+  		return Observable.fromPromise(new Promise<any>((resolve, reject) => {
+  			if(! sails.config.datapubs.sites[site] ) {
+					sails.log.error(`unknown site ${site}`);
+					reject();
+  			} else {
+  				const dir = sails.config.datapubs.sites[site].dir;
+ 					const repository = new ocfl.repository();
+  				try {
+  					repository.load(dir);
+  					resolve(repository);
+  				} catch(e) {
+  					try { 
+  						repository.create(dir);
+  						resolve(repository);
+  					}
+  				}
+  			}
+  		})).catch(err => {
+				sails.log.error("Error initialising repository for " + site);
+				sails.log.error(err.name);
+				sails.log.error(err.message);
+        return new Observable();
+			});
+  	} 
+
+
+  	// async function which takes a data publication and destination directory
+  	// and writes out the attachments and datacrate files to it
+
+    private async writeDataCrate(metadata: Object, dir: string): Promise<any> {
+
+
+    }
+
+
+
+
+		private async writeAttachments(drid: string, dir: string; attachments: Object[]): Promise<any> {
 				sails.log.debug("Going to write attachments");
 
 				// build a list of observables, each of which loads and writes out an
 				// attachment
 
-				const obs = attachments.map((a) => {
+
+				const attachments = md['dataLocations'].filter(
+					(a) => a['type'] === 'attachment'
+				);
+
+				const attach_obs = attachments.map((a) => {
 					sails.log.debug("building attachment observable " + a['name']);
 					return RecordsService.getDatastream(drid, a['fileId']).
 						flatMap(ds => {
@@ -121,35 +185,17 @@ export module Services {
 						});
 				});
 
+				
+
+
 				obs.push(this.makeDataCrate(oid, dir, md));
-				obs.push(this.updateUrl(oid, record, site['url']));
-
-				return Observable.merge(...obs);
-    	} else {
-     		sails.log.info(`Not sending notification log for: ${oid}, condition not met: ${_.get(options, "triggerCondition", "")}`)
-    		return Observable.of(null);
-   		}
-  	}
 
 
-		// this version works, but I'm worried that it will put the whole of
-		// the buffer in RAM. See writeDatastream for my first attempt, which
-		// doesnt' work.
 
-		private writeData(buffer: Buffer, fn: string): Promise<boolean> {
-			return new Promise<boolean>( ( resolve, reject ) => {
-				try {
-					fs.writeFile(fn, buffer, () => {
-						sails.log.debug("wrote to " + fn);
-						resolve(true)
-					});
-				} catch(e) {
-					sails.log.error("attachment write error");
-					sails.log.error(e.name);
-					sails.log.error(e.message);
-					reject;
-				}
-			});
+			for( const a of attachments ) {
+				const buffer = await this.getDatastream(drid, a['fileId']);
+				await fse.writeFile()
+			}	
 		}
 
 
@@ -174,6 +220,29 @@ export module Services {
     		});
 			});
 		}
+
+		// this version works, but I'm worried that it will put the whole of
+		// the buffer in RAM. See writeDatastream for my first attempt, which
+		// doesnt' work.
+
+		private async writeData(buffer: Buffer, fn: string): Promise<boolean> {
+			return new Promise<boolean>( ( resolve, reject ) => {
+				try {
+					fs.writeFile(fn, buffer, () => {
+						sails.log.debug("wrote to " + fn);
+						resolve(true)
+					});
+				} catch(e) {
+					sails.log.error("attachment write error");
+					sails.log.error(e.name);
+					sails.log.error(e.message);
+					reject;
+				}
+			});
+		}
+
+
+
 
 		private updateUrl(oid: string, record: Object, baseUrl: string): Observable<any> {
 			const branding = sails.config.auth.defaultBrand; // fix me
