@@ -905,6 +905,8 @@ module.exports = {
                             value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
                           },{
                             value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
+                          },{
+                            value: "others", label: "@dmpt-dc:rightsHolder_dc:name-others"
                           }
                         ]
                       }
