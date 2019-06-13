@@ -295,9 +295,9 @@ export module Services {
 			// it, which on localhost:8080 breaks the link in some browsers - see 
 			// https://serverfault.com/questions/759762/how-to-stop-nginx-301-auto-redirect-when-trailing-slash-is-not-in-uri/812461#812461
 			record['metadata']['citation_url'] = baseUrl + '/' + oid + '/';
-			return Observable.of(null);
-			//I have a hunch that this is what's causing the loop
-			//return RecordsService.updateMeta(branding, oid, record);
+			// turn off postsave triggers
+			sails.log.debug(`Updating citation_url to ${record['metadata']['citation_url']}`);
+			return RecordsService.updateMeta(branding, oid, record, null, true, false);
 		}
 
 
