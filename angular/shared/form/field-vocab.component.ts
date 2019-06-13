@@ -32,6 +32,7 @@ import { BaseService } from '../base-service';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 import { ConfigService } from '../config-service';
 import * as luceneEscapeQuery from "lucene-escape-query";
+
 /**
  * Vocabulary Field
  *
@@ -263,6 +264,13 @@ export class VocabField extends FieldBase<any> {
     if (updateTitle) {
       this.component.ngCompleter.ctrInput.nativeElement.value = this.getTitle(value);
     }
+  }
+
+  relationshipLookup(searchTerm, searchFields) {
+    const url = this.lookupService.getMintRootUrl(this.vocabId);
+    console.log(`Using: ${url}`);
+    const mlu = new MintRelationshipLookup(url, this.lookupService.http, searchFields);
+    return mlu.search(searchTerm);
   }
 
 }
@@ -595,5 +603,33 @@ export class VocabFieldComponent extends SimpleComponent {
     } else {
       return this.disableEditAfterSelect && this.field.disableEditAfterSelect;
     }
+  }
+}
+
+export class MintRelationshipLookup {
+
+  searchFieldStr: string;
+  http: Http;
+
+  constructor(private url: string, http: Http, searchFieldStr: string) {
+      this.http = http;
+      this.searchFieldStr = searchFieldStr;
+  }
+
+  search(term) {
+    term = _.trim(luceneEscapeQuery.escape(term));
+    let searchString = '';
+    if (!_.isEmpty(term)) {
+      term = _.toLower(term);
+      if(_.isEmpty(this.searchFieldStr)) {
+        searchString = term;
+      } else {
+        _.forEach(this.searchFieldStr.split(','), (searchFld) => {
+          searchString = `${searchString}${_.isEmpty(searchString) ? '' : ' OR '}${searchFld}:${term}`
+        });
+      }
+    }
+    const searchUrl = `${this.url}${searchString}`;
+    return this.http.get(`${searchUrl}`);
   }
 }

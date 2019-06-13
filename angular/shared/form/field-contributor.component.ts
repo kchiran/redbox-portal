@@ -24,6 +24,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as _ from "lodash";
 import { RbValidator } from './validators';
 import { VocabField } from './field-vocab.component';
+import { Observable} from 'rxjs/Rx';
 /**
  * Contributor Model
  *
@@ -62,7 +63,9 @@ export class ContributorField extends FieldBase<any> {
   givenNameHdr: string;
   // Frankenstein end
   component: any;
-
+  findRelationship: any;
+  findRelationshipFor: string;
+  relationshipFor: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -122,6 +125,9 @@ export class ContributorField extends FieldBase<any> {
       this.validators['family_name'] = [Validators.required];
       this.validators['given_name'] = [Validators.required];
     }
+    this.findRelationshipFor = options['findRelationshipFor'] || '';
+    this.findRelationship = options['findRelationship'] || null;
+    this.relationshipFor = options['relationshipFor'] || '';
   }
 
   setLookupServices(completerService:any, lookupService:any) {
@@ -229,6 +235,65 @@ export class ContributorField extends FieldBase<any> {
     } else {
       this.setEmptyValue();
     }
+    if(this.findRelationship) {
+      if(this.findRelationshipFor && this.relationshipFor){
+        this.initWithRelationship();
+      }
+    }
+  }
+
+  initWithRelationship() {
+    const related = this.findRelationship['relateWith'];
+    const relatedWith = this.options[related];
+    const role = this.findRelationship['role'] || '';
+    const relationship = this.findRelationship['relationship'] || ''
+    const searchFields = this.findRelationship['searchFields'] || '';
+    const searchRelation = this.findRelationship['searchRelation'] || '';
+    const titleCompleter = this.findRelationship['titleCompleter'] || '';
+    const emailCompleter = this.findRelationship['emailCompleter'] || '';
+    const fullNameHonorific = this.findRelationship['fullNameHonorific'] || '';
+    const givenName = this.findRelationship['givenName'] || '';
+    const familyName = this.findRelationship['familyName'] || '';
+
+    this.vocabField.relationshipLookup(relatedWith, searchFields)
+    .flatMap(res => {
+      const data = res.json();
+      let rel: any = null;
+      if(data) {
+        const obj = _.first(data);
+        if(_.isArray(obj[relationship])) {
+          rel = _.first(obj[relationship]);
+        }
+      }
+      if(rel) {
+        return this.vocabField.relationshipLookup(rel, searchRelation);
+      } else {
+        return Observable.of(null);
+      }
+    })
+    .subscribe(res => {
+      const data = res.json();
+      if(data) {
+        const obj = _.first(data);
+        if(obj) {
+          const emailCompleterValue = _.first(obj[emailCompleter]) || obj[emailCompleter] || '';
+          const titleCompleterValue = obj[titleCompleter] || '';
+          const fullNameHonorificValue = obj[fullNameHonorific] || '';
+          const givenNameValue = obj[givenName] || '';
+          const familyNameValue = obj[familyName] || '';
+
+          this.vocabField.initialValue = {
+            role: role,
+            email: emailCompleterValue,
+            text_full_name: titleCompleterValue,
+            text_full_name_honorific: fullNameHonorificValue,
+            givenName: givenNameValue,
+            familyName: familyNameValue
+          };
+          this.vocabField.initialValue.title = titleCompleterValue;
+        }
+      }
+    });
   }
 
   setEmptyValue(emitEvent:boolean = true) {
