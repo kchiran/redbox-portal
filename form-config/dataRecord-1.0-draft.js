@@ -160,6 +160,27 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'Toggle',
+                  compClass: 'ToggleComponent',
+                  variableSubstitutionFields: ['valueCheck'],
+                  definition: {
+                    valueCheck: '@user_edupersonscopedaffiliation',
+                    name: 'project-hdr',
+                    checkedWhen: 'student@uts.edu.au',
+                    label: '@dmpt-project-hdr',
+                    help: '@dmpt-project-hdr-help',
+                    controlType: 'checkbox',
+                    subscribe: {
+                      'rdmpGetter': {
+                        onValueUpdate: [{
+                          action: 'utilityService.getPropertyFromObject',
+                          field: 'project-hdr'
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
                   class: 'RepeatableVocab',
                   compClass: 'RepeatableVocabComponent',
                   definition: {
