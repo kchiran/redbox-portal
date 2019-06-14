@@ -433,11 +433,12 @@ module.exports = {
                       role: 'Chief Investigator',
                       searchFields: '',//dc_email TODO: index the email
                       searchRelation: '',//dc_utsId TODO: index the email
-                      titleCompleter: 'text_full_name',
+                      title: 'text_full_name',
                       fullNameHonorific: 'text_full_name_honorific',
-                      emailCompleter: 'dc_email',
+                      honorific: 'honorific',
+                      email: 'dc_email',
                       givenName: 'given_name',
-                      familyName: 'family_name'
+                      familyName: 'family_name'                      
                     },
                     userEmail: '@user_email',
                     relationshipFor: '@user_edupersonscopedaffiliation',

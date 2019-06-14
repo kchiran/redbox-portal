@@ -503,8 +503,25 @@ module.exports = {
                           field: 'contributor_ci'
                         }]
                       }
-                    }
-                  }
+                    },
+                    findRelationshipFor: 'student@uts.edu.au',
+                    findRelationship: {
+                      relationship: 'dc_supervisor',
+                      relateWith: 'userEmail',
+                      role: 'Chief Investigator',
+                      searchFields: '',//dc_email TODO: index the email
+                      searchRelation: '',//dc_utsId TODO: index the email
+                      title: 'text_full_name',
+                      fullNameHonorific: 'text_full_name_honorific',
+                      honorific: 'honorific',
+                      email: 'dc_email',
+                      givenName: 'given_name',
+                      familyName: 'family_name'
+                    },
+                    userEmail: '@user_email',
+                    relationshipFor: '@user_edupersonscopedaffiliation',
+                  },
+                  variableSubstitutionFields: ['userEmail', 'relationshipFor']
                 },
                 {
                   class: 'ContributorField',

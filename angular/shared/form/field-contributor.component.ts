@@ -232,13 +232,16 @@ export class ContributorField extends FieldBase<any> {
         this.vocabField.initialValue.title = this.vocabField.getTitle(value);
         this.vocabField.initLookupData();
       }
+      // If there is a findRelationship Object in configuration init the value,
+      // and not already inited, lookup and complete with a corresponding
+      // relationship in Mint
+      if(this.findRelationship && _.isEmpty(this.vocabField.initialValue.title)) {
+        if(this.findRelationshipFor && this.relationshipFor){
+          this.initWithRelationship();
+        }
+      }
     } else {
       this.setEmptyValue();
-    }
-    if(this.findRelationship) {
-      if(this.findRelationshipFor && this.relationshipFor){
-        this.initWithRelationship();
-      }
     }
   }
 
@@ -249,11 +252,12 @@ export class ContributorField extends FieldBase<any> {
     const relationship = this.findRelationship['relationship'] || ''
     const searchFields = this.findRelationship['searchFields'] || '';
     const searchRelation = this.findRelationship['searchRelation'] || '';
-    const titleCompleter = this.findRelationship['titleCompleter'] || '';
-    const emailCompleter = this.findRelationship['emailCompleter'] || '';
-    const fullNameHonorific = this.findRelationship['fullNameHonorific'] || '';
-    const givenName = this.findRelationship['givenName'] || '';
-    const familyName = this.findRelationship['familyName'] || '';
+    const titleCompleter = this.findRelationship['title'] || '';
+    const emailCompleter = this.findRelationship['email'] || '';
+    const fullNameHonorificCompleter = this.findRelationship['fullNameHonorific'] || '';
+    const honorificCompleter = this.findRelationship['honorific'] || '';
+    const givenNameCompleter = this.findRelationship['givenName'] || '';
+    const familyNameCompleter = this.findRelationship['familyName'] || '';
 
     this.vocabField.relationshipLookup(relatedWith, searchFields)
     .flatMap(res => {
@@ -276,24 +280,31 @@ export class ContributorField extends FieldBase<any> {
       if(data) {
         const obj = _.first(data);
         if(obj) {
-          const emailCompleterValue = _.first(obj[emailCompleter]) || obj[emailCompleter] || '';
-          const titleCompleterValue = obj[titleCompleter] || '';
-          const fullNameHonorificValue = obj[fullNameHonorific] || '';
-          const givenNameValue = obj[givenName] || '';
-          const familyNameValue = obj[familyName] || '';
+          const emailCompleterValue = this.getFirstOrDefault(obj[emailCompleter], '');
+          const titleCompleterValue = this.getFirstOrDefault(obj[titleCompleter], '');
+          const fullNameHonorificValue = this.getFirstOrDefault(obj[fullNameHonorificCompleter], '');
+          const honorificValue = this.getFirstOrDefault(obj[honorificCompleter], '');
+          const givenNameValue = this.getFirstOrDefault(obj[givenNameCompleter], '');
+          const familyNameValue = this.getFirstOrDefault(obj[familyNameCompleter], '');
 
           this.vocabField.initialValue = {
-            role: role,
-            email: emailCompleterValue,
             text_full_name: titleCompleterValue,
             text_full_name_honorific: fullNameHonorificValue,
+            email: emailCompleterValue,
             givenName: givenNameValue,
-            familyName: familyNameValue
+            familyName: familyNameValue,
+            honorific: honorificValue,
+            full_name_family_name_first: `${familyNameValue}, ${givenNameValue}`,
+            role: role
           };
           this.vocabField.initialValue.title = titleCompleterValue;
         }
       }
     });
+  }
+
+  getFirstOrDefault(obj, defaultValue){
+    return _.defaultTo(_.isArray(obj) ? _.first(obj) : obj, defaultValue);
   }
 
   setEmptyValue(emitEvent:boolean = true) {
