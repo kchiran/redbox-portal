@@ -91,8 +91,8 @@ module.exports = [
             valueCheck: '@user_edupersonscopedaffiliation',
             name: 'project-hdr',
             checkedWhen: 'student@uts.edu.au',
-            label: '@dmpt-project-hdr',
-            help: '@dmpt-project-hdr-help',
+            label: '@dataRecord-project-hdr',
+            help: '@dataRecord-project-hdr-help',
             controlType: 'checkbox',
             subscribe: {
               'dataRecordGetter': {
