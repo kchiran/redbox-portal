@@ -431,14 +431,14 @@ module.exports = {
                       relationship: 'dc_supervisor',
                       relateWith: 'userEmail',
                       role: 'Chief Investigator',
-                      searchFields: '',//dc_email TODO: index the email
-                      searchRelation: '',//dc_utsId TODO: index the email
+                      searchField: 'Email',
+                      searchRelation: 'dc_utsId',
                       title: 'text_full_name',
                       fullNameHonorific: 'text_full_name_honorific',
                       honorific: 'honorific',
                       email: 'dc_email',
                       givenName: 'given_name',
-                      familyName: 'family_name'                      
+                      familyName: 'family_name'
                     },
                     userEmail: '@user_email',
                     relationshipFor: '@user_edupersonscopedaffiliation',
@@ -455,7 +455,7 @@ module.exports = {
                     help: '@dmpt-people-tab-data-manager-help',
                     role: "@dmpt-people-tab-data-manager-role",
                     freeText: false,
-                    vocabId: 'Parties AND repository_name:People',
+                    vocabId: 'Parties AND repository_name:People%20AND%20(status:(%22active%22))',
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
                     fieldNames: [{

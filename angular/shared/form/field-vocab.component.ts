@@ -32,7 +32,6 @@ import { BaseService } from '../base-service';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 import { ConfigService } from '../config-service';
 import * as luceneEscapeQuery from "lucene-escape-query";
-
 /**
  * Vocabulary Field
  *
@@ -266,11 +265,11 @@ export class VocabField extends FieldBase<any> {
     }
   }
 
-  relationshipLookup(searchTerm, searchFields) {
+  relationshipLookup(searchTerm, lowerTerm, searchFields) {
     const url = this.lookupService.getMintRootUrl(this.vocabId);
     console.log(`Using: ${url}`);
     const mlu = new MintRelationshipLookup(url, this.lookupService.http, searchFields);
-    return mlu.search(searchTerm);
+    return mlu.search(searchTerm, lowerTerm);
   }
 
 }
@@ -616,11 +615,11 @@ export class MintRelationshipLookup {
       this.searchFieldStr = searchFieldStr;
   }
 
-  search(term) {
+  search(term, lower) {
     term = _.trim(luceneEscapeQuery.escape(term));
     let searchString = '';
     if (!_.isEmpty(term)) {
-      term = _.toLower(term);
+      if(lower) term = _.toLower(term);
       if(_.isEmpty(this.searchFieldStr)) {
         searchString = term;
       } else {
