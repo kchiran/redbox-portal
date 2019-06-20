@@ -171,7 +171,7 @@ export module Services {
 			// attachment
 
 			const attachments = metadata['dataLocations'].filter(
-				(a) => a['type'] === 'attachment'
+				(a) => ( a['type'] === 'attachment' && a['selected'] )
 			);
 
 			const obs = attachments.map((a) => {
