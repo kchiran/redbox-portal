@@ -67,7 +67,8 @@ module.exports = [
                   onValueUpdate: {
                     modelEventSource: 'valueChanges'
                   }
-                }
+                },
+                activeValidators: {}
               }
             }],
             subscribe: {
