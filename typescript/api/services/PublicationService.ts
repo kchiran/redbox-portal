@@ -104,9 +104,9 @@ export module Services {
 				return Observable.fromPromise(this.getRepository(options['site']))
 					.flatMap((repository) => {
 						return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
-							sails.log.debug(`Writing datacrate for ${oid} in ${dir}`);
-							await this.writeDataCrate(oid, drid, md, dir);
-							sails.log.debug("Finished writing datacrate");
+							sails.log.debug(`Writing dataset for ${oid} in ${dir}`);
+							await this.writeDataset(oid, drid, md, dir);
+							sails.log.debug("Finished writing dataset");
 						}));
 					}).flatMap(() => {
 						return this.updateUrl(oid, record, site['url']);
@@ -114,6 +114,7 @@ export module Services {
 						sails.log.error(`Error publishing dataset ${oid} to ocfl repo st ${options['site']}`);
 						sails.log.error(err.name);
 						sails.log.error(err.message);
+						sails.log.error(err.stack);
            	return this.recordPublicationError(oid, record, err);
 					});
 
@@ -168,7 +169,7 @@ export module Services {
     // based on the original exportDataset - takes the existing Observable chain
     // and converts it to a promise so that it can work with the ocfl library
 
-		private async writeDataCrate(oid: string, drid: string, metadata: Object, dir: string): Promise<any> {
+		private async writeDataset(oid: string, drid: string, metadata: Object, dir: string): Promise<any> {
 
 			// this leads to catalog.json only in inventory
 			// and if you don't select metadata only, it doesn't write the URL back to the metadata
@@ -180,32 +181,24 @@ export module Services {
 			// indexed
 
 			const attachments = metadata['dataLocations'].filter(
-				(a) => ( a['type'] === 'attachment' && a['selected'] && !mdOnly )
+				(a) => ( a['type'] === 'attachment' )
 			);
 
-			const obs = [];
-
-			if( attachments ) {
-				obs.push(... attachments.map((a) => {
-					sails.log.debug("Building attachment observable " + a['name']);
-					return RecordsService.getDatastream(drid, a['fileId']).
-						flatMap(ds => {
+			const obs = attachments.map((a) => {
+				sails.log.debug("Building attachment observable " + a['name']);
+				return RecordsService.getDatastream(drid, a['fileId']).
+					flatMap(ds => {
+						if( a['selected'] && !mdOnly ) {
 							const filename = path.join(dir, a['name']);
-							sails.log.debug("About to write " + filename);
-							return Observable.fromPromise(this.writeAttachment(ds.body, filename))
-								.catch(err => {
-									sails.log.error("Error writing attachment " + a['fileId']);
-									sails.log.error(err.name);
-									sails.log.error(err.message);
-                 	return new Observable();
-								});
-						});
-				}));
-			} else {
-				sails.log.debug("Stub observable, no attachments");
-				obs.push(Observable.of({}));
-			}
-
+							sails.log.debug("Made promise to write attachment " + filename);
+							return Observable.fromPromise(this.writeAttachment(ds.body, filename));
+						} else {
+							sails.log.debug("Made Observable that returns true to skip attachment " + a['name]']);
+							return Observable.of(true);
+						}
+					});
+			});
+	
 			obs.push(this.makeDataCrate(oid, dir, metadata));
 			return Observable.merge(...obs).toPromise();
 		}
@@ -241,7 +234,7 @@ export module Services {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
 					fs.writeFile(fn, buffer, () => {
-						sails.log.debug("Wrote attachment to " + fn);
+						sails.log.debug("Just wrote attachment to " + fn);
 						resolve(true)
 					});
 				} catch(e) {
