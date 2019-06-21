@@ -41,14 +41,11 @@ export module Services {
     ];
     /** Warning this is synch... */
     public bootstrap() {
-      sails.log.debug("#####################");
-      sails.log.debug(Backend);
-      sails.log.debug("#####################");
 
       //@ts-ignore
       i18next.use(Backend).init({
           preload: ['en'],
-          debug: true,
+          debug: false,
           lng: 'en',
           fallbackLng: 'en',
           initImmediate: false,
@@ -56,9 +53,9 @@ export module Services {
             loadPath: `${sails.config.appPath}/assets/locales/{{lng}}/{{ns}}.json`
           }
         }).then(i18next => {
-          sails.log.debug("**************************");
-          sails.log.debug("i18next initialised");
-          sails.log.debug("**************************");
+          sails.log.verbose("**************************");
+          sails.log.verbose("i18next initialised");
+          sails.log.verbose("**************************");
           });
     }
 

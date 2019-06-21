@@ -101,18 +101,24 @@ export module Services {
 				//sails.log.debug("Bailing out before actually writing data pub");
 				//return Observable.of(null);
 
-				return this.getRepository(options['site'])
+				return Observable.fromPromise(this.getRepository(options['site']))
 					.flatMap((repository) => {
 						return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
 							sails.log.debug(`Writing datacrate for ${oid} in ${dir}`);
-							await this.writeDataCrate(oid, drid, md, dir)
+							await this.writeDataCrate(oid, drid, md, dir);
+							sails.log.debug("Finished writing datacrate");
 						}));
 					}).flatMap(() => {
 						return this.updateUrl(oid, record, site['url']);
+					}).catch(err => {
+						sails.log.error(`Error publishing dataset ${oid} to ocfl repo st ${options['site']}`);
+						sails.log.error(err.name);
+						sails.log.error(err.message);
+           	return this.recordPublicationError(oid, record, err);
 					});
 
     	} else {
-//     		sails.log.info(`Not sending for: ${oid}, condition not met: ${_.get(options, "triggerCondition", "")}`);
+     		sails.log.debug(`Not publishing: ${oid}, condition not met: ${_.get(options, "triggerCondition", "")}`);
     		return Observable.of(null);
    		}
   	}
@@ -122,42 +128,39 @@ export module Services {
   	// is a bit rough and ready. FIXME - this should be done in 
   	// deployment or at least bootstrapping the server
 
-  	public getRepository(site): Observable<any> {
-  		return Observable.fromPromise(new Promise<any>((resolve, reject) => {
-  			sails.log.debug(`getRepository for ${site}`)
-  			if(! sails.config.datapubs.sites[site] ) {
-					sails.log.error(`unknown site ${site}`);
-					reject();
-  			} else {
-  				const dir = sails.config.datapubs.sites[site].dir;
- 					const repository = new ocfl.Repository();
+  	public async getRepository(site): Promise<any> {
+ 			sails.log.debug(`getRepository for ${site}`)
+  		if(! sails.config.datapubs.sites[site] ) {
+				sails.log.error(`unknown site ${site}`);
+				throw(new Error("unknown repostitory site " + site));
+  		} else {
+  			const dir = sails.config.datapubs.sites[site].dir;
+ 				const repository = new ocfl.Repository();
+  		  sails.log.debug(`Newly created repositor = ${JSON.stringify(repository)}`);
+  			try {
+  		    sails.log.debug(`Trying to load existing repository from ${dir}`);
+  		    sails.log.debug(`repo = ${JSON.stringify(repository)}`);
+  				await repository.load(dir);
+  		    sails.log.debug(`load was successful`);
+  				return repository;
+  			} catch(e) {
+  			  sails.log.debug(`Couldn't load existing repository from ${dir}`);
+  		    sails.log.debug(`repo = ${JSON.stringify(repository)}`);
   				try {
-  			    sails.log.debug(`trying to load existing repository from ${dir}`);
-  					repository.load(dir);
-  			    sails.log.debug('connected to existing repository');
-  					resolve(repository);
+  					const newrepo = new ocfl.Repository();
+  			    sails.log.debug(`Trying to creating new repository at ${dir}`);
+  			    await fse.ensureDir(dir);
+  					await newrepo.create(dir);
+  			    sails.log.debug(`Repository created at ${dir}`);
+  					return newrepo;
   				} catch(e) {
-  			    sails.log.debug(`Couldn't load existing repository from ${dir}`);
-  					try { 
-  			      sails.log.debug(`Creating existing repository at ${dir}`);
-  						repository.create(dir);
-  			      sails.log.debug(`Repository created at ${dir}`);
-  						resolve(repository);
-  					} catch(e) {
-  						sails.log.error("Could neither load nor initialise repo at " + dir);
-  						sails.log.error(e);
-  						reject();
-  					}
+  					sails.log.error("Could neither load nor initialise repo at " + dir);
+  		    	sails.log.debug(`repo = ${JSON.stringify(repository)}`);
+  					throw(e);
   				}
   			}
-  		})).catch(err => {
-				sails.log.error("Error initialising repository for " + site);
-				sails.log.error(err.name);
-				sails.log.error(err.message);
-        return new Observable();
-			});
-  	} 
-
+  		}
+  	}
 
   	// async function which takes a data publication and destination directory
   	// and writes out the attachments and datacrate files to it
@@ -167,28 +170,41 @@ export module Services {
 
 		private async writeDataCrate(oid: string, drid: string, metadata: Object, dir: string): Promise<any> {
 
-			// build a list of observables, each of which loads and writes out an
-			// attachment
+			// this leads to catalog.json only in inventory
+			// and if you don't select metadata only, it doesn't write the URL back to the metadata
+			// so it's blowing up somewhere
+
+			const mdOnly = metadata['accessRightsToggle'];
+
+			// if there are no attachments, for whatever reason, only the CATALOG.json gets 
+			// indexed
 
 			const attachments = metadata['dataLocations'].filter(
-				(a) => ( a['type'] === 'attachment' && a['selected'] )
+				(a) => ( a['type'] === 'attachment' && a['selected'] && !mdOnly )
 			);
 
-			const obs = attachments.map((a) => {
-				sails.log.debug("Building attachment observable " + a['name']);
-				return RecordsService.getDatastream(drid, a['fileId']).
-					flatMap(ds => {
-						const filename = path.join(dir, a['name']);
-						sails.log.debug("About to write " + filename);
-						return Observable.fromPromise(this.writeAttachment(ds.body, filename))
-							.catch(err => {
-								sails.log.error("Error writing attachment " + a['fileId']);
-								sails.log.error(err.name);
-								sails.log.error(err.message);
-                 return new Observable();
-							});
-					});
-			});
+			const obs = [];
+
+			if( attachments ) {
+				obs.push(... attachments.map((a) => {
+					sails.log.debug("Building attachment observable " + a['name']);
+					return RecordsService.getDatastream(drid, a['fileId']).
+						flatMap(ds => {
+							const filename = path.join(dir, a['name']);
+							sails.log.debug("About to write " + filename);
+							return Observable.fromPromise(this.writeAttachment(ds.body, filename))
+								.catch(err => {
+									sails.log.error("Error writing attachment " + a['fileId']);
+									sails.log.error(err.name);
+									sails.log.error(err.message);
+                 	return new Observable();
+								});
+						});
+				}));
+			} else {
+				sails.log.debug("Stub observable, no attachments");
+				obs.push(Observable.of({}));
+			}
 
 			obs.push(this.makeDataCrate(oid, dir, metadata));
 			return Observable.merge(...obs).toPromise();
@@ -271,7 +287,7 @@ export module Services {
 					const html_filename = index.html_file_name;
 					return Observable.merge(pages.map((p) => {
 						const outdir = path.join(dir, p.path);
-						sails.log.debug(`Writing catalog file to ${outdir}`);
+						sails.log.debug(`Writing catalog file to ${outdir}/${html_filename}`);
 						return Observable.fromPromise(this.writeCatalogHTML(outdir, html_filename, p.html))
 					}))
 				}).catch(error => {
@@ -290,15 +306,21 @@ export module Services {
 
 
 		private updateUrl(oid: string, record: Object, baseUrl: string): Observable<any> {
-			const branding = sails.config.auth.defaultBrand; // fix me
-			// Note: the trailing slash on the URL is here to stop nginx auto-redirecting
-			// it, which on localhost:8080 breaks the link in some browsers - see 
-			// https://serverfault.com/questions/759762/how-to-stop-nginx-301-auto-redirect-when-trailing-slash-is-not-in-uri/812461#812461
+			const branding = sails.config.auth.defaultBrand; 
 			record['metadata']['citation_url'] = baseUrl + '/' + oid + '/';
 			// turn off postsave triggers
 			sails.log.debug(`Updating citation_url to ${record['metadata']['citation_url']}`);
 			return RecordsService.updateMeta(branding, oid, record, null, true, false);
 		}
+
+		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
+			const branding = sails.config.auth.defaultBrand; 
+			// turn off postsave triggers
+			sails.log.debug(`recording publication error in record metadata`);
+			record['metadata']['publication_error'] = "Data publication failed with error: " + err.name + " " + err.message;
+			return RecordsService.updateMeta(branding, oid, record, null, true, false);
+		}
+
 
 
 
