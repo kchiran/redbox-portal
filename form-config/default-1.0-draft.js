@@ -426,7 +426,7 @@ module.exports = {
                         modelEventSource: 'valueChanges'
                       }
                     },
-                    findRelationshipFor: 'student@uts.edu.au',
+                    findRelationshipFor: ['student@uts.edu.au'],
                     findRelationship: {
                       relationship: 'dc_supervisor',
                       relateWith: 'userEmail',
@@ -437,8 +437,8 @@ module.exports = {
                       fullNameHonorific: 'text_full_name_honorific',
                       honorific: 'honorific',
                       email: 'dc_email',
-                      givenName: 'given_name',
-                      familyName: 'family_name'
+                      givenName: 'text_given_name',
+                      familyName: 'text_family_name'
                     },
                     userEmail: '@user_email',
                     relationshipFor: '@user_edupersonscopedaffiliation',
