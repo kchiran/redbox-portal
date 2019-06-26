@@ -580,5 +580,10 @@ export class ContributorComponent extends SimpleComponent {
     }
   }
 
+  public onOpen(isOpen:boolean) {
+    if (isOpen) {
+      this.field.toggleConditionalValidation(false);
+    }
+  }
 
 }
