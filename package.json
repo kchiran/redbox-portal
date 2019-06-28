@@ -16,7 +16,7 @@
     "calcyte": "^1.0.5",
     "chokidar": "~2.1.0",
     "core-js": "^2.4.1",
-    "datacrate": "^1.0.4",
+    "datacrate": "^1.0.7",
     "dotenv": "^6.1.0",
     "ejs": "2.6.1",
     "font-awesome-sass": "4.7.0",
