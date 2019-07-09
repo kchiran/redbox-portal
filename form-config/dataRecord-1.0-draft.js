@@ -988,6 +988,14 @@ module.exports = {
                     label: '@dataRecord-data-software',
                     type: 'text'
                   }
+                },
+                {
+                  class: 'TextArea',
+                  definition: {
+                    name: 'access_instructions',
+                    label: '@dataRecord-access-instructions',
+                    type: 'text'
+                  }
                 }
               ]
             }
