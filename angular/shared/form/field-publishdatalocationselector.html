@@ -11,12 +11,15 @@
           <th width="5%"><input type="checkbox" (change)="selectAllLocations($event.target.checked)" *ngIf="field.editMode" [attr.aria-label]="'select-all-items' | translate"/><span [hidden]="true">Select</span></th>
           <th width="15%">{{ field.typeHeader }}</th>
           <th width="40%">{{ field.locationHeader }}</th>
-          <th width="40%">{{ field.notesHeader }}</th>
+          <th *ngIf="field.notesEnabled" width="20%">{{ field.notesHeader }}</th>
+          <th *ngIf="field.iscEnabled" width="20%">{{ field.iscHeader }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let dataLocation of getDatalocations(); let i = index;">
-          <td><input type="checkbox" [(ngModel)]="dataLocation.selected" [attr.disabled]="field.editMode ? null : ''"  [attr.aria-label]="'select-item' | translate"/></td>
+          <td>
+            <input type="checkbox" [(ngModel)]="dataLocation.selected" [attr.disabled]="dataLocation.isc && dataLocation.isc === 'public' && field.editMode ? null : ''"  [attr.aria-label]="'select-item' | translate"/>
+          </td>
           <td>{{ field.dataTypeLookup[dataLocation.type] }}</td>
           <td>
             <ng-container *ngIf="dataLocation && dataLocation.type != 'attachment'">
@@ -31,9 +34,12 @@
               </a>
             </ng-container>
           </td>
-          <td>
+          <td *ngIf="field.notesEnabled">
             {{ dataLocation.notes }}
             <button *ngIf="field.editMode" type='button' class="btn btn-primary pull-right" (click)="editNotes(dataLocation, i)">{{ field.editNotesButtonText }}</button>
+          </td>
+          <td *ngIf="field.iscEnabled">
+            {{ dataLocation.isc }}
           </td>
 
         </tr>

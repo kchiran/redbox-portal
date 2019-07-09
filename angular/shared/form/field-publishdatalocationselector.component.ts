@@ -76,6 +76,9 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
   typeHeader: string;
   locationHeader: string;
   notesHeader: string;
+  iscHeader: string;
+  iscEnabled: boolean;
+  notesEnabled: boolean;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -91,6 +94,9 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
     this.typeHeader =  this.getTranslated(options['typeHeader'], 'Type');
     this.locationHeader =  this.getTranslated(options['locationHeader'], 'Location');
     this.notesHeader =  this.getTranslated(options['notesHeader'], 'Notes');
+    this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
+    this.notesEnabled = !_.isUndefined(options['notesEnabled']) ? options['notesEnabled'] : true;
+    this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
 
     this.value = options['value'] || this.setEmptyValue();
     this.recordsService = this.getFromInjector(RecordsService);
@@ -160,9 +166,17 @@ export class PublishDataLocationSelectorComponent extends SimpleComponent {
   }
 
   public selectAllLocations(checked){
-    _.each(this.field.value, (dataLocation:any) => {
-      dataLocation.selected = checked;
-    });
+    if(this.field.iscEnabled) {
+      _.each(this.field.value, (dataLocation:any) => {
+        if(dataLocation.isc && dataLocation.isc === 'public') {
+          dataLocation.selected = checked;
+        }
+      });
+    } else {
+      _.each(this.field.value, (dataLocation:any) => {
+        dataLocation.selected = checked;
+      });
+    }
   }
 
   public getDatalocations() {

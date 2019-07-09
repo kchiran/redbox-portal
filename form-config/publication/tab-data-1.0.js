@@ -46,6 +46,8 @@ module.exports = [
             name: "dataLocations", // this will create another entry on form group that will contain the list of those selected
             visibilityCriteria: false, // hidden when access rights is unchecked
             disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
+            notesEnabled: false,
+            iscEnabled: true,
             subscribe: {
               'dataRecordGetter': {
                 onValueUpdate: [{

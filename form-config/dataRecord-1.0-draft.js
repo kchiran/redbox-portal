@@ -974,7 +974,7 @@ module.exports = {
                     name: "dataLocations",
                     maxFileSize: 1073741824, // <- Configure web server to match this
                     maxNumberOfFiles: 50,
-                    notesEnabled: true,
+                    notesEnabled: false,
                     notesHeader: '@dataLocations-notes',
                     iscHeader: '@dataLocations-isc',
                     uppyDashboardNote: '@dataLocations-uploader-note',
