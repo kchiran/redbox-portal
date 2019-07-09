@@ -336,7 +336,7 @@
   "@dmpt-agls:protectiveMarking_dc:type": "Type of sensitivity:",
   "@dmpt-agls:protectiveMarking_dc:type-help": "If there are specific sensitivities relevant to this research, select these here. Specific sensitivities may impact the storage of and management of your research data.",
   "@dmpt-agls:protectiveMarking_dc:type-cultural": "Culturally sensitive (e.g. Personal & sensitive data, Indigenous knowledge)",
-  "@dmpt-agls:protectiveMarking_dc:type-health": "Health data",
+  "@dmpt-agls:protectiveMarking_dc:type-health": "Health records and information",
   "@dmpt-agls:protectiveMarking_dc:type-security": "Security classified",
   "@dmpt-agls:protectiveMarking_dc:type-commercial": "Commercially sensitive",
   "@dmpt-agls:protectiveMarking_dc:type-nonPublic": "Other non public (e.g. DSGL affected, research on animals)",

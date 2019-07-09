@@ -105,7 +105,7 @@ module.exports = {
                     forceClone: ['lookupService', 'completerService'],
                     disableEditAfterSelect: false,
                     disabledExpression: '<%= !_.isEmpty(oid) && (_.indexOf(user.roles, \'Admin\') == -1) %>',
-                    vocabId: '\"Research Activities\"%20AND%20(text_status:(%22Completed%22%20OR%20%22Approved%22%20OR%20%22Closed%20Off%22%20OR%20%22Combined%22%20OR%20%22Transferred%22))',
+                    vocabId: '\"Research Activities\"%20AND%20(text_status:(%22Completed%22%20OR%20%22Applied%22%20OR%20%22Approved%22%20OR%20%22Closed%20Off%22%20OR%20%22Combined%22%20OR%20%22Transferred%22))',
                     sourceType: 'mint',
                     fieldNames: ['dc_title', 'folio', 'description', 'summary', 'refId', 'keyword', 'startDate', 'endDate', 'organization', 'fundingSource', 'rmId'],
                     searchFields: 'autocomplete_title',
