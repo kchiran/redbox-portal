@@ -42,7 +42,7 @@ export class DataLocationField extends FieldBase<any> {
   failedObjects: object[];
   recordsService: RecordsService;
   columns: object[];
-  newLocation: any = { type: "url", location: "", notes: "" };
+  newLocation: any = { type: "url", location: "", notes: "", isc: "confidential" };
   attachmentText: string="Add attachment(s)";
   dataTypes: object[] = [{
     'label': 'URL',
@@ -82,11 +82,14 @@ export class DataLocationField extends FieldBase<any> {
   locationHeader: string;
   notesHeader: string;
   uppyDashboardNote: string;
+  securityClassificationOptions: any;
+  notesEnabled: boolean;
+  iscHeader: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
     this.accessDeniedObjects = [];
-    this.locationAddText = this.getTranslated(options['locationAddText'], null);
+    this.locationAddText = this.getTranslated(options['locationAddText'], 'Add Location');
     this.editNotesButtonText = this.getTranslated(options['editNotesButtonText'], 'Edit');
     this.editNotesTitle = this.getTranslated(options['editNotesTitle'], 'Edit Notes');
     this.cancelEditNotesButtonText = this.getTranslated(options['cancelEditNotesButtonText'], 'Cancel');
@@ -94,8 +97,11 @@ export class DataLocationField extends FieldBase<any> {
     this.editNotesCssClasses = options['editNotesCssClasses'] || 'form-control';
     this.typeHeader =  this.getTranslated(options['typeHeader'], 'Type');
     this.locationHeader =  this.getTranslated(options['locationHeader'], 'Location');
-    this.notesHeader =  this.getTranslated(options['notesHeader'], 'Notes');
+    this.notesEnabled = !_.isUndefined(options['notesEnabled']) ? options['notesEnabled'] : true;
+    this.notesHeader = options['notesHeader'] ? this.getTranslated(options['notesHeader'], options['notesHeader']) : null;
+    this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
     this.uppyDashboardNote = this.getTranslated(options['uppyDashboardNote'], 'Maximum upload size: 1 Gb per file');
+    this.securityClassificationOptions = options['securityClassificationOptions'] || [];
     this.columns = options['columns'] || [];
 
     this.maxFileSize = options['maxFileSize'] || null;
@@ -120,7 +126,7 @@ export class DataLocationField extends FieldBase<any> {
   addLocation() {
     this.value.push(this.newLocation);
     this.setValue(this.value);
-    this.newLocation = { type: "url", location: "", notes: "" };
+    this.newLocation = { type: "url", location: "", notes: "", isc: "confidential" };
   }
 
   appendLocation(newLoc: any) {

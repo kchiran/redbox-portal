@@ -974,9 +974,17 @@ module.exports = {
                     name: "dataLocations",
                     maxFileSize: 1073741824, // <- Configure web server to match this
                     maxNumberOfFiles: 50,
+                    notesEnabled: true,
                     notesHeader: '@dataLocations-notes',
+                    iscHeader: '@dataLocations-isc',
                     uppyDashboardNote: '@dataLocations-uploader-note',
                     locationAddText: '@dataLocations-addText',
+                    securityClassificationOptions: [
+                      {value:'confidential', label: 'Confidential'},
+                      {value:'sensitive', label: 'Sensitive'},
+                      {value:'internal', label: 'Internal'},
+                      {value:'public', label: 'Public'},
+                    ],
                     help: '@dataLocations-help',
                     label: '@dataLocations-label'
                   }

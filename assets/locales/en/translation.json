@@ -660,6 +660,7 @@
   "@dataLocations-help": "Data can include raw or processed data in any form and can also include research records relating to data. Examples include (but are not limited to), third party data management or custodial agreements, eNotebooks, survey instruments, ReadMe files which explain the data's structure, provenance and significance, etc",
   "@dataLocations-label": "Data Locations",
   "@dataLocations-notes": "Notes",
+  "@dataLocations-isc": "Information Security Classification",
   "@dataLocations-uploader-note": "Maximum 50 files, up to 1 GB each",
   "@dataLocations-addText": "Add",
   "logo-alt-text": "ReDBox Logo",
