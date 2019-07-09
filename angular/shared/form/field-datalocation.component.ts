@@ -85,6 +85,7 @@ export class DataLocationField extends FieldBase<any> {
   securityClassificationOptions: any;
   notesEnabled: boolean;
   iscHeader: string;
+  iscEnabled: boolean;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -101,6 +102,7 @@ export class DataLocationField extends FieldBase<any> {
     this.notesHeader = options['notesHeader'] ? this.getTranslated(options['notesHeader'], options['notesHeader']) : null;
     this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
     this.uppyDashboardNote = this.getTranslated(options['uppyDashboardNote'], 'Maximum upload size: 1 Gb per file');
+    this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
     this.securityClassificationOptions = options['securityClassificationOptions'] || [];
     this.columns = options['columns'] || [];
 

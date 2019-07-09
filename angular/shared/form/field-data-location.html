@@ -12,7 +12,7 @@
             <th width="15%">{{ field.typeHeader }}</th>
             <th width="40%">{{ field.locationHeader }}</th>
             <th *ngIf="field.notesEnabled" width="20%">{{ field.notesHeader }}</th>
-            <th width="20%">{{ field.iscHeader }}</th>
+            <th  *ngIf="field.iscEnabled" width="20%">{{ field.iscHeader }}</th>
             <th width="5%" *ngIf="field.editMode"><span [hidden]="true">Action</span></th>
           </tr>
         </thead>
@@ -36,7 +36,7 @@
               {{ dataLocation.notes }}
               <button *ngIf="field.editMode" type='button' class="btn btn-primary pull-right" (click)="editNotes(dataLocation, i)">{{ field.editNotesButtonText }}</button>
             </td>
-            <td>
+            <td *ngIf="field.iscEnabled">
               {{ dataLocation.isc }}
             </td>
             <td *ngIf="field.editMode">
@@ -54,10 +54,10 @@
         <span class="label-font">{{ field.locationHeader }}</span>
       </div>
       <div class="col-xs-2">
-        <span class="label-font" *ngIf="field.newLocation.type != 'attachment'">{{ field.notesHeader }}</span>
+        <span class="label-font" *ngIf="field.newLocation.type != 'attachment' && field.notesEnabled">{{ field.notesHeader }}</span>
       </div>
       <div class="col-xs-2">
-        <span class="label-font">{{ field.iscHeader }}</span>
+        <span class="label-font" *ngIf="field.iscEnabled">{{ field.iscHeader }}</span>
       </div>
       <div class="col-xs-1">
         <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
@@ -83,7 +83,7 @@
         <input [(ngModel)]="field.newLocation.notes"  *ngIf="field.newLocation.type != 'attachment' && field.notesEnabled" type="text" class="form-control" [attr.aria-label]="field.notesHeader" />
       </div>
       <div class="col-xs-2">
-        <select [(ngModel)]="field.newLocation.isc" [id]="field.newLocation.isc" class="form-control" [attr.aria-label]="field.iscHeader">
+        <select *ngIf="field.iscEnabled" [(ngModel)]="field.newLocation.isc" [id]="field.newLocation.isc" class="form-control" [attr.aria-label]="field.iscHeader">
            <option *ngFor="let opt of field.securityClassificationOptions" [value]="opt.value">{{opt.label}}</option>
         </select>
       </div>

@@ -975,6 +975,7 @@ module.exports = {
                     maxFileSize: 1073741824, // <- Configure web server to match this
                     maxNumberOfFiles: 50,
                     notesEnabled: false,
+                    iscEnabled: true,
                     notesHeader: '@dataLocations-notes',
                     iscHeader: '@dataLocations-isc',
                     uppyDashboardNote: '@dataLocations-uploader-note',
