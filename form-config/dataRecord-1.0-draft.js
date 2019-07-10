@@ -504,19 +504,19 @@ module.exports = {
                         }]
                       }
                     },
-                    findRelationshipFor: 'student@uts.edu.au',
+                    findRelationshipFor: ['student@uts.edu.au'],
                     findRelationship: {
                       relationship: 'dc_supervisor',
                       relateWith: 'userEmail',
                       role: 'Chief Investigator',
-                      searchFields: '',//dc_email TODO: index the email
-                      searchRelation: '',//dc_utsId TODO: index the email
+                      searchField: 'Email',
+                      searchRelation: 'dc_utsId',
                       title: 'text_full_name',
                       fullNameHonorific: 'text_full_name_honorific',
                       honorific: 'honorific',
                       email: 'dc_email',
-                      givenName: 'given_name',
-                      familyName: 'family_name'
+                      givenName: 'text_given_name',
+                      familyName: 'text_family_name'
                     },
                     userEmail: '@user_email',
                     relationshipFor: '@user_edupersonscopedaffiliation',
