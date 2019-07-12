@@ -27,7 +27,7 @@ services:
     entrypoint: /bin/bash -c "cd /opt/redbox-portal && node app.js"
 
   nginx:
-    image: nginx
+    image: mikelynch/nginx-ocfl
     ports:
       - "8080:8080"
     restart: always

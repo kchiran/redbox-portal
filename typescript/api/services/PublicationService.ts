@@ -33,8 +33,7 @@ import { Index, jsonld } from 'calcyte';
 const datacrate = require('datacrate').catalog;
 
 declare var sails: Sails;
-declare var RecordsService;
-declare var BrandingService;
+declare var RecordsService, UsersService, BrandingService;
 declare var _;
 
 // NOTE: the publication isn't being triggered if you go straight to review
@@ -68,7 +67,10 @@ export module Services {
     // initialised, it initalised an ocfl repository there. A future
     // release should leave this to boostrap or deployment.
 
-  	public exportDataset(oid, record, options): Observable<any> {
+    // the 'user' in the args is whoever triggered the export by clicking the
+    // publication submit button
+
+  	public exportDataset(oid, record, options, user): Observable<any> {
    		if( this.metTriggerCondition(oid, record, options) === "true") {
 
    			sails.log.debug("Called exportDataset on update");
@@ -101,15 +103,23 @@ export module Services {
 				//sails.log.debug("Bailing out before actually writing data pub");
 				//return Observable.of(null);
 
+				const creator = { email: "Place.Holder@uts.edu.au" };
+
+				sails.log.debug("Got user: " + JSON.stringify(user));
+
+				if( ! user || user['email'] ) {
+					user = { 'email': 'User.not.found@uts.edu.au' };
+				}
+
 				return Observable.fromPromise(this.getRepository(options['site']))
 					.flatMap((repository) => {
 						return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
 							sails.log.debug(`Writing dataset for ${oid} in ${dir}`);
-							await this.writeDataset(oid, drid, md, dir);
+							await this.writeDataset(creator, user, oid, drid, md, dir);
 							sails.log.debug("Finished writing dataset");
-						}));
-					}).flatMap(() => {
-						return this.updateUrl(oid, record, site['url']);
+						})).flatMap(() => {
+							return this.updateUrl(oid, record, site['url']);
+						});
 					}).catch(err => {
 						sails.log.error(`Error publishing dataset ${oid} to ocfl repo st ${options['site']}`);
 						sails.log.error(err.name);
@@ -129,7 +139,7 @@ export module Services {
   	// is a bit rough and ready. FIXME - this should be done in 
   	// deployment or at least bootstrapping the server
 
-  	public async getRepository(site): Promise<any> {
+  	private async getRepository(site): Promise<any> {
  			sails.log.debug(`getRepository for ${site}`)
   		if(! sails.config.datapubs.sites[site] ) {
 				sails.log.error(`unknown site ${site}`);
@@ -163,22 +173,26 @@ export module Services {
   		}
   	}
 
+  	// returns an Observable which looks up the record's creator
+
+  	private getRecordCreator(record): Observable<any> {
+  		return UsersService.getUserWithUsername(record['metaMetadata']['createdBy'])
+  			.flatMap((user) => {
+  				sails.log.debug("Got user: " + JSON.stringify(user));
+  				return user;
+  			});
+  	}
+
+
   	// async function which takes a data publication and destination directory
   	// and writes out the attachments and datacrate files to it
 
     // based on the original exportDataset - takes the existing Observable chain
     // and converts it to a promise so that it can work with the ocfl library
 
-		private async writeDataset(oid: string, drid: string, metadata: Object, dir: string): Promise<any> {
-
-			// this leads to catalog.json only in inventory
-			// and if you don't select metadata only, it doesn't write the URL back to the metadata
-			// so it's blowing up somewhere
+		private async writeDataset(creator: Object, approver: Object, oid: string, drid: string, metadata: Object, dir: string): Promise<any> {
 
 			const mdOnly = metadata['accessRightsToggle'];
-
-			// if there are no attachments, for whatever reason, only the CATALOG.json gets 
-			// indexed
 
 			const attachments = metadata['dataLocations'].filter(
 				(a) => ( a['type'] === 'attachment' )
@@ -199,7 +213,7 @@ export module Services {
 					});
 			});
 	
-			obs.push(this.makeDataCrate(oid, dir, metadata));
+			obs.push(this.makeDataCrate(creator, approver, oid, dir, metadata));
 			return Observable.merge(...obs).toPromise();
 		}
 
@@ -247,10 +261,8 @@ export module Services {
 		}
 
 
-		private makeDataCrate(oid: string, dir: string, metadata: Object): Observable<any> {
+		private makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Observable<any> {
 
-			const owner = 'TODO@shouldnt.the.owner.come.from.the.datapub';
-			const approver = 'TODO@get.the.logged-in.user';
 			const index = new Index();
 
 			return Observable.of({})
@@ -259,8 +271,8 @@ export module Services {
 						'id': oid,
 						'datapub': metadata,
 						'organisation': sails.config.datapubs.datacrate.organization,
-						'owner': owner,
-						'approver': approver
+						'owner': creator['email'],
+						'approver': approver['email']
 					}))
 				}).flatMap(async (catalog) => {
 
