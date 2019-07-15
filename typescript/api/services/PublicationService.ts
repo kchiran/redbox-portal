@@ -107,20 +107,22 @@ export module Services {
 
 				sails.log.debug("Got user: " + JSON.stringify(user));
 
-				if( ! user || user['email'] ) {
-					user = { 'email': 'User.not.found@uts.edu.au' };
+				if( ! user || ! user['email'] ) {
+					user = { 'email': '' };
+					sails.log.error("Empty user or no email found");
 				}
 
 				return Observable.fromPromise(this.getRepository(options['site']))
 					.flatMap((repository) => {
-						return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
-							sails.log.debug(`Writing dataset for ${oid} in ${dir}`);
-							await this.writeDataset(creator, user, oid, drid, md, dir);
-							sails.log.debug("Finished writing dataset");
-						})).flatMap(() => {
+						return UsersService.getUserWithUsername(record['metaMetadata']['createdBy'])
+							.flatMap((creator) => { 
+  							return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
+									await this.writeDataset(creator, user, oid, drid, md, dir);
+								}))
+  						})
+						}).flatMap(() => {
 							return this.updateUrl(oid, record, site['url']);
-						});
-					}).catch(err => {
+						}).catch(err => {
 						sails.log.error(`Error publishing dataset ${oid} to ocfl repo st ${options['site']}`);
 						sails.log.error(err.name);
 						sails.log.error(err.message);
