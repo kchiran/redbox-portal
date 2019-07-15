@@ -445,9 +445,10 @@ arg@^4.1.0:
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.0.tgz#583c518199419e0037abb74062c37f8519e575f0"
   integrity sha512-ZWc51jO3qegGkVh8Hwpv636EkbesNV5ZNQPCtRa+0qytRYPEs9IYT9qITY9buezqUH5uqyzlWLcufrzU2rffdg==
 
-argparse@^1.0.2, argparse@^1.0.7:
+argparse@^1.0.10, argparse@^1.0.2, argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
+  integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
   dependencies:
     sprintf-js "~1.0.2"
 
@@ -1426,27 +1427,7 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
-calcyte@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/calcyte/-/calcyte-1.0.2.tgz#c7844afc5c488b927a1c013a95f6900bb0158e41"
-  dependencies:
-    cheerio "^1.0.0-rc.2"
-    ejs "^2.5.7"
-    filesize "^3.6.1"
-    gladstone "^0.2.4"
-    html-entities "^1.2.1"
-    jquery "^3.3.1"
-    jsdom "^11.6.2"
-    json "^9.0.6"
-    jsonld "^0.4.12"
-    node-json2html "^1.1.1"
-    shelljs "^0.8.1"
-    tmp "0.0.33"
-    uri-js "^4.2.2"
-    xlsx "^0.11.17"
-    xmlbuilder "^9.0.4"
-
-calcyte@^1.0.5:
+calcyte@1.0.5, calcyte@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/calcyte/-/calcyte-1.0.5.tgz#28fa193c9845c5b7a1ccec7b8f5b8674348997d2"
   integrity sha512-Emyo/F7fs2W4vyXLymOTRj8VTTqv0kBTLgE36civ9vg7m34e1dUnTrfx2VRDmS/tNPHo25Vxyi3x1k5BkR9Z+g==
@@ -2182,14 +2163,18 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-datacrate@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/datacrate/-/datacrate-1.0.4.tgz#239faebc5c5ec240195386598718561871e1cd5e"
+datacrate@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/datacrate/-/datacrate-1.0.7.tgz#2b0aceb2867d7b85e8f064f5ae5aae9dc4d47481"
+  integrity sha512-0A1VsK6czHzqtHU+b2T4il57MojYawOLHjnNd7bTViP1LCB3PvKSioaEP+OIIhXb5/yXqSJQHIovjIULXmZQSA==
   dependencies:
-    calcyte "^1.0.2"
+    argparse "^1.0.10"
+    calcyte "1.0.5"
     fs-extra "^7.0.0"
     jsonld "^1.1.0"
     lodash "^4.17.11"
+    random-word "^2.0.0"
+    uuid "^3.3.2"
 
 dateformat@~1.0.12:
   version "1.0.12"
@@ -4282,7 +4267,7 @@ joi@^6.10.1:
     moment "2.x.x"
     topo "1.x.x"
 
-"jquery@>=1.7.1 <4.0.0", jquery@>=2.2.1, jquery@^3.3.1:
+"jquery@>=1.7.1 <4.0.0", jquery@>=2.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -6277,6 +6262,14 @@ random-bytes@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/random-bytes/-/random-bytes-1.0.0.tgz#4f68a1dc0ae58bd3fb95848c30324db75d64360b"
 
+random-word@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/random-word/-/random-word-2.0.0.tgz#25ed18d5ba5a99409eaceb59dabe65b76d2ff6e9"
+  integrity sha1-Je0Y1bpamUCerOtZ2r5lt20v9uk=
+  dependencies:
+    unique-random-array "^1.0.0"
+    word-list "^2.0.0"
+
 randomatic@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-3.1.1.tgz#b776efc59375984e36c537b2f51a1f0aff0da1ed"
@@ -7977,6 +7970,18 @@ union-value@^1.0.0:
     is-extendable "^0.1.1"
     set-value "^0.4.3"
 
+unique-random-array@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/unique-random-array/-/unique-random-array-1.0.1.tgz#f29bda2a62be8860a703c4739c8f4fdb4d722cc7"
+  integrity sha512-z9J/SV8CUIhIRROcHe9YUoAT6XthUJt0oUyLGgobiXJprDP9O9dsErNevvSaAv5BkhwFEVPn6nIEOKeNE6Ck1Q==
+  dependencies:
+    unique-random "^1.0.0"
+
+unique-random@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/unique-random/-/unique-random-1.0.0.tgz#ce3e224c8242cd33a0e77b0d7180d77e6b62d0c4"
+  integrity sha1-zj4iTIJCzTOg53sNcYDXfmti0MQ=
+
 unique-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unique-string/-/unique-string-1.0.0.tgz#9e1057cca851abb93398f8b33ae187b99caec11a"
@@ -8284,6 +8289,11 @@ wolfy87-eventemitter@*:
   version "5.2.6"
   resolved "https://registry.yarnpkg.com/wolfy87-eventemitter/-/wolfy87-eventemitter-5.2.6.tgz#cc5de965d34099e5c14ec189ee72553802d3ace2"
   integrity sha512-n+bSucT1j9ZEoosxnfuH81bWqtZG4QEtZ9WEuiXz9YQAHEktGYKoSoMTKWTJEcYux8lWoqp1KqHPBpwvJKFFTw==
+
+word-list@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/word-list/-/word-list-2.0.0.tgz#54ddfa4aae1faa71772cfb6e9208c4d8f999363e"
+  integrity sha1-VN36Sq4fqnF3LPtukgjE2PmZNj4=
 
 word-wrap@1.2.3:
   version "1.2.3"
