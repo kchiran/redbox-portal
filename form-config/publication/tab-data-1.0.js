@@ -48,6 +48,9 @@ module.exports = [
             disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
             notesEnabled: false,
             iscEnabled: true,
+            noLocationSelectedText: '@dataPublication-publish-metadata-no-location-selected',
+            noLocationSelectedHelp: '@dataPublication-publish-metadata-only-help',
+            publicCheck: 'public',
             subscribe: {
               'dataRecordGetter': {
                 onValueUpdate: [{

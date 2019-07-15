@@ -535,6 +535,7 @@
   "@dataPublication-embargoUntil": "Embargo until",
   "@dataPublication-embargoUntil-help": "Embargo your data if, for example, you don't want it to be published until after your traditional outputs are published. Choose the date when you expect the embargo to expire and we will contact you to check before publishing. Note that an embargoed record cannot be published until you deselect the embargo checkbox.",
   "@dataPublication-embargoNote": "Embargo note",
+  "@dataPublication-publish-metadata-no-location-selected": "No data selected, this publication will be metadata only",
   "@dataPublication-publish-metadata-only": "Publish metadata only (no data)?",
   "@dataPublication-publish-metadata-only-help": "Publishing only the metadata (or description) of your data allows you to publicise its availability to other researchers while retaining control of who you release it to.",
   "@dataPublication-geolocation": "Geospatial Location",

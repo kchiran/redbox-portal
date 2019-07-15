@@ -79,6 +79,9 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
   iscHeader: string;
   iscEnabled: boolean;
   notesEnabled: boolean;
+  noLocationSelectedText: string;
+  noLocationSelectedHelp: string;
+  publicCheck: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -97,6 +100,9 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
     this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
     this.notesEnabled = !_.isUndefined(options['notesEnabled']) ? options['notesEnabled'] : true;
     this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
+    this.noLocationSelectedText = !_.isUndefined(options['noLocationSelectedText']) ? this.getTranslated(options['noLocationSelectedText'], options['noLocationSelectedText']) : 'Publish Metadata Only';
+    this.noLocationSelectedHelp = !_.isUndefined(options['noLocationSelectedHelp']) ? this.getTranslated(options['noLocationSelectedHelp'], options['noLocationSelectedHelp']) : 'Publicise only metadata (or description)';
+    this.publicCheck = !_.isUndefined(options['publicCheck']) ? this.getTranslated(options['publicCheck'], options['publicCheck']) : 'public';
 
     this.value = options['value'] || this.setEmptyValue();
     this.recordsService = this.getFromInjector(RecordsService);
@@ -160,15 +166,16 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
 export class PublishDataLocationSelectorComponent extends SimpleComponent {
   field: PublishDataLocationSelectorField;
   editingNotes: any = {notes: '', index:-1};
+  locationSelected: boolean = false;
 
   public ngOnInit() {
-
+    this.checkIfLocationsSelected();
   }
 
   public selectAllLocations(checked){
     if(this.field.iscEnabled) {
       _.each(this.field.value, (dataLocation:any) => {
-        if(dataLocation.isc && dataLocation.isc === 'public') {
+        if(dataLocation.isc && dataLocation.isc === this.field.publicCheck) {
           dataLocation.selected = checked;
         }
       });
@@ -176,6 +183,18 @@ export class PublishDataLocationSelectorComponent extends SimpleComponent {
       _.each(this.field.value, (dataLocation:any) => {
         dataLocation.selected = checked;
       });
+    }
+    this.checkIfLocationsSelected();
+  }
+
+  public checkIfLocationsSelected() {
+    const locationSelected = _.find(this.field.value, (dataLocation:any) => {
+      return dataLocation.selected
+    });
+    if(locationSelected) {
+      this.locationSelected = false;
+    } else {
+      this.locationSelected = true;
     }
   }
 

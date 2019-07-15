@@ -18,12 +18,12 @@
       <tbody>
         <tr *ngFor="let dataLocation of getDatalocations(); let i = index;">
           <td>
-            <input type="checkbox" [(ngModel)]="dataLocation.selected" [attr.disabled]="dataLocation.isc && dataLocation.isc === 'public' && field.editMode ? null : ''"  [attr.aria-label]="'select-item' | translate"/>
+            <input (change)="checkIfLocationsSelected($event)" type="checkbox" [(ngModel)]="dataLocation.selected" [attr.disabled]="dataLocation.isc && dataLocation.isc === 'public' && field.editMode ? null : ''"  [attr.aria-label]="'select-item' | translate"/>
           </td>
           <td>{{ field.dataTypeLookup[dataLocation.type] }}</td>
           <td>
             <ng-container *ngIf="dataLocation && dataLocation.type != 'attachment'">
-            {{ dataLocation.location }}
+              {{ dataLocation.location }}
             </ng-container>
             <ng-container *ngIf="dataLocation.type == 'attachment'">
               <ng-container *ngIf="dataLocation.pending">
@@ -41,10 +41,13 @@
           <td *ngIf="field.iscEnabled">
             {{ dataLocation.isc }}
           </td>
-
         </tr>
       </tbody>
     </table>
+  </div>
+  <div *ngIf="locationSelected">
+    <h5 class="font-weight-bold">{{ field.noLocationSelectedText }}</h5>
+    <p>{{ field.noLocationSelectedHelp }}</p>
   </div>
   <!-- <div><button class="btn btn-info">Export</button></div> -->
 </div>
