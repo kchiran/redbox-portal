@@ -288,8 +288,8 @@ export module Services {
 
 					const template_ejs = await index.load_template();
 
-					
-					return index.make_index_pure("text_citation", "zip_path");
+					return index.make_index_pure(metadata['citation_doi'], "zip_path");
+
 				}).flatMap(async (pages) => {
 					const html_filename = index.html_file_name;
 					return Observable.merge(pages.map((p) => {
