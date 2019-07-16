@@ -79,26 +79,15 @@ module.exports = [
           }
         },
         {
-          class: 'SelectionField',
-          compClass: 'SelectionFieldComponent',
+          class: 'TextArea',
           definition: {
-            name: 'dc:accessRights',
+            name: 'accessRights_text',
             label: '@dataPublication-dc:accessRights',
             help: '@dataPublication-dc:accessRights-help',
-            defaultValue: '@dataPublication-dc:accessRights-open',
-            controlType: 'radio',
-            readOnly: false,
-            options: [
-              {
-                value: "@dataPublication-dc:accessRights-open",
-                label: "@dataPublication-dc:accessRights-open"
-              },
-              {
-                value: "@dataPublication-dc:accessRights-restricted-val",
-                label: "@dataPublication-dc:accessRights-restricted"
-              }
-            ],
-            subscribe: {}
+            type: 'text',
+            required: true,
+            defaultValue: '@dataPublication-dc:accessRights-default',
+            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
           }
         },
         {
