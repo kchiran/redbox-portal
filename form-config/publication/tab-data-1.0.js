@@ -16,30 +16,6 @@ module.exports = [
           }
         },
         {
-          class: 'Toggle',
-          compClass: 'ToggleComponent',
-          definition: {
-            name: 'accessRightsToggle',
-            defaultValue: false,
-            label: '@dataPublication-publish-metadata-only',
-            help: '@dataPublication-publish-metadata-only-help',
-            controlType: 'checkbox',
-            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
-            publish: {
-              onValueUpdate: {
-                modelEventSource: 'valueChanges'
-              }
-            },
-            subscribe: {
-              'form': {
-                onFormLoaded: [
-                  { action: 'publishValueLoaded' }
-                ]
-              }
-            }
-          }
-        },
-        {
           class: 'PublishDataLocationSelector',
           compClass: 'PublishDataLocationSelectorComponent',
           definition: {
@@ -48,6 +24,7 @@ module.exports = [
             disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
             notesEnabled: false,
             iscEnabled: true,
+            selectAllItems: '@dataPublication-publish-select-all',
             noLocationSelectedText: '@dataPublication-publish-metadata-no-location-selected',
             noLocationSelectedHelp: '@dataPublication-publish-metadata-only-help',
             publicCheck: 'public',
@@ -57,14 +34,6 @@ module.exports = [
                   action: 'utilityService.getPropertyFromObject',
                   field: 'dataLocations'
                 }]
-              },
-              'accessRightsToggle': {
-                onValueUpdate: [
-                  { action: 'setVisibility' }
-                ],
-                onValueLoaded: [
-                  { action: 'setVisibility' }
-                ]
               }
             }
           }
@@ -77,16 +46,7 @@ module.exports = [
             name: "dataPub-dm-prefix-0",
             value: '@dataPublication-data-manager',
             visibilityCriteria: true, // visible when access rights is checked
-            subscribe: {
-              'accessRightsToggle': {
-                onValueUpdate: [
-                  { action: 'setVisibility' }
-                ],
-                onValueLoaded: [
-                  { action: 'setVisibility' }
-                ]
-              }
-            }
+            subscribe: {}
           }
         },
         {
@@ -103,14 +63,6 @@ module.exports = [
                   action: 'utilityService.getPropertyFromObject',
                   field: 'contributor_data_manager.text_full_name'
                 }]
-              },
-              'accessRightsToggle': {
-                onValueUpdate: [
-                  { action: 'setVisibility' }
-                ],
-                onValueLoaded: [
-                  { action: 'setVisibility' }
-                ]
               }
             }
           }
@@ -123,16 +75,7 @@ module.exports = [
             name: "dataPub-dm-suffix-0",
             value: '@dataPublication-data_manager-transferResponsibility',
             visibilityCriteria: true, // visible when access rights is checked
-            subscribe: {
-              'accessRightsToggle': {
-                onValueUpdate: [
-                  { action: 'setVisibility' }
-                ],
-                onValueLoaded: [
-                  { action: 'setVisibility' }
-                ]
-              }
-            }
+            subscribe: {}
           }
         },
         {
@@ -144,7 +87,7 @@ module.exports = [
             help: '@dataPublication-dc:accessRights-help',
             defaultValue: '@dataPublication-dc:accessRights-open',
             controlType: 'radio',
-            readOnly:true,
+            readOnly: false,
             options: [
               {
                 value: "@dataPublication-dc:accessRights-open",
@@ -155,23 +98,7 @@ module.exports = [
                 label: "@dataPublication-dc:accessRights-restricted"
               }
             ],
-            subscribe: {
-              'accessRightsToggle': {
-                onValueUpdate: [{
-                  action: 'utilityService.getPropertyFromObjectMapping',
-                  mapping: [
-                    {
-                      key: 'true',
-                      value: 'Restricted'
-                    },
-                    {
-                      key: 'false',
-                      value: 'Open'
-                    }
-                  ]
-                }]
-              }
-            }
+            subscribe: {}
           }
         },
         {
