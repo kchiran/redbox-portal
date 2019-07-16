@@ -805,13 +805,11 @@ export module Services {
       let postSaveCreateHooks = _.get(recordType, `hooks.${mode}.post`, null);
       if (_.isArray(postSaveCreateHooks)) {
         _.each(postSaveCreateHooks, postSaveCreateHook => {
-          sails.log.debug(postSaveCreateHook);
           let postSaveCreateHookFunctionString = _.get(postSaveCreateHook, "function", null);
           if (postSaveCreateHookFunctionString != null) {
             let postSaveCreateHookFunction = eval(postSaveCreateHookFunctionString);
             let options = _.get(postSaveCreateHook, "options", {});
             if (_.isFunction(postSaveCreateHookFunction)) {
-            	sails.log.debug("postSaveCreateHook with user " + JSON.stringify(user));
               postSaveCreateHookFunction(oid, record, options, user).subscribe(result => {
                 sails.log.debug(`post-save trigger ${postSaveCreateHookFunctionString} completed for ${oid}`)
               });
