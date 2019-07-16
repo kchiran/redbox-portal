@@ -24,7 +24,6 @@ module.exports = [
             disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
             notesEnabled: false,
             iscEnabled: true,
-            selectAllItems: '@dataPublication-publish-select-all',
             noLocationSelectedText: '@dataPublication-publish-metadata-no-location-selected',
             noLocationSelectedHelp: '@dataPublication-publish-metadata-only-help',
             publicCheck: 'public',
@@ -33,6 +32,9 @@ module.exports = [
                 onValueUpdate: [{
                   action: 'utilityService.getPropertyFromObject',
                   field: 'dataLocations'
+                }],
+                onValueLoaded: [{
+                  action: 'selectAllPublic'
                 }]
               }
             }

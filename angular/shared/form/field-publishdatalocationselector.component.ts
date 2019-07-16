@@ -79,6 +79,7 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
   iscHeader: string;
   iscEnabled: boolean;
   notesEnabled: boolean;
+  noLocationSelected: boolean;
   noLocationSelectedText: string;
   noLocationSelectedHelp: string;
   publicCheck: string;
@@ -151,6 +152,28 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
     });
     this.setValue(this.value);
   }
+
+  public selectAllPublic() {
+    console.log('selectAllPublic');
+    _.each(this.value, (dataLocation:any) => {
+      if(dataLocation.isc && dataLocation.isc === this.publicCheck) {
+        dataLocation.selected = true;
+      }
+    });
+    this.checkIfLocationsSelected();
+  }
+
+  public checkIfLocationsSelected() {
+    const locationSelected = _.find(this.value, (dataLocation:any) => {
+      return dataLocation.selected
+    });
+    if(locationSelected) {
+      this.noLocationSelected = false;
+    } else {
+      this.noLocationSelected = true;
+    }
+  }
+
 }
 /**
 * Component to display information from related objects within ReDBox
@@ -192,9 +215,9 @@ export class PublishDataLocationSelectorComponent extends SimpleComponent {
       return dataLocation.selected
     });
     if(locationSelected) {
-      this.locationSelected = false;
+      this.field.noLocationSelected = false;
     } else {
-      this.locationSelected = true;
+      this.field.noLocationSelected = true;
     }
   }
 
