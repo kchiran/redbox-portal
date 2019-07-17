@@ -103,10 +103,6 @@ export module Services {
 				//sails.log.debug("Bailing out before actually writing data pub");
 				//return Observable.of(null);
 
-				const creator = { email: "Place.Holder@uts.edu.au" };
-
-				sails.log.debug("Got user: " + JSON.stringify(user));
-
 				if( ! user || ! user['email'] ) {
 					user = { 'email': '' };
 					sails.log.error("Empty user or no email found");
@@ -118,6 +114,7 @@ export module Services {
 							.flatMap((creator) => { 
   							return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
 									await this.writeDataset(creator, user, oid, drid, md, dir);
+									sails.log.debug("Finished writing out dataset inside ocfl callback");
 								}))
   						})
 						}).flatMap(() => {
@@ -215,7 +212,7 @@ export module Services {
 					});
 			});
 	
-			obs.push(this.makeDataCrate(creator, approver, oid, dir, metadata));
+			obs.push(Observable.fromPromise(this.makeDataCratePromise(creator, approver, oid, dir, metadata)));
 			return Observable.merge(...obs).toPromise();
 		}
 
@@ -244,13 +241,13 @@ export module Services {
 
 		// this version works, but I'm worried that it will put the whole of
 		// the buffer in RAM. See writeDatastream for my first attempt, which
-		// doesnt' work.
+		// doesn't work.
 
 		private async writeAttachment(buffer: Buffer, fn: string): Promise<boolean> {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
 					fs.writeFile(fn, buffer, () => {
-						sails.log.debug("Just wrote attachment to " + fn);
+						sails.log.debug("Wrote attachment to " + fn);
 						resolve(true)
 					});
 				} catch(e) {
@@ -261,6 +258,7 @@ export module Services {
 				}
 			});
 		}
+
 
 
 		private makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Observable<any> {
@@ -292,11 +290,12 @@ export module Services {
 
 				}).flatMap(async (pages) => {
 					const html_filename = index.html_file_name;
-					return Observable.merge(pages.map((p) => {
+					const pagesob = Observable.merge(pages.map((p) => {
 						const outdir = path.join(dir, p.path);
-						sails.log.debug(`Writing catalog file to ${outdir}/${html_filename}`);
 						return Observable.fromPromise(this.writeCatalogHTML(outdir, html_filename, p.html))
-					}))
+					}));
+					sails.log.debug("Returning observable which will write out HTML");
+					return pagesob;
 				}).catch(error => {
 					sails.log.error("Error (outside) while creating DataCrate");
 					sails.log.error(error.name);
@@ -306,9 +305,54 @@ export module Services {
 				});
 		}
 
+
+
+		private async makeDataCratePromise(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
+
+			const index = new Index();
+
+			const catalog = await datacrate.datapub2catalog({
+				'id': oid,
+				'datapub': metadata,
+				'organisation': sails.config.datapubs.datacrate.organization,
+				'owner': creator['email'],
+				'approver': approver['email']
+			});
+
+			const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
+			await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
+
+			index.init_pure({
+				catalog_json: catalog,
+				multiple_files: true
+			});
+
+			const template_ejs = await index.load_template();
+
+			const pages = index.make_index_pure(metadata['citation_doi'], "zip_path");
+			const html_filename = index.html_file_name;
+
+			await Promise.all(pages.map((p) => {
+					return this.writeCatalogHTML(path.join(dir, p.path), html_filename, p.html)
+			}));
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
 		private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
 			await fse.ensureDir(outdir);
 			await fse.writeFile(path.join(outdir, indexfile), html);
+			sails.log.debug(`Wrote catalog HTML: ${outdir} ${indexfile}`);
 		}
 
 
