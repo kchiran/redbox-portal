@@ -73,9 +73,6 @@ export module Services {
   	public exportDataset(oid, record, options, user): Observable<any> {
    		if( this.metTriggerCondition(oid, record, options) === "true") {
 
-   			sails.log.debug("Called exportDataset on update");
-      	sails.log.debug("oid: " + oid);
-      	sails.log.debug("options: " + JSON.stringify(options));
 				const site = sails.config.datapubs.sites[options['site']];
 				if( ! site ) {
 					sails.log.error("Unknown publication site " + options['site']);
@@ -89,7 +86,6 @@ export module Services {
 
 				if( ! drid ) {
 					sails.log.error("Couldn't find dataRecord or id for data pub " + oid);
-					sails.log.debug(JSON.stringify(record));
 					return Observable.of(null)
 				}
 
@@ -114,7 +110,6 @@ export module Services {
 							.flatMap((creator) => { 
   							return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
 									await this.writeDataset(creator, user, oid, drid, md, dir);
-									sails.log.debug("Finished writing out dataset inside ocfl callback");
 								}))
   						})
 						}).flatMap(() => {
@@ -139,29 +134,21 @@ export module Services {
   	// deployment or at least bootstrapping the server
 
   	private async getRepository(site): Promise<any> {
- 			sails.log.debug(`getRepository for ${site}`)
   		if(! sails.config.datapubs.sites[site] ) {
 				sails.log.error(`unknown site ${site}`);
 				throw(new Error("unknown repostitory site " + site));
   		} else {
   			const dir = sails.config.datapubs.sites[site].dir;
  				const repository = new ocfl.Repository();
-  		  sails.log.debug(`Newly created repositor = ${JSON.stringify(repository)}`);
   			try {
-  		    sails.log.debug(`Trying to load existing repository from ${dir}`);
-  		    sails.log.debug(`repo = ${JSON.stringify(repository)}`);
   				await repository.load(dir);
-  		    sails.log.debug(`load was successful`);
   				return repository;
   			} catch(e) {
-  			  sails.log.debug(`Couldn't load existing repository from ${dir}`);
-  		    sails.log.debug(`repo = ${JSON.stringify(repository)}`);
   				try {
   					const newrepo = new ocfl.Repository();
-  			    sails.log.debug(`Trying to creating new repository at ${dir}`);
   			    await fse.ensureDir(dir);
   					await newrepo.create(dir);
-  			    sails.log.debug(`Repository created at ${dir}`);
+  			    sails.log.info(`New ofcl repository created at ${dir}`);
   					return newrepo;
   				} catch(e) {
   					sails.log.error("Could neither load nor initialise repo at " + dir);
@@ -171,17 +158,6 @@ export module Services {
   			}
   		}
   	}
-
-  	// returns an Observable which looks up the record's creator
-
-  	private getRecordCreator(record): Observable<any> {
-  		return UsersService.getUserWithUsername(record['metaMetadata']['createdBy'])
-  			.flatMap((user) => {
-  				sails.log.debug("Got user: " + JSON.stringify(user));
-  				return user;
-  			});
-  	}
-
 
   	// async function which takes a data publication and destination directory
   	// and writes out the attachments and datacrate files to it
@@ -194,25 +170,18 @@ export module Services {
 			const mdOnly = metadata['accessRightsToggle'];
 
 			const attachments = metadata['dataLocations'].filter(
-				(a) => ( a['type'] === 'attachment' )
+				(a) => ( !mdOnly && a['type'] === 'attachment' && a['selected'] )
 			);
 
 			const obs = attachments.map((a) => {
-				sails.log.debug("Building attachment observable " + a['name']);
 				return RecordsService.getDatastream(drid, a['fileId']).
 					flatMap(ds => {
-						if( a['selected'] && !mdOnly ) {
-							const filename = path.join(dir, a['name']);
-							sails.log.debug("Made promise to write attachment " + filename);
-							return Observable.fromPromise(this.writeAttachment(ds.body, filename));
-						} else {
-							sails.log.debug("Made Observable that returns true to skip attachment " + a['name]']);
-							return Observable.of(true);
-						}
+						const filename = path.join(dir, a['name']);
+						return Observable.fromPromise(this.writeAttachment(ds.body, filename));
 					});
 			});
 	
-			obs.push(Observable.fromPromise(this.makeDataCratePromise(creator, approver, oid, dir, metadata)));
+			obs.push(Observable.fromPromise(this.makeDataCrate(creator, approver, oid, dir, metadata)));
 			return Observable.merge(...obs).toPromise();
 		}
 
@@ -247,7 +216,6 @@ export module Services {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
 					fs.writeFile(fn, buffer, () => {
-						sails.log.debug("Wrote attachment to " + fn);
 						resolve(true)
 					});
 				} catch(e) {
@@ -261,53 +229,7 @@ export module Services {
 
 
 
-		private makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Observable<any> {
-
-			const index = new Index();
-
-			return Observable.of({})
-				.flatMap(() => {
-					return Observable.fromPromise(datacrate.datapub2catalog({
-						'id': oid,
-						'datapub': metadata,
-						'organisation': sails.config.datapubs.datacrate.organization,
-						'owner': creator['email'],
-						'approver': approver['email']
-					}))
-				}).flatMap(async (catalog) => {
-
-					const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-					await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
-
-					index.init_pure({
-						catalog_json: catalog,
-						multiple_files: true
-					});
-
-					const template_ejs = await index.load_template();
-
-					return index.make_index_pure(metadata['citation_doi'], "zip_path");
-
-				}).flatMap(async (pages) => {
-					const html_filename = index.html_file_name;
-					const pagesob = Observable.merge(pages.map((p) => {
-						const outdir = path.join(dir, p.path);
-						return Observable.fromPromise(this.writeCatalogHTML(outdir, html_filename, p.html))
-					}));
-					sails.log.debug("Returning observable which will write out HTML");
-					return pagesob;
-				}).catch(error => {
-					sails.log.error("Error (outside) while creating DataCrate");
-					sails.log.error(error.name);
-					sails.log.error(error.message);
-					sails.log.error(error.stack);
-					return Observable.of({});
-				});
-		}
-
-
-
-		private async makeDataCratePromise(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
+		private async makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
 
 			const index = new Index();
 
@@ -338,21 +260,9 @@ export module Services {
 		}
 
 
-
-
-
-
-
-
-
-
-
-
-
 		private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
 			await fse.ensureDir(outdir);
 			await fse.writeFile(path.join(outdir, indexfile), html);
-			sails.log.debug(`Wrote catalog HTML: ${outdir} ${indexfile}`);
 		}
 
 
@@ -360,14 +270,13 @@ export module Services {
 			const branding = sails.config.auth.defaultBrand; 
 			record['metadata']['citation_url'] = baseUrl + '/' + oid + '/';
 			// turn off postsave triggers
-			sails.log.debug(`Updating citation_url to ${record['metadata']['citation_url']}`);
 			return RecordsService.updateMeta(branding, oid, record, null, true, false);
 		}
 
 		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
 			const branding = sails.config.auth.defaultBrand; 
 			// turn off postsave triggers
-			sails.log.debug(`recording publication error in record metadata`);
+			sails.log.info(`recording publication error in record metadata`);
 			record['metadata']['publication_error'] = "Data publication failed with error: " + err.name + " " + err.message;
 			return RecordsService.updateMeta(branding, oid, record, null, true, false);
 		}
