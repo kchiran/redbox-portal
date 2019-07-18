@@ -18,7 +18,7 @@
       <tbody>
         <tr *ngFor="let dataLocation of getDatalocations(); let i = index;">
           <td>
-            <input (change)="field.checkIfLocationsSelected($event)" type="checkbox" [(ngModel)]="dataLocation.selected" [attr.disabled]="dataLocation.isc && dataLocation.isc === 'public' && field.editMode ? null : ''"  [attr.aria-label]="'select-item' | translate"/>
+            <input (change)="field.checkIfLocationsSelected($event)" type="checkbox" [(ngModel)]="dataLocation.selected" [attr.disabled]="field.canBeSelected(dataLocation)"  [attr.aria-label]="'select-item' | translate"/>
           </td>
           <td>{{ field.dataTypeLookup[dataLocation.type] }}</td>
           <td>

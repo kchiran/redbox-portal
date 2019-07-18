@@ -171,6 +171,18 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
     });
   };
 
+  public canBeSelected(dL) {
+    let canBeSelected = false;
+    _.each(this.selectionCriteria, sC => {
+      const isSelected = _.filter(sC, (val, key) => dL[key] && dL[key] === val);
+      if(isSelected.length === Object.keys(sC).length) {
+        canBeSelected = true;
+      }
+    });
+
+    return canBeSelected && this.editMode ? null : '';
+  }
+
   public checkIfLocationsSelected() {
     const locationSelected = _.find(this.value, (dataLocation:any) => {
       return dataLocation.selected
