@@ -42,7 +42,7 @@ export class DataLocationField extends FieldBase<any> {
   failedObjects: object[];
   recordsService: RecordsService;
   columns: object[];
-  newLocation: any = { type: "url", location: "", notes: "", isc: "confidential" };
+  newLocation: any = { type: "url", location: "", notes: "" };
   attachmentText: string="Add attachment(s)";
   dataTypes: object[] = [{
     'label': 'URL',
@@ -86,6 +86,7 @@ export class DataLocationField extends FieldBase<any> {
   notesEnabled: boolean;
   iscHeader: string;
   iscEnabled: boolean;
+  publicSelect: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -103,6 +104,10 @@ export class DataLocationField extends FieldBase<any> {
     this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
     this.uppyDashboardNote = this.getTranslated(options['uppyDashboardNote'], 'Maximum upload size: 1 Gb per file');
     this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
+    this.publicSelect = !_.isUndefined(options['.']) ? options['.'] : "public";
+    if(this.iscEnabled) {
+      this.newLocation['isc'] = this.publicSelect;
+    }
     this.securityClassificationOptions = options['securityClassificationOptions'] || [];
     this.columns = options['columns'] || [];
 
@@ -126,9 +131,11 @@ export class DataLocationField extends FieldBase<any> {
   }
 
   addLocation() {
+    if(this.iscEnabled) {
+      this.newLocation['isc'] = this.publicSelect;
+    }
     this.value.push(this.newLocation);
     this.setValue(this.value);
-    this.newLocation = { type: "url", location: "", notes: "", isc: "confidential" };
   }
 
   appendLocation(newLoc: any) {
@@ -277,8 +284,11 @@ export class DataLocationComponent extends SimpleComponent {
       const fileId = urlParts[urlParts.length - 1];
       const choppedUrl = urlParts.slice(6, urlParts.length).join('/');
       const newLoc = { type: "attachment", pending: true, location: choppedUrl, notes: file.meta.notes, mimeType: file.type, name: file.meta.name, fileId: fileId, uploadUrl: uploadURL };
-      console.debug(`Adding new location:`);
-      console.debug(newLoc);
+      if(this.field.iscEnabled) {
+        newLoc['isc'] = this.field.newLocation.isc;
+      }
+      console.log(`Adding new location:`);
+      console.log(newLoc);
       this.field.appendLocation(newLoc);
     });
     // clearing all pending attachments...

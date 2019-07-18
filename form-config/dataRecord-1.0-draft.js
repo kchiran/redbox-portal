@@ -976,6 +976,7 @@ module.exports = {
                     maxNumberOfFiles: 50,
                     notesEnabled: false,
                     iscEnabled: true,
+                    publicSelect: 'public',
                     notesHeader: '@dataLocations-notes',
                     iscHeader: '@dataLocations-isc',
                     uppyDashboardNote: '@dataLocations-uploader-note',
