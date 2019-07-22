@@ -141,6 +141,9 @@ export module Services {
       	return  RecordTypesService.get(brand, record.metaMetadata.type).flatMap(async(recordType) => {
 					let response = await this.updateMetaInternal(brand, oid, record, recordType, user, triggerPreSaveTriggers)
           if (triggerPostSaveTriggers) {
+          	if( ! user ) {
+          		sails.log.error("updateMeta called with undefined user");
+          	}
             let resp: any = response;
             if (response && resp.code == "200") {
               resp.success = true;
@@ -803,13 +806,12 @@ export module Services {
       let postSaveCreateHooks = _.get(recordType, `hooks.${mode}.post`, null);
       if (_.isArray(postSaveCreateHooks)) {
         _.each(postSaveCreateHooks, postSaveCreateHook => {
-          sails.log.debug(postSaveCreateHook);
           let postSaveCreateHookFunctionString = _.get(postSaveCreateHook, "function", null);
           if (postSaveCreateHookFunctionString != null) {
             let postSaveCreateHookFunction = eval(postSaveCreateHookFunctionString);
             let options = _.get(postSaveCreateHook, "options", {});
             if (_.isFunction(postSaveCreateHookFunction)) {
-              postSaveCreateHookFunction(oid, record, options).subscribe(result => {
+              postSaveCreateHookFunction(oid, record, options, user).subscribe(result => {
                 sails.log.debug(`post-save trigger ${postSaveCreateHookFunctionString} completed for ${oid}`)
               });
             } else {

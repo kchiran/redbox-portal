@@ -2,11 +2,11 @@ module.exports.datapubs = {
 
   "sites": {
   	"staging": {
-      "dir": "/publication/staging",
+      "dir": "/publication/staging_ocfl",
       "url": "http://localhost:8080/staging"
     },
   	"public": {
-      "dir": "/publication/public",
+      "dir": "/publication/public_ocfl",
       "url": "http://localhost:8080/public"
     }
   },

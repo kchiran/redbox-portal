@@ -24,15 +24,16 @@ import 'rxjs/add/operator/toPromise';
 import * as request from "request-promise";
 import * as ejs from 'ejs';
 import * as fs from 'graceful-fs';
+import fse = require('fs-extra');
 import path = require('path');
+import ocfl = require('ocfl');
 
 
 import { Index, jsonld } from 'calcyte';
 const datacrate = require('datacrate').catalog;
 
 declare var sails: Sails;
-declare var RecordsService;
-declare var BrandingService;
+declare var RecordsService, UsersService, BrandingService;
 declare var _;
 
 // NOTE: the publication isn't being triggered if you go straight to review
@@ -57,12 +58,21 @@ export module Services {
 
 
 
-  	public exportDataset(oid, record, options): Observable<any> {
+    // exportDataset is the main point of entry. It returns an Observable
+    // which writes out the record's attachments, creates a DataCrate for
+    // them and imports them into the required repository (staging or
+    // public)
+
+    // in the current version, if the target directory has not yet been 
+    // initialised, it initalised an ocfl repository there. A future
+    // release should leave this to boostrap or deployment.
+
+    // the 'user' in the args is whoever triggered the export by clicking the
+    // publication submit button
+
+  	public exportDataset(oid, record, options, user): Observable<any> {
    		if( this.metTriggerCondition(oid, record, options) === "true") {
 
-   			sails.log.info("Called exportDataset on update");
-      	sails.log.info("oid: " + oid);
-      	sails.log.info("options: " + JSON.stringify(options));
 				const site = sails.config.datapubs.sites[options['site']];
 				if( ! site ) {
 					sails.log.error("Unknown publication site " + options['site']);
@@ -76,70 +86,136 @@ export module Services {
 
 				if( ! drid ) {
 					sails.log.error("Couldn't find dataRecord or id for data pub " + oid);
-					sails.log.info(JSON.stringify(record));
 					return Observable.of(null)
 				}
 
-				sails.log.info("Got data record: " + drid);
+				// start an Observable to get/initialise the repository, then call createNewObjectContent
+				// content on it with a callback which will actually write out the attachments and
+				// make a datacrate. Once that's done, updates the URL in the data record.
 
-				const attachments = md['dataLocations'].filter(
-					(a) => a['type'] === 'attachment'
-				);
+				// the interplay between Promises and Observables here is too convoluted and needs
+				// refactoring.
 
-				const dir = path.join(site['dir'], oid);
-				try {
+				//sails.log.debug("Bailing out before actually writing data pub");
+				//return Observable.of(null);
 
-					sails.log.info("making dataset dir: " + dir);
-					fs.mkdirSync(dir);
-				} catch(e) {
-					sails.log.error("Couldn't create dataset dir " + dir);
-					sails.log.error(e.name);
-					sails.log.error(e.message);
-					sails.log.error(e.stack);
-					return Observable.of(null);
+				if( ! user || ! user['email'] ) {
+					user = { 'email': '' };
+					sails.log.error("Empty user or no email found");
 				}
 
-				sails.log.info("Going to write attachments");
+				return Observable.fromPromise(this.getRepository(options['site']))
+					.flatMap((repository) => {
+						return UsersService.getUserWithUsername(record['metaMetadata']['createdBy'])
+							.flatMap((creator) => { 
+  							return Observable.fromPromise(repository.createNewObjectContent(oid, async (dir) => {
+									await this.writeDataset(creator, user, oid, drid, md, dir);
+								}))
+  						})
+						}).flatMap(() => {
+							return this.updateUrl(oid, record, site['url']);
+						}).catch(err => {
+						sails.log.error(`Error publishing dataset ${oid} to ocfl repo st ${options['site']}`);
+						sails.log.error(err.name);
+						sails.log.error(err.message);
+						sails.log.error(err.stack);
+           	return this.recordPublicationError(oid, record, err);
+					});
 
-				// build a list of observables, each of which writes out an
-				// attachment
-
-				const obs = attachments.map((a) => {
-					sails.log.info("building attachment observable " + a['name']);
-					return RecordsService.getDatastream(drid, a['fileId']).
-						flatMap(ds => {
-							const filename = path.join(dir, a['name']);
-							sails.log.info("about to write " + filename);
-							return Observable.fromPromise(this.writeData(ds.body, filename))
-								.catch(err => {
-									sails.log.error("Error writing attachment " + a['fileId']);
-									sails.log.error(err.name);
-									sails.log.error(err.message);
-                  return new Observable();
-								});
-						});
-				});
-
-				obs.push(this.makeDataCrate(oid, dir, md));
-				obs.push(this.updateUrl(oid, record, site['url']));
-
-				return Observable.merge(...obs);
     	} else {
-     		sails.log.info(`Not sending notification log for: ${oid}, condition not met: ${_.get(options, "triggerCondition", "")}`)
+     		sails.log.debug(`Not publishing: ${oid}, condition not met: ${_.get(options, "triggerCondition", "")}`);
     		return Observable.of(null);
    		}
   	}
 
 
+  	// this initialises the repository if it can't load it, which
+  	// is a bit rough and ready. FIXME - this should be done in 
+  	// deployment or at least bootstrapping the server
+
+  	private async getRepository(site): Promise<any> {
+  		if(! sails.config.datapubs.sites[site] ) {
+				sails.log.error(`unknown site ${site}`);
+				throw(new Error("unknown repostitory site " + site));
+  		} else {
+  			const dir = sails.config.datapubs.sites[site].dir;
+ 				const repository = new ocfl.Repository();
+  			try {
+  				await repository.load(dir);
+  				return repository;
+  			} catch(e) {
+  				try {
+  					const newrepo = new ocfl.Repository();
+  			    await fse.ensureDir(dir);
+  					await newrepo.create(dir);
+  			    sails.log.info(`New ofcl repository created at ${dir}`);
+  					return newrepo;
+  				} catch(e) {
+  					sails.log.error("Could neither load nor initialise repo at " + dir);
+  		    	sails.log.debug(`repo = ${JSON.stringify(repository)}`);
+  					throw(e);
+  				}
+  			}
+  		}
+  	}
+
+  	// async function which takes a data publication and destination directory
+  	// and writes out the attachments and datacrate files to it
+
+    // based on the original exportDataset - takes the existing Observable chain
+    // and converts it to a promise so that it can work with the ocfl library
+
+		private async writeDataset(creator: Object, approver: Object, oid: string, drid: string, metadata: Object, dir: string): Promise<any> {
+
+			const mdOnly = metadata['accessRightsToggle'];
+
+			const attachments = metadata['dataLocations'].filter(
+				(a) => ( !mdOnly && a['type'] === 'attachment' && a['selected'] )
+			);
+
+			const obs = attachments.map((a) => {
+				return RecordsService.getDatastream(drid, a['fileId']).
+					flatMap(ds => {
+						const filename = path.join(dir, a['name']);
+						return Observable.fromPromise(this.writeAttachment(ds.body, filename));
+					});
+			});
+	
+			obs.push(Observable.fromPromise(this.makeDataCrate(creator, approver, oid, dir, metadata)));
+			return Observable.merge(...obs).toPromise();
+		}
+
+
+		// This is the first attempt, but it doesn't work - the files it
+		// writes out are always empty. I think it's because the API call
+		// to get the attachment isn't requesting a stream, so it's coming
+		// back as a buffer.
+
+		private writeDatastream(stream: any, fn: string): Promise<boolean> {
+			return new Promise<boolean>( (resolve, reject) => {
+  			var wstream = fs.createWriteStream(fn);
+  			sails.log.debug("start writeDatastream " + fn);
+  			stream.pipe(wstream);
+  			stream.end();
+				wstream.on('finish', () => {
+					sails.log.debug("finished writeDatastream " + fn);
+					resolve(true);
+				});
+				wstream.on('error', (e) => {
+					sails.log.error("File write error");
+					reject
+    		});
+			});
+		}
+
 		// this version works, but I'm worried that it will put the whole of
 		// the buffer in RAM. See writeDatastream for my first attempt, which
-		// doesnt' work.
+		// doesn't work.
 
-		private writeData(buffer: Buffer, fn: string): Promise<boolean> {
+		private async writeAttachment(buffer: Buffer, fn: string): Promise<boolean> {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
 					fs.writeFile(fn, buffer, () => {
-						sails.log.info("wrote to " + fn);
 						resolve(true)
 					});
 				} catch(e) {
@@ -152,83 +228,64 @@ export module Services {
 		}
 
 
-		// This is the first attempt, but it doesn't work - the files it
-		// writes out are always empty. I think it's because the API call
-		// to get the attachment isn't requesting a stream, so it's coming
-		// back as a buffer.
 
-		private writeDatastream(stream: any, fn: string): Promise<boolean> {
-			return new Promise<boolean>( (resolve, reject) => {
-  			var wstream = fs.createWriteStream(fn);
-  			sails.log.info("start writeDatastream " + fn);
-  			stream.pipe(wstream);
-  			stream.end();
-				wstream.on('finish', () => {
-					sails.log.info("finished writeDatastream " + fn);
-					resolve(true);
-				});
-				wstream.on('error', (e) => {
-					sails.log.error("File write error");
-					reject
-    		});
+		private async makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
+
+			const index = new Index();
+
+			const catalog = await datacrate.datapub2catalog({
+				'id': oid,
+				'datapub': metadata,
+				'organisation': sails.config.datapubs.datacrate.organization,
+				'owner': creator['email'],
+				'approver': approver['email']
 			});
+
+			const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
+			await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
+
+			index.init_pure({
+				catalog_json: catalog,
+				multiple_files: true
+			});
+
+			const template_ejs = await index.load_template();
+
+			const pages = index.make_index_pure(metadata['citation_doi'], "zip_path");
+			const html_filename = index.html_file_name;
+
+			await Promise.all(pages.map((p) => {
+					return this.writeCatalogHTML(path.join(dir, p.path), html_filename, p.html)
+			}));
 		}
+
+
+		private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
+			await fse.ensureDir(outdir);
+			await fse.writeFile(path.join(outdir, indexfile), html);
+		}
+
 
 		private updateUrl(oid: string, record: Object, baseUrl: string): Observable<any> {
-			const branding = sails.config.auth.defaultBrand; // fix me
-			// Note: the trailing slash on the URL is here to stop nginx auto-redirecting
-			// it, which on localhost:8080 breaks the link in some browsers - see 
-			// https://serverfault.com/questions/759762/how-to-stop-nginx-301-auto-redirect-when-trailing-slash-is-not-in-uri/812461#812461
+			const branding = sails.config.auth.defaultBrand; 
 			record['metadata']['citation_url'] = baseUrl + '/' + oid + '/';
-			return RecordsService.updateMeta(branding, oid, record);
+			// turn off postsave triggers
+			return RecordsService.updateMeta(branding, oid, record, null, true, false);
+		}
+
+		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
+			const branding = sails.config.auth.defaultBrand; 
+			// turn off postsave triggers
+			sails.log.info(`recording publication error in record metadata`);
+			record['metadata']['publication_error'] = "Data publication failed with error: " + err.name + " " + err.message;
+			return RecordsService.updateMeta(branding, oid, record, null, true, false);
 		}
 
 
-		private makeDataCrate(oid: string, dir: string, metadata: Object): Observable<any> {
 
-			const owner = 'TODO@shouldnt.the.owner.come.from.the.datapub';
-			const approver = 'TODO@get.the.logged-in.user';
 
-			return Observable.of({})
-				.flatMap(() => {
-					return Observable.fromPromise(datacrate.datapub2catalog({
-						'id': oid,
-						'datapub': metadata,
-						'organisation': sails.config.datapubs.datacrate.organization,
-						'owner': owner,
-						'approver': approver
-					}))
-				}).flatMap((catalog) => {
-					// the following writes out the CATALOG.json and CATALOG.html, and it's all
-					// sync because of legacy code in calcyte.
-					try {
-						const jsonld_h = new jsonld();
-						const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-						sails.log.info(`Building CATALOG.json with jsonld_h`);
-						sails.log.silly(`catalog = ${JSON.stringify(catalog)}`);
-						sails.log.info(`Writing CATALOG.json to ${catalog_json}`);
-						fs.writeFileSync(catalog_json, JSON.stringify(catalog, null, 2));
-						const index = new Index();
-						index.init(catalog, dir, false);
-						sails.log.info(`Writing CATALOG.html`);
-						index.make_index_html("text_citation", "zip_path"); //writeFileSync
-						return Observable.of({});
-					} catch (error) {
-						sails.log.error("Error (inside) while creating DataCrate");
-						sails.log.error(error.name);
-						sails.log.error(error.message);
-						sails.log.error(error.stack);
-						return Observable.of(null);
-					}
-				}).catch(error => {
-					sails.log.error("Error (outside) while creating DataCrate");
-					sails.log.error(error.name);
-					sails.log.error(error.message);
-					sails.log.error(error.stack);
-					return Observable.of({});
-				});
-		}
 	}
+
 }
 
 module.exports = new Services.DataPublication().exports();
