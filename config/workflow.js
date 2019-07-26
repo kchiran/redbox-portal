@@ -69,7 +69,8 @@ module.exports.workflow = {
         },
         authorization: {
           viewRoles: ['Admin', 'Librarians'],
-          editRoles: ['Admin']
+          editRoles: ['Admin'],
+          transitionRoles: ['Researcher', 'Admin', 'Librarians']
         },
         form: 'dataPublication-1.0-reviewing',
         displayIndex: 3
@@ -83,7 +84,8 @@ module.exports.workflow = {
         },
         authorization: {
           viewRoles: ['Admin', 'Librarians'],
-          editRoles: ['Admin']
+          editRoles: ['Admin', 'Librarians'],
+          transitionRoles: ['Admin', 'Librarians']
         },
         form: 'dataPublication-1.0-published',
         displayIndex: 4
@@ -97,7 +99,8 @@ module.exports.workflow = {
         },
         authorization: {
           viewRoles: ['Admin', 'Librarians'],
-          editRoles: ['Admin']
+          editRoles: ['Admin', 'Librarians'],
+          transitionRoles: ['Admin', 'Librarians']
         },
         form: 'dataPublication-1.0-retired',
         displayIndex: 5

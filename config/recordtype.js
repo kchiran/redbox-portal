@@ -326,7 +326,7 @@ module.exports.recordtype = {
             function: 'sails.services.emailservice.sendRecordNotification',
             options: {
               triggerCondition: "<%= record.notification != null && record.notification.state == 'draft' && record.workflow.stage == 'reviewing' %>",
-              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>,<%= record.metadata.contributor_supervisor.email %>",
+              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>",
               subject: "A publication has been staged for publishing.",
               template: "publicationStaged",
               onNotifySuccess: [
@@ -359,7 +359,7 @@ module.exports.recordtype = {
             function: 'sails.services.emailservice.sendRecordNotification',
             options: {
               triggerCondition: "<%= record.notification != null && record.notification.state == 'emailed-reviewing' && record.workflow.stage == 'published' %>",
-              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>,<%= record.metadata.contributor_supervisor.email %>,librarian@redboxresearchdata.com.au,<%= _.isEmpty(record.metadata.creators) ? '' : _.join(_.map(record.metadata.creators, (creator)=>{ return creator.email; }), ',') %>",
+              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>,librarian@redboxresearchdata.com.au,<%= _.isEmpty(record.metadata.creators) ? '' : _.join(_.map(record.metadata.creators, (creator)=>{ return creator.email; }), ',') %>",
               subject: "A publication has been successfully published",
               template: "publicationPublished",
               onNotifySuccess: [
@@ -386,7 +386,7 @@ module.exports.recordtype = {
           {
             function: 'sails.services.triggerservice.transitionWorkflow',
             options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'queued') && _.isEqual(metadata.embargoByDate, '') %>",
+              "triggerCondition": "<%= _.isEqual(workflow.stage, 'draft') && _.isEqual(metadata.embargoByDate, '') %>",
               "targetWorkflowStageName": "reviewing",
               "targetWorkflowStageLabel": "Reviewing",
               "targetForm": "dataPublication-1.0-reviewing"
@@ -395,7 +395,7 @@ module.exports.recordtype = {
           {
             function: 'sails.services.triggerservice.transitionWorkflow',
             options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'queued') && _.isEqual(metadata.embargoByDate, true) %>",
+              "triggerCondition": "<%= _.isEqual(workflow.stage, 'draft') && _.isEqual(metadata.embargoByDate, true) %>",
               "targetWorkflowStageName": "embargoed",
               "targetWorkflowStageLabel": "Embargoed",
               "targetForm": "dataPublication-1.0-embargoed"
@@ -437,7 +437,7 @@ module.exports.recordtype = {
             function: 'sails.services.emailservice.sendRecordNotification',
             options: {
               triggerCondition: "<%= record.notification != null && record.notification.state == 'draft' && record.workflow.stage == 'reviewing' %>",
-              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>,<%= record.metadata.contributor_supervisor.email %>",
+              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>",
               subject: "A publication has been staged for review.",
               template: "publicationStaged",
               onNotifySuccess: [
@@ -480,7 +480,7 @@ module.exports.recordtype = {
             function: 'sails.services.emailservice.sendRecordNotification',
             options: {
               triggerCondition: "<%= record.notification != null && record.notification.state == 'emailed-reviewing' && record.workflow.stage == 'published' %>",
-              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>,<%= record.metadata.contributor_supervisor.email %>,librarian@redboxresearchdata.com.au,<%= _.isEmpty(record.metadata.creators) ? '' : _.join(_.map(record.metadata.creators, (creator)=>{ return creator.email; }), ',') %>",
+              to: "<%= record.metadata.contributor_ci.email %>,<%= record.metadata.contributor_data_manager.email %>,librarian@redboxresearchdata.com.au,<%= _.isEmpty(record.metadata.creators) ? '' : _.join(_.map(record.metadata.creators, (creator)=>{ return creator.email; }), ',') %>",
               subject: "A publication has been successfully published",
               template: "publicationPublished",
               onNotifySuccess: [
