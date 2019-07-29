@@ -386,15 +386,6 @@ module.exports.recordtype = {
           {
             function: 'sails.services.triggerservice.transitionWorkflow',
             options: {
-              "triggerCondition": "<%= _.isEqual(workflow.stage, 'draft') && _.isEqual(metadata.embargoByDate, '') %>",
-              "targetWorkflowStageName": "reviewing",
-              "targetWorkflowStageLabel": "Reviewing",
-              "targetForm": "dataPublication-1.0-reviewing"
-            }
-          },
-          {
-            function: 'sails.services.triggerservice.transitionWorkflow',
-            options: {
               "triggerCondition": "<%= _.isEqual(workflow.stage, 'draft') && _.isEqual(metadata.embargoByDate, true) %>",
               "targetWorkflowStageName": "embargoed",
               "targetWorkflowStageLabel": "Embargoed",
