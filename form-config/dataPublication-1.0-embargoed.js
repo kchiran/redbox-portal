@@ -8,7 +8,7 @@ var _ = require('lodash');
 var mainViewOnly = require('./publication/header-view-only-1.0.js');
 var mainTab = require('./publication/tab-main-1.0.js');
 // Non-draft specific footer
-var footer = require('./publication/footer-non-draft-1.0.js');
+var footer = require('./publication/footer-embargoed-1.0.js');
 // Start building the main tab and child tabs...
 var startTab = require('./publication/tab-start-1.0.js');
 var coverageTab = require('./publication/tab-coverage-1.0.js');

@@ -25,8 +25,7 @@ module.exports = [
           class: "SaveButton",
           definition: {
             label: 'Save',
-            cssClasses: 'btn-success',
-            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
+            cssClasses: 'btn-success'
           }
         },
         {
@@ -34,19 +33,29 @@ module.exports = [
           definition: {
             label: 'Save & Close',
             closeOnSave: true,
-            redirectLocation: '/@branding/@portal/dashboard/dataPublication',
-            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
+            redirectLocation: '/@branding/@portal/dashboard/dataPublication'
           },
           variableSubstitutionFields: ['redirectLocation']
         },
         {
           class: "SaveButton",
           definition: {
-            label: '@dataPublication-submit-for-review',
+            label: '@dataPublication-embargo-back-to-draft',
             closeOnSave: true,
             redirectLocation: '/@branding/@portal/dashboard/dataPublication',
-            targetStep: 'reviewing',
-            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
+            targetStep: 'draft',
+            disabledExpression: '<%= _.isEmpty(relatedRecordId) || ( fieldMap.embargoByDate.control.value == true && fieldMap.embargoUntil.control.value && moment(fieldMap.embargoUntil.control.value).isSameOrAfter(moment())  ) %>'
+          },
+          variableSubstitutionFields: ['redirectLocation']
+        },
+        {
+          class: "SaveButton",
+          definition: {
+            label: '@dataPublication-publish',
+            closeOnSave: true,
+            redirectLocation: '/@branding/@portal/dashboard/dataPublication',
+            targetStep: 'published',
+            disabledExpression: '<%= _.isEmpty(relatedRecordId) || ( fieldMap.embargoByDate.control.value == true && fieldMap.embargoUntil.control.value && moment(fieldMap.embargoUntil.control.value).isSameOrAfter(moment())  ) %>'
           },
           variableSubstitutionFields: ['redirectLocation']
         },

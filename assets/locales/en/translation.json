@@ -647,6 +647,8 @@
   "@dataPublication-reviewer-tab": "Reviewer",
   "@dataPublication-reviewer-tab-heading": "Data Publication review",
   "@dataPublication-withdraw": "Withdraw",
+  "@dataPublication-embargo-back-to-draft": "Return to Draft",
+  "@dataPublication-submit-for-review": "Submit for Review",
   "@dataPublication-delete": "DELETE PUBLICATION",
   "@dataPublication-confirmDelete": "Are you sure you want to delete?",
   "@dataPublication-confirmDeleteTitle": "Confirm Publication Delete",

@@ -176,6 +176,7 @@ export module Services {
           sails.log.verbose(options);
           // send record notification
           const to = this.runTemplate(_.get(options, "to", null), variables);
+          sails.log.verbose(`Sending email to: ${to}`);
           if (!to) {
             sails.log.error(`Error sending notification for oid: ${oid}, invalid 'To' address: ${to}. Please check your configuration 'to' option: ${_.get(options, 'to')}`);
             return Observable.of(null);
