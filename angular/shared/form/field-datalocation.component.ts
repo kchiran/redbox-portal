@@ -131,11 +131,9 @@ export class DataLocationField extends FieldBase<any> {
   }
 
   addLocation() {
-    if(this.iscEnabled) {
-      this.newLocation['isc'] = this.publicSelect;
-    }
     this.value.push(this.newLocation);
     this.setValue(this.value);
+    this.newLocation = { type: "url", location: "", notes: "", isc: this.publicSelect };
   }
 
   appendLocation(newLoc: any) {
