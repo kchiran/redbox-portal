@@ -181,6 +181,21 @@ export class UtilityService {
       return _.first(value);
     }
 
+    public convertToDateFormat(data:any, config:any) {
+      let delim = config.delim;
+      let field = config.field;
+      let formatOrigin = config.formatOrigin || 'DD-MMM-YY';
+      let formatTarget = config.formatTarget || 'YYYY-MM-DD';
+      let value = data;
+
+      if(field) {
+        value = _.get(data,field);
+      }
+      const converted = moment(value, formatOrigin).format(formatTarget);
+      console.log(`convertToDateFormat ${converted}`);
+      return converted;
+    }
+
     public joinArray(data:any, config:any, fieldName:string=null, fieldSeparator:string=null) {
       return _.join(_.get(data, fieldName ? fieldName : config.field), fieldSeparator ? fieldSeparator : config.separator);
     }

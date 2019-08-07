@@ -252,6 +252,22 @@ module.exports = {
                       onValueUpdate: {
                         modelEventSource: 'valueChanges'
                       }
+                    },
+                    subscribe: {
+                      title: {
+                        onItemSelect: [
+                          {
+                            action: 'reset'
+                          },
+                          {
+                            action: 'utilityService.convertToDateFormat',
+                            field: 'startDate',
+                            delim: ',',
+                            formatOrigin: 'DD-MMM-YY',
+                            formatTarget: 'YYYY-MM-DD'
+                          }
+                        ]
+                      }
                     }
                   }
                 },
@@ -274,6 +290,20 @@ module.exports = {
                     subscribe: {
                       'dc:coverage_vivo:DateTimeInterval_vivo:start': {
                         onValueUpdate: []
+                      },
+                      title: {
+                        onItemSelect: [
+                          {
+                            action: 'reset'
+                          },
+                          {
+                            action: 'utilityService.convertToDateFormat',
+                            field: 'endDate',
+                            delim: ',',
+                            formatOrigin: 'DD-MMM-YY',
+                            formatTarget: 'YYYY-MM-DD'
+                          }
+                        ]
                       }
                     }
                   }
