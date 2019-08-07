@@ -161,7 +161,7 @@
   "@dmpt-project-hdr-help": "Check if this is an HDR Student Project",
   "@dmpt-project-desc": "Project Description",
   "@dmpt-project-desc-help": "Enter a description of your research project. This description should outline the purpose and intent of the project.",
-  "@dmpt-finalKeywords": "Keywords (*)",
+  "@dmpt-finalKeywords": "Keywords",
   "@dmpt-finalKeywords-help": "Enter a word or phrase that characterises your research data.",
   "@dmpt-project-website": "Project website",
   "@dmpt-project-website-help": "If there is a website associated with the research project that you will be collecting data for, enter details of this website here.",

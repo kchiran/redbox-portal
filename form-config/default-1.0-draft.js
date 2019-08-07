@@ -196,7 +196,7 @@ module.exports = {
                     fields: [{
                       class: 'TextField',
                       definition: {
-                        required: true,
+                        required: false,
                         type: 'text',
                         validationMessages: {
                           required: "@dataRecord-keywords-required"
