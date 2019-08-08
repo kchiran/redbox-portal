@@ -166,7 +166,7 @@
   "@dmpt-project-website": "Project website",
   "@dmpt-project-website-help": "If there is a website associated with the research project that you will be collecting data for, enter details of this website here.",
   "@dmpt-project-startdate": "Start Date",
-  "@dmpt-project-startdate-help": "Enter the date that the project started.",
+  "@dmpt-project-startdate-help": "Enter the approximate date that the project started (for reporting purposes only). Note that if you change the start date, you must check that the end date is still correct.",
   "@dmpt-project-enddate": "End Date",
   "@dmpt-project-enddate-help": "Enter the date that the project is expected to end.",
   "@dmpt-project-activity-type": "Activity type",
