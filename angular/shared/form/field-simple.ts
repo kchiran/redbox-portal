@@ -435,10 +435,14 @@ export class Toggle extends FieldBase<boolean> {
   }
 
   setToggle() {
-    if(this.options.valueCheck && this.options['checkedWhen'] && this.editMode) {
-      return this.options.valueCheck === this.options['checkedWhen'];
-    } else {
-      return this.options['value'] || false;
+    if(_.isUndefined(this.options['value'])) {
+      if(this.options.valueCheck && this.options['checkedWhen'] && this.editMode) {
+        return this.options.valueCheck === this.options['checkedWhen'];
+      } else {
+        return false;
+      }
+    } {
+      return this.options['value'];
     }
   }
 }
