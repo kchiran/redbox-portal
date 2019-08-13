@@ -86,7 +86,7 @@ export class DataLocationField extends FieldBase<any> {
   notesEnabled: boolean;
   iscHeader: string;
   iscEnabled: boolean;
-  publicSelect: string;
+  defaultSelect: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -104,9 +104,9 @@ export class DataLocationField extends FieldBase<any> {
     this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
     this.uppyDashboardNote = this.getTranslated(options['uppyDashboardNote'], 'Maximum upload size: 1 Gb per file');
     this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
-    this.publicSelect = !_.isUndefined(options['.']) ? options['.'] : "public";
+    this.defaultSelect = !_.isUndefined(options['defaultSelect']) ? options['defaultSelect'] : "confidential";
     if(this.iscEnabled) {
-      this.newLocation['isc'] = this.publicSelect;
+      this.newLocation['isc'] = this.defaultSelect;
     }
     this.securityClassificationOptions = options['securityClassificationOptions'] || [];
     this.columns = options['columns'] || [];
@@ -133,7 +133,7 @@ export class DataLocationField extends FieldBase<any> {
   addLocation() {
     this.value.push(this.newLocation);
     this.setValue(this.value);
-    this.newLocation = { type: "url", location: "", notes: "", isc: this.publicSelect };
+    this.newLocation = { type: "url", location: "", notes: "", isc: this.defaultSelect };
   }
 
   appendLocation(newLoc: any) {
