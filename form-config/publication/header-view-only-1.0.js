@@ -21,13 +21,6 @@ module.exports = [
     variableSubstitutionFields: ['value']
   },
   {
-    class: "ActionButton",
-    viewOnly: true,
-    definition: {
-      name: "ckanLocation"
-    }
-  },
-  {
     class: 'MarkdownTextArea',
     viewOnly: true,
     definition: {
