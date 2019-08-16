@@ -251,7 +251,7 @@ export module Services {
 
 			const template_ejs = await index.load_template();
 
-			const pages = index.make_index_pure(metadata['citation_doi'], "zip_path");
+			const pages = index.make_index_pure(metadata['citation_doi'], null);
 			const html_filename = index.html_file_name;
 
 			await Promise.all(pages.map((p) => {
