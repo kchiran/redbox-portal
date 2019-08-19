@@ -36,9 +36,7 @@ declare var sails: Sails;
 declare var RecordsService, UsersService, BrandingService;
 declare var _;
 
-// NOTE: the publication isn't being triggered if you go straight to review
-// from a new data pub
-
+const URL_PLACEHOLDER = '{ID_WILL_BE_HERE}'; // config
 
 
 export module Services {
@@ -104,6 +102,10 @@ export module Services {
 					sails.log.error("Empty user or no email found");
 				}
 
+				const datasetUrl = site['url'] + '/' + oid + '/';
+				md['citation_url'] = datasetUrl;
+				md['citation_doi'] = md['citation_doi'].replace(URL_PLACEHOLDER, datasetUrl);
+
 				return Observable.fromPromise(this.getRepository(options['site']))
 					.flatMap((repository) => {
 						return UsersService.getUserWithUsername(record['metaMetadata']['createdBy'])
@@ -113,7 +115,9 @@ export module Services {
 								}))
   						})
 						}).flatMap(() => {
-							return this.updateUrl(oid, record, site['url']);
+							// updateMeta to save the citation_url and citation_doi back to the
+							// data publication record
+							return RecordsService.updateMeta(sails.config.auth.defaultBrand, oid, record, null, true, false);
 						}).catch(err => {
 						sails.log.error(`Error publishing dataset ${oid} to ocfl repo st ${options['site']}`);
 						sails.log.error(err.name);
@@ -266,12 +270,6 @@ export module Services {
 		}
 
 
-		private updateUrl(oid: string, record: Object, baseUrl: string): Observable<any> {
-			const branding = sails.config.auth.defaultBrand; 
-			record['metadata']['citation_url'] = baseUrl + '/' + oid + '/';
-			// turn off postsave triggers
-			return RecordsService.updateMeta(branding, oid, record, null, true, false);
-		}
 
 		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
 			const branding = sails.config.auth.defaultBrand; 
@@ -280,9 +278,6 @@ export module Services {
 			record['metadata']['publication_error'] = "Data publication failed with error: " + err.name + " " + err.message;
 			return RecordsService.updateMeta(branding, oid, record, null, true, false);
 		}
-
-
-
 
 	}
 
