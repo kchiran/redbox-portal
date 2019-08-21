@@ -38,7 +38,7 @@ module.exports = [
             timePickerOpts: false,
             hasClearButton: false,
             valueFormat: 'YYYY-MM-DD',
-            displayFormat: 'L',
+            displayFormat: 'DD/MM/YYYY',
             disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
             publish: {
               onValueUpdate: {
@@ -70,7 +70,7 @@ module.exports = [
             timePickerOpts: false,
             hasClearButton: false,
             valueFormat: 'YYYY-MM-DD',
-            displayFormat: 'L',
+            displayFormat: 'DD/MM/YYYY',
             adjustStartRange: true,
             requiredIfHasValue: ['startDate', 'endDate'],
             disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',

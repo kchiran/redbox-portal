@@ -118,7 +118,15 @@ module.exports = [
             hasClearButton: false,
             valueFormat: 'YYYY-MM-DD',
             displayFormat: 'L',
-            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
+            disabledExpression: '<%= _.isEmpty(relatedRecordId) %>',
+            subscribe: {
+              'dataRecordGetter': {
+                onValueUpdate: [{
+                  action: 'utilityService.todaysDate',
+                  format: 'YYYY-MM-DD'
+                }]
+              }
+            }
           }
         },
         {

@@ -76,7 +76,10 @@ module.exports.recordtype = {
         },
         dataManager: {
           label: "@dmpt-people-tab-data-manager", // The label to show in the radio button options
-          updateField: 'contributor_data_manager'
+          updateField: 'contributor_data_manager',
+          fieldNames: {
+            text_full_name: "dataLicensingAccess_manager" // The name field in the form
+          }
         },
         dataOwner: {
           label: "@dmpt-people-tab-data-owner", // The label to show in the radio button options

@@ -247,7 +247,7 @@ module.exports = {
                     timePickerOpts: false,
                     hasClearButton: false,
                     valueFormat: 'YYYY-MM-DD',
-                    displayFormat: 'L',
+                    displayFormat: 'DD/MM/YYYY',
                     publish: {
                       onValueUpdate: {
                         modelEventSource: 'valueChanges'
@@ -286,7 +286,7 @@ module.exports = {
                     timePickerOpts: false,
                     hasClearButton: false,
                     valueFormat: 'YYYY-MM-DD',
-                    displayFormat: 'L',
+                    displayFormat: 'DD/MM/YYYY',
                     subscribe: {
                       'dc:coverage_vivo:DateTimeInterval_vivo:start': {
                         onValueUpdate: []

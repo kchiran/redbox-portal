@@ -206,4 +206,9 @@ export class UtilityService {
       const template = _.template(config.template, templateData);
       return template();
     }
+
+    public todaysDate(data:any, config:any) {
+      let format = config.format || 'YYYY-MM-DD';
+      return moment().local().format(format);
+    }
 }
