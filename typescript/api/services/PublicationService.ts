@@ -180,7 +180,7 @@ export module Services {
 			// make sure attachments have a unique filepath 
 
 			attachments.map((a) => {
-				attachments['path'] = path.join(a['fileId'], a['name']);
+				a['path'] = path.join(a['fileId'], a['name']);
 			});
 
 			const obs = attachments.map((a) => {
