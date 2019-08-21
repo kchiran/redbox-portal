@@ -177,11 +177,17 @@ export module Services {
 				(a) => ( !mdOnly && a['type'] === 'attachment' && a['selected'] )
 			);
 
+			// make sure attachments have a unique filepath 
+
+			attachments.map((a) => {
+				attachments['path'] = path.join(a['fileId'], a['name']);
+			});
+
 			const obs = attachments.map((a) => {
 				return RecordsService.getDatastream(drid, a['fileId']).
 					flatMap(ds => {
-						const filename = path.join(dir, a['name']);
-						return Observable.fromPromise(this.writeAttachment(ds.body, filename));
+						const filedir = path.join(dir, a['fileId']);
+						return Observable.fromPromise(this.writeAttachment(ds.body, filedir, a['name']));
 					});
 			});
 	
@@ -216,11 +222,17 @@ export module Services {
 		// the buffer in RAM. See writeDatastream for my first attempt, which
 		// doesn't work.
 
-		private async writeAttachment(buffer: Buffer, fn: string): Promise<boolean> {
+		private async writeAttachment(buffer: Buffer, dir: string, fn: string): Promise<boolean> {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
-					fs.writeFile(fn, buffer, () => {
-						resolve(true)
+					fse.ensureDir(dir, err => {
+						if( ! err ) {
+							fs.writeFile(path.join(dir, fn), buffer, () => {
+								resolve(true)
+							});
+						} else {
+							throw(err);
+						}
 					});
 				} catch(e) {
 					sails.log.error("attachment write error");
