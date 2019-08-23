@@ -27,15 +27,12 @@ module.exports = [
             noLocationSelectedText: '@dataPublication-publish-metadata-no-location-selected',
             noLocationSelectedHelp: '@dataPublication-publish-metadata-only-help',
             publicCheck: 'public',
-            selectionCriteria: [{isc:'public', type:'attachment'}],
+            selectionCriteria: [{isc:'public', type:'attachment'}, {isc: 'public', type: 'url'}],
             subscribe: {
               'dataRecordGetter': {
                 onValueUpdate: [{
                   action: 'utilityService.getPropertyFromObject',
                   field: 'dataLocations'
-                }],
-                onValueLoaded: [{
-                  action: 'selectAllPublic'
                 }]
               }
             }
