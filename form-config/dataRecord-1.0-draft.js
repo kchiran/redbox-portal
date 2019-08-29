@@ -458,7 +458,7 @@ module.exports = {
                     role: "@dmpt-people-tab-ci-role",
                     freeText: false,
                     forceLookupOnly: true,
-                    vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22))',
+                    vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22)%20OR%20text_has_appointment:(%22reversionary%22))',
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) || !_.isEmpty(relatedRecordId) %>',
                     fieldNames: [{
@@ -533,7 +533,7 @@ module.exports = {
                     help: '@dmpt-people-tab-data-manager-help',
                     role: "@dmpt-people-tab-data-manager-role",
                     freeText: false,
-                    vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22))',
+                    vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22)%20OR%20text_has_appointment:(%22reversionary%22))',
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
                     fieldNames: [{
@@ -604,7 +604,7 @@ module.exports = {
                         help: '@dmpt-people-tab-contributors-help',
                         role: "@dmpt-people-tab-contributors-role",
                         freeText: false,
-                        vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22))',
+                        vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22)%20OR%20text_has_appointment:(%22reversionary%22))',
                         sourceType: 'mint',
                         fieldNames: [{
                             'text_full_name': 'text_full_name'
@@ -670,7 +670,7 @@ module.exports = {
                         help: '@dmpt-people-tab-supervisor-help',
                         role: "@dmpt-people-tab-supervisor-role",
                         freeText: false,
-                        vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22))',
+                        vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22)%20OR%20text_has_appointment:(%22reversionary%22))',
                         sourceType: 'mint',
                         fieldNames: [{
                             'text_full_name': 'text_full_name'
