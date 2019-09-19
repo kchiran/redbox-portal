@@ -845,6 +845,7 @@ module.exports = {
                   definition: {
                     name: 'dataowner_name',
                     label: '@dmpt-dataRetention_data_owner',
+                    help: '@dmpt-dataRetention_data_owner:help',
                     type: 'text',
                     readOnly: true,
                     subscribe: {
