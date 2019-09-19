@@ -418,7 +418,7 @@ module.exports = {
                     role: "@dmpt-people-tab-ci-role",
                     freeText: false,
                     forceLookupOnly: true,
-                    vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22)%20OR%20text_has_appointment:(%22reversionary%22)',
+                    vocabId: 'Parties AND repository_name:People%20AND%20(text_has_appointment:(%22active%22)%20OR%20text_has_appointment:(%22reversionary%22))',
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
                     fieldNames: [{
