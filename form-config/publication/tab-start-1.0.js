@@ -138,6 +138,10 @@ module.exports = [
                 label: "@dataPublication-dataype-select:Empty"
               },
               {
+                value: "audiovisual",
+                label: "@dataPublication-dataype-select:audiovisual"
+              },
+              {
                 value: "catalogueOrIndex",
                 label: "@dataPublication-dataype-select:catalogueOrIndex"
               },
@@ -146,8 +150,32 @@ module.exports = [
                 label: "@dataPublication-dataype-select:collection"
               },
               {
+                value: "dataPaper",
+                label: "@dataPublication-dataype-select:dataPaper"
+              },
+              {
                 value: "dataset",
                 label: "@dataPublication-dataype-select:dataset"
+              },
+              {
+                value: "event",
+                label: "@dataPublication-dataype-select:event"
+              },
+              {
+                value: "interactiveResource",
+                label: "@dataPublication-dataype-select:interactiveResource"
+              },
+              {
+                value: "image",
+                label: "@dataPublication-dataype-select:image"
+              },
+              {
+                value: "model",
+                label: "@dataPublication-dataype-select:model"
+              },
+              {
+                value: "physicalObject",
+                label: "@dataPublication-dataype-select:physicalObject"
               },
               {
                 value: "registry",
@@ -158,8 +186,24 @@ module.exports = [
                 label: "@dataPublication-dataype-select:repository"
               },
               {
+                value: "service",
+                label: "@dataPublication-dataype-select:service"
+              },
+              {
                 value: "software",
                 label: "@dataPublication-dataype-select:software"
+              },
+              {
+                value: "sound",
+                label: "@dataPublication-dataype-select:sound"
+              },
+              {
+                value: "text",
+                label: "@dataPublication-dataype-select:text"
+              },
+              {
+                value: "workflow",
+                label: "@dataPublication-dataype-select:workflow"
               }
             ],
             subscribe: {
