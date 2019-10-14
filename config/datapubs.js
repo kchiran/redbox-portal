@@ -11,9 +11,9 @@ module.exports.datapubs = {
     }
   },
 
-  "datacrate": {
-  	"catalog_html": "CATALOG.html",
-    "catalog_json": "CATALOG.json",
+  "metadata": {
+  	"html_filename": "ro-crate-preview.html",
+    "jsonld_filename": "ro-crate-metadata.jsonld",
     "datapub_json": "datapub.json",
     "organization": {
       "id": "https://www.uts.edu.au/",

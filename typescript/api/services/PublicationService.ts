@@ -30,7 +30,10 @@ import ocfl = require('ocfl');
 
 
 import { Index, jsonld } from 'calcyte';
+
 const datacrate = require('datacrate').catalog;
+
+const rocrate = require('ro-crate');
 
 declare var sails: Sails;
 declare var RecordsService, UsersService, BrandingService;
@@ -191,7 +194,7 @@ export module Services {
 					});
 			});
 	
-			obs.push(Observable.fromPromise(this.makeDataCrate(creator, approver, oid, dir, metadata)));
+			obs.push(Observable.fromPromise(this.makeROCrate(creator, approver, oid, dir, metadata)));
 			return Observable.merge(...obs).toPromise();
 		}
 
@@ -245,43 +248,67 @@ export module Services {
 
 
 
-		private async makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
+		// private async makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
+
+		// 	const index = new Index();
+
+		// 	const catalog = await datacrate.datapub2catalog({
+		// 		'id': oid,
+		// 		'datapub': metadata,
+		// 		'organisation': sails.config.datapubs.datacrate.organization,
+		// 		'owner': creator['email'],
+		// 		'approver': approver['email']
+		// 	});
+
+		// 	const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
+		// 	await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
+
+		// 	index.init_pure({
+		// 		catalog_json: catalog,
+		// 		multiple_files: true
+		// 	});
+
+		// 	const template_ejs = await index.load_template();
+
+		// 	const pages = index.make_index_pure(metadata['citation_doi'], null);
+		// 	const html_filename = index.html_file_name;
+
+		// 	await Promise.all(pages.map((p) => {
+		// 			return this.writeCatalogHTML(path.join(dir, p.path), html_filename, p.html)
+		// 	}));
+		// }
+
+
+		// private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
+		// 	await fse.ensureDir(outdir);
+		// 	await fse.writeFile(path.join(outdir, indexfile), html);
+		// }
+
+
+		// Drop-in replacement for makeDataCrate which writes an RO-crate instead
+
+		private async makeROCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
 
 			const index = new Index();
 
 			const catalog = await datacrate.datapub2catalog({
 				'id': oid,
 				'datapub': metadata,
-				'organisation': sails.config.datapubs.datacrate.organization,
+				'organisation': sails.config.datapubs.metadata.organization,
 				'owner': creator['email'],
 				'approver': approver['email']
 			});
 
-			const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-			await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
+			const jsonld_file = path.join(dir, sails.config.datapubs.metadata.jsonld_filename);
+			const html_file = path.join(dir, sails.config.datapubs.metadata.html_filename);
 
-			index.init_pure({
-				catalog_json: catalog,
-				multiple_files: true
-			});
+			await fs.writeFile(jsonld_file, JSON.stringify(catalog, null, 2));
 
-			const template_ejs = await index.load_template();
+			const preview = new rocrate.Preview(new rocrate.ROCrate(catalog));
 
-			const pages = index.make_index_pure(metadata['citation_doi'], null);
-			const html_filename = index.html_file_name;
-
-			await Promise.all(pages.map((p) => {
-					return this.writeCatalogHTML(path.join(dir, p.path), html_filename, p.html)
-			}));
-		}
-
-
-		private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
-			await fse.ensureDir(outdir);
-			await fse.writeFile(path.join(outdir, indexfile), html);
-		}
-
-
+			const preview_html = await preview.render();
+			await fse.writeFile(html_file, preview.html);
+		}		
 
 		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
 			const branding = sails.config.auth.defaultBrand; 
