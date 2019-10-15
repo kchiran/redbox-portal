@@ -31,7 +31,7 @@ import ocfl = require('ocfl');
 
 import { Index, jsonld } from 'calcyte';
 
-const datacrate = require('datacrate').catalog;
+const rb2rocrate = require('redbox-ro-crate').rb2rocrate;
 
 const rocrate = require('ro-crate');
 
@@ -45,7 +45,7 @@ const URL_PLACEHOLDER = '{ID_WILL_BE_HERE}'; // config
 export module Services {
   /**
    *
-   * a Service to extract a DataPub and put it in a DataCrate with the
+   * a Service to extract a DataPub and put it in a RO-Crate with the
    * metadata crosswalked into the right JSON-LD
    *
    * @author <a target='_' href='https://github.com/spikelynch'>Mike Lynch</a>
@@ -60,7 +60,7 @@ export module Services {
 
 
     // exportDataset is the main point of entry. It returns an Observable
-    // which writes out the record's attachments, creates a DataCrate for
+    // which writes out the record's attachments, creates a RO-Crate for
     // them and imports them into the required repository (staging or
     // public)
 
@@ -92,7 +92,7 @@ export module Services {
 
 				// start an Observable to get/initialise the repository, then call createNewObjectContent
 				// content on it with a callback which will actually write out the attachments and
-				// make a datacrate. Once that's done, updates the URL in the data record.
+				// make a RO-Crate. Once that's done, updates the URL in the data record.
 
 				// the interplay between Promises and Observables here is too convoluted and needs
 				// refactoring.
@@ -167,7 +167,7 @@ export module Services {
   	}
 
   	// async function which takes a data publication and destination directory
-  	// and writes out the attachments and datacrate files to it
+  	// and writes out the attachments and RO-Crate files to it
 
     // based on the original exportDataset - takes the existing Observable chain
     // and converts it to a promise so that it can work with the ocfl library
@@ -291,7 +291,7 @@ export module Services {
 
 			const index = new Index();
 
-			const catalog = await datacrate.datapub2catalog({
+			const catalog = await rb2rocrate({
 				'id': oid,
 				'datapub': metadata,
 				'organisation': sails.config.datapubs.metadata.organization,
