@@ -307,7 +307,7 @@ export module Services {
 			const preview = new rocrate.Preview(new rocrate.ROCrate(jsonld));
 
 			const preview_html = await preview.render();
-			await fse.writeFile(html_file, preview.html);
+			await fse.writeFile(html_file, preview_html);
 		}		
 
 		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
