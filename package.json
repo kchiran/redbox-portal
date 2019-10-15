@@ -45,7 +45,7 @@
     "passport-local": "^1.0.0",
     "rc": "1.2.8",
     "redbox2ckan": "github:redbox-mint-contrib/redbox2ckan#dev_build",
-    "redbox-ro-crate": "^1.0.1",
+    "redbox-ro-crate": "^1.0.5",
     "redux": "4.0.1",
     "request-promise": "^4.2.0",
     "ro-crate": "^1.2.10",

@@ -291,7 +291,7 @@ export module Services {
 
 			const index = new Index();
 
-			const catalog = await rb2rocrate({
+			const jsonld = await rb2rocrate.rb2rocrate({
 				'id': oid,
 				'datapub': metadata,
 				'organisation': sails.config.datapubs.metadata.organization,
@@ -302,9 +302,9 @@ export module Services {
 			const jsonld_file = path.join(dir, sails.config.datapubs.metadata.jsonld_filename);
 			const html_file = path.join(dir, sails.config.datapubs.metadata.html_filename);
 
-			await fs.writeFile(jsonld_file, JSON.stringify(catalog, null, 2));
+			await fs.writeFile(jsonld_file, JSON.stringify(jsonld, null, 2));
 
-			const preview = new rocrate.Preview(new rocrate.ROCrate(catalog));
+			const preview = new rocrate.Preview(new rocrate.ROCrate(jsonld));
 
 			const preview_html = await preview.render();
 			await fse.writeFile(html_file, preview.html);
