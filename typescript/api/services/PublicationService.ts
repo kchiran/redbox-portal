@@ -306,7 +306,7 @@ export module Services {
 
 			const preview = new rocrate.Preview(new rocrate.ROCrate(jsonld));
 
-			const preview_html = await preview.render();
+			const preview_html = await preview.render(null, sails.config.datapubs.metadata.render_script);
 			await fse.writeFile(html_file, preview_html);
 		}		
 
