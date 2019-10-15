@@ -248,44 +248,8 @@ export module Services {
 
 
 
-		// private async makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
 
-		// 	const index = new Index();
-
-		// 	const catalog = await datacrate.datapub2catalog({
-		// 		'id': oid,
-		// 		'datapub': metadata,
-		// 		'organisation': sails.config.datapubs.datacrate.organization,
-		// 		'owner': creator['email'],
-		// 		'approver': approver['email']
-		// 	});
-
-		// 	const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-		// 	await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
-
-		// 	index.init_pure({
-		// 		catalog_json: catalog,
-		// 		multiple_files: true
-		// 	});
-
-		// 	const template_ejs = await index.load_template();
-
-		// 	const pages = index.make_index_pure(metadata['citation_doi'], null);
-		// 	const html_filename = index.html_file_name;
-
-		// 	await Promise.all(pages.map((p) => {
-		// 			return this.writeCatalogHTML(path.join(dir, p.path), html_filename, p.html)
-		// 	}));
-		// }
-
-
-		// private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
-		// 	await fse.ensureDir(outdir);
-		// 	await fse.writeFile(path.join(outdir, indexfile), html);
-		// }
-
-
-		// Drop-in replacement for makeDataCrate which writes an RO-crate instead
+		// Writes an RO-crate preview HTML page
 
 		private async makeROCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
 
