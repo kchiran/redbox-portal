@@ -605,7 +605,7 @@
   "@dataPublication-dc:accessRights-restricted-val": "Restricted",
   "@dataPublication-dc:accessRights-default": "Please contact the data manager for this publication for access",
   "@dataPublication-dataLicensingAccess_manager": "The data manager is recorded as:",
-  "@dataPublication-data-manager": "<h4>Access to the data will be managed by the data manager:</h4>",
+  "@dataPublication-data-manager": "<h5>Access to the data will be managed by the data manager</h5>",
   "@dataPublication-data_manager-transferResponsibility": "To change the data manager please <a href='/@branding/@portal/record/transfer/rdmp'>transfer data responsibilities</a>.",
   "@dataPublication-accessRights_url": "Access conditions URL",
   "@dataPublication-accessRights_url-help": "Use this if you have an online form for access requests, or a web page with data access application instructions.",
