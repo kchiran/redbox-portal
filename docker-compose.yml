@@ -24,6 +24,7 @@ services:
      main:
        aliases:
          - rbportal
+    # entrypoint: /bin/bash -c "sleep 99999999999"
     entrypoint: /bin/bash -c "cd /opt/redbox-portal && node app.js"
 
   nginx:
