@@ -30,7 +30,10 @@ import ocfl = require('ocfl');
 
 
 import { Index, jsonld } from 'calcyte';
-const datacrate = require('datacrate').catalog;
+
+const rb2rocrate = require('redbox-ro-crate').rb2rocrate;
+
+const rocrate = require('ro-crate');
 
 declare var sails: Sails;
 declare var RecordsService, UsersService, BrandingService;
@@ -42,7 +45,7 @@ const URL_PLACEHOLDER = '{ID_WILL_BE_HERE}'; // config
 export module Services {
   /**
    *
-   * a Service to extract a DataPub and put it in a DataCrate with the
+   * a Service to extract a DataPub and put it in a RO-Crate with the
    * metadata crosswalked into the right JSON-LD
    *
    * @author <a target='_' href='https://github.com/spikelynch'>Mike Lynch</a>
@@ -57,7 +60,7 @@ export module Services {
 
 
     // exportDataset is the main point of entry. It returns an Observable
-    // which writes out the record's attachments, creates a DataCrate for
+    // which writes out the record's attachments, creates a RO-Crate for
     // them and imports them into the required repository (staging or
     // public)
 
@@ -89,7 +92,7 @@ export module Services {
 
 				// start an Observable to get/initialise the repository, then call createNewObjectContent
 				// content on it with a callback which will actually write out the attachments and
-				// make a datacrate. Once that's done, updates the URL in the data record.
+				// make a RO-Crate. Once that's done, updates the URL in the data record.
 
 				// the interplay between Promises and Observables here is too convoluted and needs
 				// refactoring.
@@ -164,7 +167,7 @@ export module Services {
   	}
 
   	// async function which takes a data publication and destination directory
-  	// and writes out the attachments and datacrate files to it
+  	// and writes out the attachments and RO-Crate files to it
 
     // based on the original exportDataset - takes the existing Observable chain
     // and converts it to a promise so that it can work with the ocfl library
@@ -191,7 +194,7 @@ export module Services {
 					});
 			});
 	
-			obs.push(Observable.fromPromise(this.makeDataCrate(creator, approver, oid, dir, metadata)));
+			obs.push(Observable.fromPromise(this.makeROCrate(creator, approver, oid, dir, metadata)));
 			return Observable.merge(...obs).toPromise();
 		}
 
@@ -245,43 +248,31 @@ export module Services {
 
 
 
-		private async makeDataCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
+
+		// Writes an RO-crate preview HTML page
+
+		private async makeROCrate(creator: Object, approver: Object, oid: string, dir: string, metadata: Object): Promise<any> {
 
 			const index = new Index();
 
-			const catalog = await datacrate.datapub2catalog({
+			const jsonld = await rb2rocrate.rb2rocrate({
 				'id': oid,
 				'datapub': metadata,
-				'organisation': sails.config.datapubs.datacrate.organization,
+				'organisation': sails.config.datapubs.metadata.organization,
 				'owner': creator['email'],
 				'approver': approver['email']
 			});
 
-			const catalog_json = path.join(dir, sails.config.datapubs.datacrate.catalog_json);
-			await fs.writeFile(catalog_json, JSON.stringify(catalog, null, 2));
+			const jsonld_file = path.join(dir, sails.config.datapubs.metadata.jsonld_filename);
+			const html_file = path.join(dir, sails.config.datapubs.metadata.html_filename);
 
-			index.init_pure({
-				catalog_json: catalog,
-				multiple_files: true
-			});
+			await fs.writeFile(jsonld_file, JSON.stringify(jsonld, null, 2));
 
-			const template_ejs = await index.load_template();
+			const preview = new rocrate.Preview(new rocrate.ROCrate(jsonld));
 
-			const pages = index.make_index_pure(metadata['citation_doi'], null);
-			const html_filename = index.html_file_name;
-
-			await Promise.all(pages.map((p) => {
-					return this.writeCatalogHTML(path.join(dir, p.path), html_filename, p.html)
-			}));
-		}
-
-
-		private async writeCatalogHTML(outdir: string, indexfile: string, html: string): Promise<any> {
-			await fse.ensureDir(outdir);
-			await fse.writeFile(path.join(outdir, indexfile), html);
-		}
-
-
+			const preview_html = await preview.render(null, sails.config.datapubs.metadata.render_script);
+			await fse.writeFile(html_file, preview_html);
+		}		
 
 		private recordPublicationError(oid: string, record: Object, err: Error): Observable<any> {
 			const branding = sails.config.auth.defaultBrand; 
