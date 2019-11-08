@@ -68,7 +68,7 @@ export module Services {
       return newObj;
     }
 
-    createWorkspaceRecord(config: any, username: string, project: any, recordType: string, workflowStage: string) {
+    createWorkspaceRecord(config: any, username: string, project: any, recordType: string, workflowStage: string, emailPendingUsers: Array<string>) {
       // TODO: how to get the workflowStage??
       // TODO: Get the project metadata from the form, move this logic to the controller
       sails.log.debug(config);
@@ -79,8 +79,8 @@ export module Services {
           authorization: {
             edit: [username],
             view: [username],
-            editPending:[],
-            viewPending:[]
+            editPending: [...emailPendingUsers],
+            viewPending: [...emailPendingUsers]
           },
           metadata: project,
           workflowStage: workflowStage
