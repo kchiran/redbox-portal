@@ -40,7 +40,7 @@ declare var RecordsService, UsersService, BrandingService;
 declare var _;
 
 const URL_PLACEHOLDER = '{ID_WILL_BE_HERE}'; // config
-
+const DEFAULT_IDENTIFIER_NAMESPACE = 'redbox';
 
 export module Services {
   /**
@@ -255,7 +255,7 @@ export module Services {
 
 			const index = new Index();
 
-			const jsonld = await rb2rocrate.rb2rocrate({
+			const jsonld_raw = await rb2rocrate.rb2rocrate({
 				'id': oid,
 				'datapub': metadata,
 				'organisation': sails.config.datapubs.metadata.organization,
@@ -263,12 +263,22 @@ export module Services {
 				'approver': approver['email']
 			});
 
+
+
 			const jsonld_file = path.join(dir, sails.config.datapubs.metadata.jsonld_filename);
 			const html_file = path.join(dir, sails.config.datapubs.metadata.html_filename);
+			const namespace = sails.config.datapubs.metadata.identifier_namespace || DEFAULT_IDENTIFIER_NAMESPACE;
+
+			const roc = new rocrate.ROCrate(jsonld_raw);
+			
+			roc.index();
+			roc.addIdentifier({identifier: oid, name: namespace})
+
+			const jsonld = roc.json_ld;
 
 			await fs.writeFile(jsonld_file, JSON.stringify(jsonld, null, 2));
 
-			const preview = new rocrate.Preview(new rocrate.ROCrate(jsonld));
+			const preview = new rocrate.Preview(roc);
 
 			const preview_html = await preview.render(null, sails.config.datapubs.metadata.render_script);
 			await fse.writeFile(html_file, preview_html);
