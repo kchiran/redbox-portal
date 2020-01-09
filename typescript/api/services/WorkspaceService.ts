@@ -71,6 +71,9 @@ export module Services {
     createWorkspaceRecord(config: any, username: string, project: any, recordType: string, workflowStage: string, emailPendingUsers: Array<string>) {
       // TODO: how to get the workflowStage??
       // TODO: Get the project metadata from the form, move this logic to the controller
+      if(!emailPendingUsers) {
+        emailPendingUsers = [];
+      }
       sails.log.debug(config);
       const post = request({
         uri: config.brandingAndPortalUrl + `/api/records/metadata/${recordType}`,
