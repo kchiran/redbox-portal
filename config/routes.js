@@ -285,5 +285,6 @@ module.exports.routes = {
   },
 
   'get /:branding/:portal/workspaces/types/:name' : 'WorkspaceTypesController.getOne',
-  'get /:branding/:portal/workspaces/types' : 'WorkspaceTypesController.get'
+  'get /:branding/:portal/workspaces/types' : 'WorkspaceTypesController.get',
+  'get /:branding/:portal/workspaces/available' : 'WorkspaceTypesController.getAvailableWorkspaces',
 };

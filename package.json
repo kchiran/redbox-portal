@@ -56,6 +56,8 @@
     "sails-hook-grunt": "^3.1.0",
     "sails-hook-orm": "^2.0.0",
     "sails-hook-sockets": "^1.5.2",
+    "sails-hook-redbox-labarchives": "*",
+    "sails-hook-redbox-catalog": "*",
     "sails-mongo": "^1.0.0",
     "skipper-gridfs": "https://github.com/marcelomedina10/skipper-gridfs.git",
     "systemjs": "3.1.3",

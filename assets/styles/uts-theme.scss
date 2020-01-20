@@ -1334,3 +1334,8 @@ tree-internal > ul.rootless > li > tree-internal > ul {
   overflow-x: auto;
   max-height: 400px;
 }
+
+.overlay {
+  pointer-events: none;
+  opacity: 0.6;
+}
