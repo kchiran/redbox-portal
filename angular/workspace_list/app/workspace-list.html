@@ -1,17 +1,16 @@
 <div *ngIf="!isLoading">
   <div class="row">
-    <h5><span *ngIf="!hasSelectedRdmp()"> In order to request/create a research workspace, please first select a plan. If you do not have one create one by following this <a href="{{ rdmpUrl }}">link -></a></span></h5>
+    <h4><span *ngIf="!hasSelectedRdmp()"> In order to request/create a research workspace, please first select a plan. If you do not have one create one by following this <a href="{{ rdmpUrl }}">link -></a></span></h4>
     <br/>
   </div>
   <div class="row" *ngIf="createMode">
-    <h5 *ngIf="!hasSelectedRdmp()">{{ searchLabel }}</h5>
+    <h4 *ngIf="!hasSelectedRdmp()">{{ searchLabel }}</h4>
     <rb-RelatedObjectSelector [field]="selectorField"></rb-RelatedObjectSelector>
     <button (click)="cancelCreate()" class="btn btn-primary">{{ backButtonLabel }}</button>
   </div>
   <div class="row" *ngIf="!createMode">
     <button type='button' (click)="createWorkspace()" class="btn btn-primary"> {{ createWorkspaceLabel }} </button>
   </div>
-  <h3 *ngIf="!hasSelectedRdmp()">Select a Plan</h3>
   <br />
   <div class="container">
     <div class="row justify-content-center" [ngClass]="hasSelectedRdmp() ? 'block' : 'overlay'">
