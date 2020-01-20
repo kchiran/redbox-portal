@@ -39,7 +39,7 @@ export class WorkspaceFieldComponent {
   /**
    * The DOM node for this field.
    */
-  @ViewChild('field', {read: ViewContainerRef}) fieldAnchor: ViewContainerRef;
+  @ViewChild('field', { read: ViewContainerRef }) fieldAnchor: ViewContainerRef;
 
   /**
    * The parentId of this field
@@ -61,7 +61,7 @@ export class WorkspaceFieldComponent {
   /**
    * For DI'ing...
    */
-  constructor(@Inject(ComponentFactoryResolver) private componentFactoryResolver: ComponentFactoryResolver, protected app: ApplicationRef){
+  constructor(@Inject(ComponentFactoryResolver) private componentFactoryResolver: ComponentFactoryResolver, protected app: ApplicationRef) {
     this.disabledElements = [];
   }
   /**
@@ -80,23 +80,23 @@ export class WorkspaceFieldComponent {
   public isDisabled() {
 
     var disabledExpression = this.field.options['disabledExpression'];
-    if(disabledExpression != null) {
+    if (disabledExpression != null) {
 
       var imports = this.fieldAnchor;
-      var variables= {};
+      var variables = {};
       variables['imports'] = this.fieldMap._rootComp;
       var compiled = _.template(disabledExpression, variables);
       var parentElement = jQuery(this.fieldElement.nativeElement.parentElement);
-      if(compiled() == "true") {
+      if (compiled() == "true") {
         //take note of which elements where already disabled as we dont want to enable them if whole component becomes enabled again
         this.disabledElements = parentElement.find('*:disabled');
-        parentElement.find('input').prop( "disabled", true );
+        parentElement.find('input').prop("disabled", true);
         return 'disabled';
       } else {
-        if(jQuery(this.fieldElement.nativeElement).prop('disabled') == 'disabled') {
+        if (jQuery(this.fieldElement.nativeElement).prop('disabled') == 'disabled') {
           //previously disabled so lets re-enable
-          parentElement.find('input').prop( "disabled", false );
-          _.each(this.disabledElements, disabledElement => disabledElement.prop("disabled",true));
+          parentElement.find('input').prop("disabled", false);
+          _.each(this.disabledElements, disabledElement => disabledElement.prop("disabled", true));
         }
         return null;
       }
@@ -115,7 +115,7 @@ export class WorkspaceFieldComponent {
     this.fieldAnchor.clear();
 
     let compFactory = this.componentFactoryResolver.resolveComponentFactory(this.field.compClass);
-    let fieldCompRef:ComponentRef<SimpleComponent> = <ComponentRef<SimpleComponent>> this.fieldAnchor.createComponent(compFactory, undefined, this.app['_injector']);
+    let fieldCompRef: ComponentRef<SimpleComponent> = <ComponentRef<SimpleComponent>>this.fieldAnchor.createComponent(compFactory, undefined, this.app['_injector']);
     fieldCompRef.instance.injector = this.app['_injector'];
     fieldCompRef.instance.field = this.field;
     fieldCompRef.instance.form = this.form;
@@ -132,6 +132,7 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
   rdmp: string;
   workspaceTypeService: WorkspaceTypeService;
   workspaceApp: any;
+  services: any = [];
   appLink: string;
 
   constructor(options: any, injector: any) {
@@ -148,14 +149,23 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
     });
     this.appLink = this.workspaceTypeService.getBrand() + '/record/';
     this.workspaceTypeService.getWorkspaceTypes().then(response => {
-      if(response['status']) {
+      if (response['status']) {
         //append results from database into workspaceApps
         this.workspaceApps = _.concat(this.workspaceApps, response['workspaceTypes']);
       } else {
         throw new Error('cannot get workspaces');
       }
     }).catch(error => {
-      console.log(error);
+      console.error(error);
+    });
+    this.workspaceTypeService.getAvailableWorkspaces().then(response => {
+      if (response['status']) {
+        this.services = _.concat(this.services, response['workspaces']);
+      } else {
+        throw new Error('cannot get workspaces');
+      }
+    }).catch(error => {
+      console.error(error);
     });
   }
 
@@ -175,9 +185,9 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
 
   loadWorkspaceDetails(value: string) {
     //GET me the value from the database
-    if(!value){
+    if (!value) {
       this.workspaceApp = null
-    }else {
+    } else {
       this.workspaceApp = _.find(this.workspaceApps,
         function(w) {
           return w['name'] == value;
@@ -190,8 +200,8 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
     if (this.controlType == 'checkbox') {
       const fgDef = [];
 
-      _.map(this.options, (opt:any)=>{
-        const hasValue = _.find(this.value, (val:any) => {
+      _.map(this.options, (opt: any) => {
+        const hasValue = _.find(this.value, (val: any) => {
           return val == opt.value;
         });
         if (hasValue) {

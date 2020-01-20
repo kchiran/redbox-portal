@@ -355,7 +355,7 @@
   "@dmpt-workspace-select-type": "Select the desired workspace (or storage service) from the list. If it isn't there, select from the Data Storage locations below.",
   "@dmpt-workspace-select-help": "The next list allows Stash to link your RDMP to your workspaces. This helps us keep your data safe: the RDMP tells us how long to preserve the workspace and to whom it belongs.",
   "@dmpt-workspace-open": "Go",
-  "@dmpt-workspace-saveFirst": "First, save your plan to access workspaces",
+  "@dmpt-workspace-saveFirst": "Save your plan",
   "@dmp-create-datarecord-link": "Create a data record from this plan",
   "@dataRecord-about-tab": "What",
   "@dataRecord-about-heading": "What is the data about?",

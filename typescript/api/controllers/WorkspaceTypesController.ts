@@ -112,8 +112,6 @@ export module Controllers {
 
 		getAvailableWorkspaces(req, res) {
 			const workspaces = sails.config.workspaces.available;
-			sails.log.debug('workspaces');
-			sails.log.debug(workspaces);
 			this.ajaxOk(req, res, null, { status: true, workspaces: workspaces });
 		}
 

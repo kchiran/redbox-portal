@@ -1,26 +1,27 @@
 //Workspaces Definitions
 
 module.exports.workspaces = {
-  available: [{
-      logo: '/angular/gitlab/assets/images/gitlab.png',
-      name: 'gitlab',
-      displayName: 'GITLAB',
-      title: 'GitLab',
-      desc: 'Source Code',
-      app: {
-        id: 'gitlab'
-      }
-    },
-    {
-      logo: '/angular/omero/assets/images/omero.png',
-      name: 'omero',
-      displayName: 'OMERO',
-      title: 'OMERO',
-      desc: 'Microimaging',
-      app: {
-        id: 'omero'
-      }
-    },
+  available: [
+    // {
+    //   logo: '/angular/gitlab/assets/images/gitlab.png',
+    //   name: 'gitlab',
+    //   displayName: 'GITLAB',
+    //   title: 'GitLab',
+    //   desc: 'Source Code',
+    //   app: {
+    //     id: 'gitlab'
+    //   }
+    // },
+    // {
+    //   logo: '/angular/omero/assets/images/omero.png',
+    //   name: 'omero',
+    //   displayName: 'OMERO',
+    //   title: 'OMERO',
+    //   desc: 'Microimaging',
+    //   app: {
+    //     id: 'omero'
+    //   }
+    // },
     {
       logo: '/angular/catalog/assets/images/storage.png',
       name: 'storage',
@@ -64,15 +65,15 @@ module.exports.workspaces = {
         id: 'labarchives'
       }
     },
-    {
-      logo: '/angular/redcap/assets/images/logo.png',
-      name: 'redcap',
-      displayName: 'REDCAP',
-      title: 'RedCap',
-      desc: 'Redcap',
-      app: {
-        id: 'redcap'
-      }
-    }
+    // {
+    //   logo: '/angular/redcap/assets/images/logo.png',
+    //   name: 'redcap',
+    //   displayName: 'REDCAP',
+    //   title: 'RedCap',
+    //   desc: 'Redcap',
+    //   app: {
+    //     id: 'redcap'
+    //   }
+    // }
   ]
 }
