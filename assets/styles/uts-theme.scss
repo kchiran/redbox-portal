@@ -1339,3 +1339,8 @@ tree-internal > ul.rootless > li > tree-internal > ul {
   pointer-events: none;
   opacity: 0.6;
 }
+
+.workspaces-panel-body {
+  height: 250px;
+  max-height: 250px;
+}

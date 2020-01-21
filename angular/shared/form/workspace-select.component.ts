@@ -44,7 +44,7 @@ export class WorkspaceSelectComponent extends SimpleComponent {
               <span *ngIf="s.displayName">{{ s.displayName }}</span>
             </h5>
           </div>
-          <div class="panel-body" style="height:200px; max-height:200px;">
+          <div class="panel-body workspaces-panel-body">
             <img style="max-height:100px;" class="card-img-top" src="{{ s.logo }}" alt="{{ s.name }}">
             <div class="card-body" style="margin-bottom: auto;">
               <h5 class="card-title" style="margin-top: 2px">
