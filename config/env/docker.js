@@ -74,47 +74,5 @@ module.exports = {
       adapter: require('sails-mongo'),
       url: 'mongodb://mongodb:27017/redbox-portal'
     }
-  },
-  workspaces: {
-    portal: {
-      authorization: 'Bearer 1f720605-cf59-4377-87f2-3a94bfa11945'
-    },
-    provisionerUser: 'admin',
-    parentRecord: 'rdmp',
-    labarchives: {
-      parentRecord: 'rdmp',
-      formName: 'labarchives-1.0-draft',
-      workflowStage: 'draft',
-      appName: 'labarchives',
-      appId: 'labarchives',
-      recordType: 'labarchives',
-      workspaceFileName: 'README.md',
-      key: {"akid": "***REMOVED***", "password": "***REMOVED***", "baseurl": "https://ohtest.labarchives.com",
-  "api": "/api"},
-      location: 'https://ohtest.labarchives.com',
-      description: 'eNotebook Workspace'
-    },
-    catalog: {
-      parentRecord: 'rdmp',
-      formName: 'catalog-1.0-draft',
-      workflowStage: 'draft',
-      appName: 'catalog',
-      appId: 'catalog',
-      recordType: 'catalog',
-      description: 'eResearch Service',
-      domain: 'https://utstest.service-now.com',
-      taskURL: '/task.do?sys_id=',
-      requestTable: 'sc_request',
-      user: '***REMOVED***',
-      password: '***REMOVED***',
-      assignedToEmail: 'Moises.Sacal@uts.edu.au',
-      testRequestorId: null,
-      items: [
-        {name: 'ihpc', id: 'xxx'},
-        {name: 'hpcc', id: 'xxx'},
-        {name: 'storage', id: 'xxx'},
-        {name: 'stash_rdmp_help', id: 'xxx'}
-      ]
-    }
   }
 };
