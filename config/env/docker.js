@@ -109,6 +109,12 @@ module.exports = {
       password: '***REMOVED***',
       assignedToEmail: 'Moises.Sacal@uts.edu.au',
       testRequestorId: null,
+      items: [
+        {name: 'ihpc', id: 'xxx'},
+        {name: 'hpcc', id: 'xxx'},
+        {name: 'storage', id: 'xxx'},
+        {name: 'stash_rdmp_help', id: 'xxx'}
+      ]
     }
   }
 };

@@ -45,14 +45,25 @@ module.exports.workspaces = {
       }
     },
     {
-      logo: '/angular/catalog/assets/images/uts_hpcs.png',
+      logo: '/angular/catalog/assets/images/uts_ihpc.png',
       name: 'hpc',
-      displayName: 'HPC',
-      title: 'eResearch Computing',
-      desc: 'eResearch Computing',
+      displayName: 'iHPC',
+      title: 'eResearch iHPC (Project Volumes)',
+      desc: 'The iHPC facility provides an interactive high performance computing resource for all researchers within UTS.',
       app: {
         id: 'catalog',
-        type: 'hpc'
+        type: 'ihpc'
+      }
+    },
+    {
+      logo: '/angular/catalog/assets/images/uts_hpcc.png',
+      name: 'hpcc',
+      displayName: 'HPCC',
+      title: 'eResearch HPCC',
+      desc: 'High Performance Computing Cluster (HPCC) that can be accessed by UTS researchers.',
+      app: {
+        id: 'catalog',
+        type: 'hpcc'
       }
     },
     {
