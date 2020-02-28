@@ -270,7 +270,7 @@ export class FieldBase<T> {
                 }
               }
               console.log(`Emitting data:`);
-              console.log(emitData);
+              console.log(`eventName: ${eventName} emitData: ${emitData} value: ${value}`);
               this.emitEvent(eventName, emitData, value);
             }
           });
@@ -280,7 +280,6 @@ export class FieldBase<T> {
     }
 
     if (!_.isEmpty(subscribeConfig)) {
-
       _.forOwn(subscribeConfig, (subConfig, srcName) => {
         _.forOwn(subConfig, (eventConfArr, eventName) => {
           const eventEmitter = this.getEventEmitter(eventName, srcName);
@@ -394,7 +393,8 @@ export class FieldBase<T> {
           var objectName = this.visibilityCriteria.action.substring(0,this.visibilityCriteria.action.indexOf("."));
           boundFunction = fn.bind(this[objectName]);
         }
-        this.visible = boundFunction(data);
+        console.log(`visibilityCriteria: ${this.visibilityCriteria.name}`);
+        this.visible = boundFunction(data, this.visibilityCriteria);
       }
     } else {
       this.visible = _.isEqual(data, this.visibilityCriteria);
@@ -469,5 +469,79 @@ export class FieldBase<T> {
   //Default asyncLoadData function. No async load required so return empty Observable.
   asyncLoadData() {
     return Observable.of(null);
+  }
+
+  setProp(change: any, config: any) {
+
+    if(config['debug'] === 'ethics_data_secondary_third_party_special'){debugger;}
+    console.log(`Set Props: ${config['debug']}`);
+    let value;
+    let checked;
+    let setChange = false;
+    if (_.isObject(change)) {
+      value = change.value;
+      checked = change.checked;
+    } else {
+      value = change;
+      checked = true;
+    }
+    const found = config['valueTest'].find((val) => {
+      return val === value;
+    });
+    if(found) {
+      setChange = true;
+    }
+    if (setChange && checked) {
+      _.each(config['props'], (prop) => {
+        if (prop.key === 'required') {
+          this.setRequired(prop.val);
+        }
+        else if (prop.key === 'value') {
+          if(this.formModel) {
+            this.setValue(this.getTranslated(prop.val, undefined));
+          } else {
+            this.value = this.getTranslated(prop.val, undefined);
+          }
+        }
+        else if (prop.key === 'visible') {
+          setTimeout(() => {
+            this.setVisibility(prop.val);
+          });
+        }
+      });
+    } else if (setChange){
+      console.log('just found');
+    } else {
+      _.each(config['props'], (prop) => {
+        if (prop.key === 'required') {
+          this.setRequired(prop.val2);
+        }
+        else if (prop.key === 'value') {
+          if(this.value) {
+            this.setValue(prop.val2, true);
+          }
+        }
+        else if (prop.key === 'visible') {
+          this.setVisibility(prop.val2);
+        }
+      });
+    }
+  }
+
+  updateVisibility(visible, config) {
+    console.log(`updateVisibility: ${config['debug']}`);
+    const fieldName = config['field'];
+    const fieldValue = config['fieldValue'];
+    let field;
+    if(this.fieldMap[fieldName]) {
+      field = this.fieldMap[fieldName]['field'];
+      if(field && field['value'] === fieldValue) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
   }
 }

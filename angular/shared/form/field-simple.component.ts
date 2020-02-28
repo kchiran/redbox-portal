@@ -222,7 +222,7 @@ export class DropdownFieldComponent extends SelectionComponent {
       <legend [hidden]="true"><span></span></legend>
         <span *ngFor="let opt of field.selectOptions">
           <!-- radio type hard-coded otherwise accessor directive will not work! -->
-          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null ">
+          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null " (change)="onChange(opt, $event)" [attr.selected]="getControlFromOption(opt)" [attr.checked]="getControlFromOption(opt)">
           <input *ngIf="!isRadio()" type="{{field.controlType}}" name="{{field.name}}" [id]="field.name + '_' + opt.value" [value]="opt.value" (change)="onChange(opt, $event)" [attr.selected]="getControlFromOption(opt)" [attr.checked]="getControlFromOption(opt)" [attr.disabled]="field.readOnly ? '' : null ">
           <label for="{{field.name + '_' + opt.value}}" class="radio-label">{{ opt.label }}</label>
           <br/>
@@ -268,18 +268,31 @@ export class SelectionFieldComponent extends SelectionComponent {
   }
 
   onChange(opt:any, event:any) {
+    console.log('onChange, SelectionFieldComponent');
+    console.log(opt);
     let formcontrol:any = this.getFormControl();
-    if (event.target.checked) {
-      formcontrol.push(new FormControl(opt.value));
-    } else {
-      let idx = null;
-      _.forEach(formcontrol.controls, (ctrl, i) => {
-        if (ctrl.value == opt.value) {
-          idx = i;
-          return false;
-        }
-      });
-      formcontrol.removeAt(idx);
+    if(formcontrol && formcontrol.length > 0){
+      if (event.target.checked) {
+        formcontrol.push(new FormControl(opt.value));
+      } else {
+        let idx = null;
+        _.forEach(formcontrol.controls, (ctrl, i) => {
+          if (ctrl.value == opt.value) {
+            idx = i;
+            return false;
+          }
+        });
+        formcontrol.removeAt(idx);
+      }
+    }
+    if(this.field.publish) {
+      // Some perf
+      if(this.field.publish.onItemSelect) {
+        this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
+      }
+      if(this.field.publish.onValueUpdate) {
+        this.field.onValueUpdate.emit({value: opt['publishTag'], checked: true});
+      }
     }
   }
 }
@@ -758,8 +771,8 @@ export class SpacerComponent extends SimpleComponent {
 @Component({
   selector: 'toggle',
   template: `
-    <div *ngIf="field.type == 'checkbox'" [formGroup]='form'>
-      <input type="checkbox" [checked]="field.value" name="{{field.name}}" [id]="field.name" [formControl]="getFormControl()" [attr.disabled]="field.editMode ? null : ''" >
+    <div *ngIf="field.type == 'checkbox' && field.visible" [formGroup]='form'>
+      <input type="checkbox" [checked]="field.value" name="{{field.name}}" [id]="field.name" [formControl]="getFormControl()" [attr.disabled]="field.editMode ? null : ''" (change)="onChange(field.options, $event)">
       <label for="{{ field.name }}" class="radio-label">{{ field.label }} <button *ngIf="field.editMode && field.help" type="button" class="btn btn-default" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button></label>
       <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
     </div>
@@ -768,4 +781,12 @@ export class SpacerComponent extends SimpleComponent {
 export class ToggleComponent extends SimpleComponent {
   field: Toggle;
 
+  onChange(opt:any, event:any) {
+    console.log(`ToggleComponent, onChanged Checked: ${event.target.checked}`);
+    if(this.field.publish) {
+      setTimeout(() => {
+        this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
+      });
+    }
+  }
 }

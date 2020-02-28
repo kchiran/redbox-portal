@@ -43,6 +43,7 @@ export class NotInFormField extends FieldBase<any> {
 export class SelectionField extends FieldBase<any>  {
   selectOptions: any[] = [];
   storeValueAndLabel:boolean = false;
+  @Output() onItemSelect: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -427,6 +428,7 @@ export class Spacer extends NotInFormField {
 
 export class Toggle extends FieldBase<boolean> {
   type: string;
+  @Output() onItemSelect: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(options: any, injector: any) {
     super(options, injector);
