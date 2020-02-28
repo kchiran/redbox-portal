@@ -254,7 +254,7 @@
   "@dmpt-retention-tab": "Data retention and disposal",
   "@dmpt-retention-heading": "Data retention and disposal",
   "@dmpt-redbox:retentionPeriod_dc:date": "Minimum retention period",
-  "@dmpt-redbox:retentionPeriod_dc:date-help": "Record the period of time that the data must be kept in line with <a href='https://www.records.nsw.gov.au/sites/default/files/Recordkeeping/GA0047%20Higher%20and%20further%20education%20with%20reference%20to%20GDA23%20for%20child%20care%20and%20patient%20records.pdf' target='_blank' rel='noopener noreferrer'> NSW State Archives and Records requirements</a>.",
+  "@dmpt-redbox:retentionPeriod_dc:date-help": "Record the period of time that the data must be kept in line with <a href='https://www.records.nsw.gov.au/recordkeeping/education%3A-higher-%26-further-education-and-research-records-%28ga47%29' target='_blank' rel='noopener noreferrer'> NSW State Archives and Records requirements</a>.",
   "@dmpt-redbox:retentionPeriod_dc:date-required": "Retention Period must be specified",
   "@dmpt-redbox:retentionPeriod_dc:date-1year": "1 year (short term projects for assessment purposes only)",
   "@dmpt-redbox:retentionPeriod_dc:date-5years": "5 years (general research)",
