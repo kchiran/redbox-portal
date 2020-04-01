@@ -849,7 +849,6 @@ module.exports = {
                     }
                   }
                 },
-                ,
                 {
                   class: 'TextField',
                   definition: {
@@ -903,17 +902,25 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'Toggle',
-                  compClass: 'ToggleComponent',
-                  variableSubstitutionFields: ['valueCheck'],
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
                   definition: {
-                    valueCheck: '@user_edupersonscopedaffiliation',
+                    required: true,
                     name: 'ethics_approval',
-                    checkedWhen: 'student@uts.edu.au',
                     label: '@dmpt-ethics:approval',
                     help: '@dmpt-ethics:approval:help',
-                    controlType: 'checkbox',
-                    publishTag: 'ethics_approval',
+                    controlType: 'radio',
+                    options: [{
+                        value: "yes",
+                        label: "Yes",
+                        publishTag: "ethics_approval"
+                      },
+                      {
+                        value: "no",
+                        label: "No",
+                        publishTag: "ethics_approval"
+                      }
+                    ],
                     publish: {
                       onItemSelect: {
                         modelEventSource: 'valueChanges'
@@ -971,7 +978,7 @@ module.exports = {
                         onItemSelect: [{
                           fieldName: 'ethics_approval_type:subscribedto:ethics_approval',
                           action: 'setProp',
-                          valueTest: ['ethics_approval'],
+                          valueTest: ['yes'],
                           props: [
                             {key: 'visible', val: true, val2: false},
                             {key: 'required', val: true, val2: false},
@@ -1429,6 +1436,81 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_informed_consent_no_collection',
+                    label: '@dmpt-ethics:identifiable:informed_consent:no:collection',
+                    help: '@dmpt-ethics:identifiable:informed_consent:collection"help',
+                    controlType: 'checkbox',
+                    options: [{
+                        value: "eresearch_store",
+                        label: "eResearch Store"
+                      },
+                      {
+                        value: "onedrive",
+                        label: "OneDrive"
+                      },
+                      {
+                        value: "redcap",
+                        label: "RedCap"
+                      },
+                      {
+                        value: "qualtrics",
+                        label: "Qualtrics"
+                      },
+                      {
+                        value: "others",
+                        label: "Others",
+                        publishTag: 'ethics_identifiable_informed_consent_no_others'
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'human_participant_data_identifiable': {
+                        onValueUpdate: [{
+                          fieldName: 'ethics_identifiable_informed_consent_no_collection',
+                          action: 'setProp',
+                          valueTest: ['human_participant_data_identifiable'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_informed_consent_no_collection_other',
+                    label: 'Plese specify other means of storage',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_informed_consent_no_collection': {
+                        onItemSelect: [{
+                          fieldName: 'ethics_identifiable_informed_consent_no_others',
+                          action: 'setProp',
+                          valueTest: ['ethics_identifiable_informed_consent_no_others'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -1470,81 +1552,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_informed_consent_no_collection',
-                    label: '@dmpt-ethics:identifiable:informed_consent:no:collection',
-                    help: '@dmpt-ethics:identifiable:informed_consent:collection"help',
-                    controlType: 'checkbox',
-                    options: [{
-                        value: "eresearch_store",
-                        label: "eresearch_store"
-                      },
-                      {
-                        value: "onedrive",
-                        label: "onedrive"
-                      },
-                      {
-                        value: "redcap",
-                        label: "redcap"
-                      },
-                      {
-                        value: "qualtrics",
-                        label: "qualtrics"
-                      },
-                      {
-                        value: "others",
-                        label: "Others Please Specify",
-                        publishTag: 'ethics_identifiable_informed_consent_no_others'
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe:{
-                      'ethics_identifiable_informed_consent_publish': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_informed_consent_no_collection',
-                          action: 'setProp',
-                          valueTest: ['no','some'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_informed_consent_no_collection_other',
-                    label: 'Plese Specify Other storage',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_informed_consent_no_collection': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_informed_consent_no_others',
-                          action: 'setProp',
-                          valueTest: ['ethics_identifiable_informed_consent_no_others'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
                           ]
                         }]
                       }
@@ -1719,68 +1726,27 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
+                  class: 'TextField',
                   definition: {
                     visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_de_identify',
+                      debug: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
                       field: 'human_participant_data_identifiable',
                       fieldValue : 'human_participant_data_identifiable'
                     },
-                    name: 'ethics_identifiable_de_identify',
-                    label: '@dmpt-ethics:identifiable:de_identify',
-                    help: '@dmpt-ethics:identifiable:transfered_out:help',
-                    controlType: 'radio',
-                    options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'ethics_identifiable_de_identify_yes'
-                      },
-                      {
-                        value: "no",
-                        label: "No",
-                        publishTag: 'ethics_identifiable_de_identify_no'
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
+                    name: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
+                    label: '@dmpt-dc:accessRights:share_data:data_de_identify',
+                    type: 'text',
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_de_identify',
+                          fieldName: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
                             {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_not_de_identify',
-                    label: '@dmpt-ethics:identifiable:not_de_identify',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['no'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false}
                           ]
                         }]
@@ -1788,91 +1754,22 @@ module.exports = {
                     }
                   }
                 },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_yes_de_identify_how_when',
-                    label: '@dmpt-ethics:identifiable:yes_de_identify:how_when',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_yes_de_identify_who_access',
-                    label: '@dmpt-ethics:identifiable:yes_de_identify:who_access',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_yes_de_identify_link_files',
-                    label: '@dmpt-ethics:identifiable:yes_de_identify:link_files',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  visible: true,
-                  visibilityCriteria: {
-                    type: 'function',
-                    action: 'updateVisibility',
-                    debug: 'ethics_identifiable_de_identify_non_personal_stored_on_workspaces',
-                    field: 'human_participant_data',
-                    fieldValue : 'human_participant_data'
-                  },
-                  definition: {
-                    value: '@dmpt-ethics:identifiable:de_identify_non_personal:stored_on_workspaces',
-                    type: 'h5'
-                  }
-                }
+                //Removed it since it is in the same tab// {
+                //   class: 'Container',
+                //   compClass: 'TextBlockComponent',
+                //   visible: true,
+                //   visibilityCriteria: {
+                //     type: 'function',
+                //     action: 'updateVisibility',
+                //     debug: 'ethics_identifiable_de_identify_non_personal_stored_on_workspaces',
+                //     field: 'human_participant_data',
+                //     fieldValue : 'human_participant_data'
+                //   },
+                //   definition: {
+                //     value: '@dmpt-ethics:identifiable:de_identify_non_personal:stored_on_workspaces',
+                //     type: 'h5'
+                //   }
+                // }
               ]
             }
           },
@@ -2079,63 +1976,6 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    required: true,
-                    name: 'dc:accessRights',
-                    label: '@dmpt-dc:accessRights',
-                    help: '@dmpt-dc:accessRights-help',
-                    defaultValue: 'null',
-                    controlType: 'radio',
-                    options: [{
-                        value: "@dmpt-dc:accessRights-manager",
-                        label: "@dmpt-dc:accessRights-manager",
-                        publishTag: 'dc_access_rights_available'
-                      },
-                      {
-                        value: "@dmpt-dc:accessRights-open",
-                        label: "@dmpt-dc:accessRights-open",
-                        publishTag: 'dc_access_rights_available'
-                      },
-                      {
-                        value: "@dmpt-dc:accessRights-none-val",
-                        label: "@dmpt-dc:accessRights-none",
-                        publishTag: 'dc_access_rights_not_available',
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'dmpt_ethics_dc_access_rights_not_available',
-                    label: '@dmpt-dc:accessRights:not_available',
-                    type: 'text',
-                    subscribe: {
-                      'dc:accessRights': {
-                        onItemSelect: [{
-                          fieldName: 'dmpt_ethics_dc_access_rights_not_available',
-                          action: 'setProp',
-                          valueTest: ['dc_access_rights_not_available'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-
-                {
                   class: 'TextField',
                   definition: {
                     visible: false,
@@ -2205,35 +2045,7 @@ module.exports = {
                     }
                   }
                 },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: {
-                      type: 'function',
-                      action: 'updateVisibility',
-                      debug: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
-                    },
-                    name: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
-                    label: '@dmpt-dc:accessRights:share_data:data_de_identify',
-                    type: 'text',
-                    subscribe: {
-                      'human_participant_data_identifiable': {
-                        onValueUpdate: [{
-                          fieldName: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
-                          action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
+
                 {
                   class: 'TextField',
                   definition: {
@@ -2342,6 +2154,253 @@ module.exports = {
                 },
                 {
                   class: 'SelectionField',
+                  compClass: 'DropdownFieldComponent',
+                  definition: {
+                    name: 'vivo:Dataset_dc:location_rdf:PlainLiteral',
+                    label: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral',
+                    help: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-help',
+                    options: [{
+                        value: "",
+                        label: "@dmpt-select:Empty"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other"
+                      }
+                    ],
+                    required: false,
+                    validationMessages: {
+                      required: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-required"
+                    }
+                  }
+                },
+                {
+                  class: 'TextArea',
+                  compClass: 'TextAreaComponent',
+                  definition: {
+                    name: 'vivo:Dataset_dc:location_skos:note',
+                    label: '@dmpt-vivo:Dataset_dc:location_skos:note',
+                    rows: 5,
+                    columns: 10
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    required: true,
+                    name: 'dc:accessRights',
+                    label: '@dmpt-dc:accessRights',
+                    help: '@dmpt-dc:accessRights-help',
+                    defaultValue: 'null',
+                    controlType: 'radio',
+                    options: [{
+                        value: "@dmpt-dc:accessRights-manager",
+                        label: "@dmpt-dc:accessRights-manager",
+                        publishTag: 'dc_access_rights_available'
+                      },
+                      {
+                        value: "@dmpt-dc:accessRights-open",
+                        label: "@dmpt-dc:accessRights-open",
+                        publishTag: 'dc_access_rights_available'
+                      },
+                      {
+                        value: "@dmpt-dc:accessRights-none-val",
+                        label: "@dmpt-dc:accessRights-none",
+                        publishTag: 'dc_access_rights_not_available',
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'dmpt_ethics_dc_access_rights_not_available',
+                    label: '@dmpt-dc:accessRights:not_available',
+                    type: 'text',
+                    subscribe: {
+                      'dc:accessRights': {
+                        onItemSelect: [{
+                          fieldName: 'dmpt_ethics_dc_access_rights_not_available',
+                          action: 'setProp',
+                          valueTest: ['dc_access_rights_not_available'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_de_identify',
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
+                    },
+                    name: 'ethics_identifiable_de_identify',
+                    label: '@dmpt-ethics:identifiable:de_identify',
+                    help: '@dmpt-ethics:identifiable:transfered_out:help',
+                    controlType: 'radio',
+                    options: [{
+                        value: "yes",
+                        label: "Yes",
+                        publishTag: 'ethics_identifiable_de_identify_yes'
+                      },
+                      {
+                        value: "no",
+                        label: "No",
+                        publishTag: 'ethics_identifiable_de_identify_no'
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'human_participant_data_identifiable': {
+                        onValueUpdate: [{
+                          fieldName: 'ethics_identifiable_de_identify',
+                          action: 'setProp',
+                          valueTest: ['human_participant_data_identifiable'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_not_de_identify',
+                    label: '@dmpt-ethics:identifiable:not_de_identify',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_de_identify': {
+                        onItemSelect: [{
+                          fieldName: 'ethics_identifiable_not_de_identify',
+                          action: 'setProp',
+                          valueTest: ['no'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_yes_de_identify_how_when',
+                    label: '@dmpt-ethics:identifiable:yes_de_identify:how_when',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_de_identify': {
+                        onItemSelect: [{
+                          fieldName: 'ethics_identifiable_not_de_identify',
+                          action: 'setProp',
+                          valueTest: ['yes'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_yes_de_identify_who_access',
+                    label: '@dmpt-ethics:identifiable:yes_de_identify:who_access',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_de_identify': {
+                        onItemSelect: [{
+                          fieldName: 'ethics_identifiable_not_de_identify',
+                          action: 'setProp',
+                          valueTest: ['yes'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_yes_de_identify_link_files',
+                    label: '@dmpt-ethics:identifiable:yes_de_identify:link_files',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_de_identify': {
+                        onItemSelect: [{
+                          fieldName: 'ethics_identifiable_not_de_identify',
+                          action: 'setProp',
+                          valueTest: ['yes'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: true,
@@ -2349,7 +2408,7 @@ module.exports = {
                     name: 'ethics_data_secondary_third_party',
                     label: '@dmpt-ethics:data:secondary_third_party',
                     help: '@dmpt-ethics:identifiable:secondary_third_party:help',
-                    defaultValue: 'yes',
+                    defaultValue: 'no',
                     controlType: 'radio',
                     options: [{
                         value: "no",
@@ -2533,30 +2592,6 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_data_secondary_third_party_other',
-                    label: '@dmpt-ethics:data:secondary_third_party:other',
-                    help: '@dmpt-ethics:data:secondary_third_party:other:help',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_data_secondary_third_party': {
-                        onItemSelect: [{
-                          debug: 'ethics_data_secondary_third_party_other',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
                     visible: false,
                     visibilityCriteria: true,
                     name: 'ethics_data_secondary_third_party_access_arrangements',
@@ -2578,6 +2613,30 @@ module.exports = {
                     }
                   }
                 },
+                {
+                  class: 'TextField',
+                  definition: {
+                  visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_data_secondary_third_party_other',
+                    label: '@dmpt-ethics:data:secondary_third_party:other',
+                    help: '@dmpt-ethics:data:secondary_third_party:other:help',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_data_secondary_third_party': {
+                        onItemSelect: [{
+                          debug: 'ethics_data_secondary_third_party_other',
+                          action: 'setProp',
+                          valueTest: ['yes'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                }
               ]
             }
           },
@@ -2654,59 +2713,7 @@ module.exports = {
                       label: '@dmpt-select:Empty'
                     }]
                   }
-                },
-                {
-                  class: 'SelectionField',
-                  compClass: 'DropdownFieldComponent',
-                  definition: {
-                    name: 'vivo:Dataset_dc:location_rdf:PlainLiteral',
-                    label: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral',
-                    help: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-help',
-                    options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other"
-                      }
-                    ],
-                    required: false,
-                    validationMessages: {
-                      required: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-required"
-                    }
-                  }
-                },
-                {
-                  class: 'TextArea',
-                  compClass: 'TextAreaComponent',
-                  definition: {
-                    name: 'vivo:Dataset_dc:location_skos:note',
-                    label: '@dmpt-vivo:Dataset_dc:location_skos:note',
-                    rows: 5,
-                    columns: 10
-                  }
-                },
+                }
               ]
             }
           }
