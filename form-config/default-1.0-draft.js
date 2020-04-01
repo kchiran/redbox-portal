@@ -827,45 +827,78 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     required: true,
-                    name: 'ethics_describe',
-                    label: '@dmpt-ethics:describe',
-                    help: '@dmpt-ethics:describe:help',
+                    name: 'ethics_sensitive_data',
+                    label: '@dmpt-ethics:sensitive_data',
+                    help: '@dmpt-ethics:sensitive_data:help',
                     controlType: 'radio',
                     options: [{
-                        value: "commercially_sensitive_data",
-                        label: "@dmpt-ethics:describe:commercially_sensitive_data",
+                        value: "yes",
+                        label: "Yes",
                         publishTag: "iscs_confidential"
                       },
                       {
-                        value: "security_classified",
-                        label: "@dmpt-ethics:describe:security_classified",
-                        publishTag: "iscs_confidential"
-                      },
-                      {
-                        value: "human_participant_data",
-                        label: "@dmpt-ethics:describe:human_participant_data",
-                        publishTag: "human_participant_data"
-                      },
-                      {
-                        value: "indigenous",
-                        label: "@dmpt-ethics:describe:indigenous",
-                        publishTag: "iscs_confidential"
-                      },
-                      {
-                        value: "other_sensitive",
-                        label: "@dmpt-ethics:describe:other_sensitive",
-                        publishTag: "iscs_confidential"
-                      },
-                      {
-                        value: "none",
-                        label: "@dmpt-ethics:describe:none",
+                        value: "no",
+                        label: "No",
                         publishTag: "iscs_sensitive"
-                      },
+                      }
                     ],
                     publish: {
                       onItemSelect: {
                         modelEventSource: 'valueChanges'
                       }
+                    }
+                  }
+                },
+                ,
+                {
+                  class: 'TextField',
+                  definition: {
+                    editable: false,
+                    readOnly: true,
+                    visible: true,
+                    visibilityCriteria: true,
+                    name: 'dmpt_ethics_iscs',
+                    label: '@dmpt-ethics:iscs',
+                    help: '@dmpt-ethics:iscs:help',
+                    publishTag: 'dmpt_ethics_iscs',
+                    type: 'text',
+                    value: '@dmpt-ethics:iscs:sensitive',
+                    publish: {
+                      onValueUpdate: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'ethics_sensitive_data': {
+                        onItemSelect: [{
+                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_sensitive_data',
+                          action: 'setProp',
+                          valueTest: ['iscs_confidential'],
+                          props: [
+                            {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: '@dmpt-ethics:iscs:sensitive'},
+                          ]
+                        }]
+                      },
+                      // 'ethics_describe': {
+                      //   onItemSelect: [{
+                      //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
+                      //     action: 'setProp',
+                      //     valueTest: ['ethics_describe'],
+                      //     props: [
+                      //       {key: 'value', val: 'ethics_describe', val2: ''},
+                      //     ]
+                      //   }]
+                      // },
+                      // 'ethics_approval_type': {
+                      //   onValueUpdate: [{
+                      //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_approval_type',
+                      //     action: 'setProp',
+                      //     valueTest: ['committee', 'iscs_confidential'],
+                      //     props: [
+                      //       {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: ''}
+                      //     ]
+                      //   }]
+                      // }
                     }
                   }
                 },
@@ -987,43 +1020,67 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'TextField',
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
                   definition: {
-                    editable: false,
-                    readOnly: true,
-                    visible: true,
-                    visibilityCriteria: true,
-                    name: 'dmpt_ethics_iscs',
-                    label: '@dmpt-ethics:iscs',
-                    help: '@dmpt-ethics:iscs:help',
-                    publishTag: 'dmpt_ethics_iscs',
-                    type: 'text',
-                    value: '@dmpt-ethics:iscs:sensitive',
-                    publish: {
-                      onValueUpdate: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe: {
-                      'ethics_describe': {
-                        onItemSelect: [{
-                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          valueTest: ['ethics_describe'],
-                          props: [
-                            {key: 'value', val: 'ethics_describe', val2: ''},
-                          ]
-                        }]
+                    required: false,
+                    name: 'ethics_describe',
+                    label: '@dmpt-ethics:describe',
+                    help: '@dmpt-ethics:describe:help',
+                    controlType: 'checkbox',
+                    options: [{
+                        value: "human_participant_data",
+                        label: "@dmpt-ethics:describe:human_participant_data",
+                        publishTag: "human_participant_data"
+                      },{
+                        value: "animal_use",
+                        label: "@dmpt-ethics:describe:animal_use",
+                        publishTag: ""
                       },
-                      'ethics_approval_type': {
-                        onValueUpdate: [{
-                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_approval_type',
-                          action: 'setProp',
-                          valueTest: ['committee', 'iscs_confidential'],
-                          props: [
-                            {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: ''}
-                          ]
-                        }]
+                      {
+                        value: "gmos",
+                        label: "@dmpt-ethics:describe:gmos",
+                        publishTag: ""
+                      },
+                      {
+                        value: "infectious_materials_pathogens_cytotoxic_substances",
+                        label: "@dmpt-ethics:describe:infectious_materials_pathogens_cytotoxic_substances",
+                        publishTag: ""
+                      },
+                      {
+                        value: "ionizing_radiation",
+                        label: "@dmpt-ethics:describe:ionizing_radiation",
+                        publishTag: ""
+                      },
+                      {
+                        value: "clinical_trials",
+                        label: "@dmpt-ethics:describe:clinical_trials",
+                        publishTag: ""
+                      },
+                      {
+                        value: "commercially_sensitive_data",
+                        label: "@dmpt-ethics:describe:commercially_sensitive_data",
+                        publishTag: ""
+                      },
+                      {
+                        value: "policed_data",
+                        label: "@dmpt-ethics:describe:policed_data",
+                        publishTag: ""
+                      },
+                      {
+                        value: "indigenous_cultural_intelectual_property",
+                        label: "@dmpt-ethics:describe:indigenous_cultural_intelectual_property",
+                        publishTag: ""
+                      },
+                      {
+                        value: "other_sensitive",
+                        label: "@dmpt-ethics:describe:other_sensitive",
+                        publishTag: ""
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
                       }
                     }
                   }

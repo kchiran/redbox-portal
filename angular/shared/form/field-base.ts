@@ -510,19 +510,33 @@ export class FieldBase<T> {
         }
       });
     } else if (setChange){
-      console.log('just found');
-    } else {
+      console.log('setChange and notChecked');
       _.each(config['props'], (prop) => {
         if (prop.key === 'required') {
-          this.setRequired(prop.val2);
+          this.setRequired(this.getTranslated(prop.val2, undefined));
         }
         else if (prop.key === 'value') {
           if(this.value) {
-            this.setValue(prop.val2, true);
+            this.setValue(this.getTranslated(prop.val2, undefined), true);
           }
         }
         else if (prop.key === 'visible') {
-          this.setVisibility(prop.val2);
+          this.setVisibility(this.getTranslated(prop.val2, undefined));
+        }
+      });
+    } else {
+      console.log('not setChange')
+      _.each(config['props'], (prop) => {
+        if (prop.key === 'required') {
+          this.setRequired(this.getTranslated(prop.val2, undefined));
+        }
+        else if (prop.key === 'value') {
+          if(this.value) {
+            this.setValue(this.getTranslated(prop.val2, undefined), true);
+          }
+        }
+        else if (prop.key === 'visible') {
+          this.setVisibility(this.getTranslated(prop.val2, undefined));
         }
       });
     }
