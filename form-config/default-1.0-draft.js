@@ -2636,6 +2636,16 @@ module.exports = {
                       }
                     }
                   }
+                },
+                {
+                  class: "SaveButton",
+                  definition: {
+                    label: 'Attach copy of license or agreement documents (not implemented)',
+                    closeOnSave: true,
+                    redirectLocation: '/@branding/@portal/dashboard/default',
+                    disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
+                  },
+                  variableSubstitutionFields: ['redirectLocation']
                 }
               ]
             }
