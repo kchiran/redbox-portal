@@ -473,8 +473,7 @@ export class FieldBase<T> {
 
   setProp(change: any, config: any) {
 
-    if(config['debug'] === 'ethics_data_secondary_third_party_special'){debugger;}
-    console.log(`Set Props: ${config['debug']}`);
+    //console.log(`Set Props: ${config['debug']}`);
     let value;
     let checked;
     let setChange = false;
@@ -512,31 +511,43 @@ export class FieldBase<T> {
     } else if (setChange){
       console.log('setChange and notChecked');
       _.each(config['props'], (prop) => {
-        if (prop.key === 'required') {
-          this.setRequired(this.getTranslated(prop.val2, undefined));
+        if(config['debug'] === 'ethics_approval:subscribedto:ethics_describe'){
+          console.log(`this value: ${value}`);
+          debugger;
         }
-        else if (prop.key === 'value') {
-          if(this.value) {
-            this.setValue(this.getTranslated(prop.val2, undefined), true);
+        if(!prop.keepIfYes && (_.isUndefined(value) || value === '')) {
+          if (prop.key === 'required') {
+            this.setRequired(this.getTranslated(prop.val2, undefined));
           }
-        }
-        else if (prop.key === 'visible') {
-          this.setVisibility(this.getTranslated(prop.val2, undefined));
+          else if (prop.key === 'value') {
+            if(this.value) {
+              this.setValue(this.getTranslated(prop.val2, undefined), true);
+            }
+          }
+          else if (prop.key === 'visible') {
+            this.setVisibility(this.getTranslated(prop.val2, undefined));
+          }
         }
       });
     } else {
-      console.log('not setChange')
+      console.log('not setChange');
       _.each(config['props'], (prop) => {
-        if (prop.key === 'required') {
-          this.setRequired(this.getTranslated(prop.val2, undefined));
+        if(config['debug'] === 'ethics_approval:subscribedto:ethics_describe'){
+          console.log(`this value: ${value}`);
+          debugger;
         }
-        else if (prop.key === 'value') {
-          if(this.value) {
-            this.setValue(this.getTranslated(prop.val2, undefined), true);
+        if(!prop.keepIfYes && (_.isUndefined(value) || value === '')) {
+          if (prop.key === 'required') {
+            this.setRequired(this.getTranslated(prop.val2, undefined));
           }
-        }
-        else if (prop.key === 'visible') {
-          this.setVisibility(this.getTranslated(prop.val2, undefined));
+          else if (prop.key === 'value') {
+            if(this.value) {
+              this.setValue(this.getTranslated(prop.val2, undefined), true);
+            }
+          }
+          else if (prop.key === 'visible') {
+            this.setVisibility(this.getTranslated(prop.val2, undefined));
+          }
         }
       });
     }

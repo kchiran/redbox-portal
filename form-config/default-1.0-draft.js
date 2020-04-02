@@ -506,9 +506,13 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'ANDSVocab',
-                  compClass: 'ANDSVocabComponent',
+                  // hide the FOR codes https://synergy.itd.uts.edu.au/jira/browse/ST-634
+                  // class: 'ANDSVocab',
+                  // compClass: 'ANDSVocabComponent',
+                  class: 'HiddenValue',
+                  compClass: 'HiddenValueComponent',
                   definition: {
+                    visible: false,
                     label: "@dmpt-project-anzsrcFor",
                     help: "@dmpt-project-anzsrcFor-help",
                     name: "dc:subject_anzsrc:for",
@@ -925,6 +929,21 @@ module.exports = {
                       onItemSelect: {
                         modelEventSource: 'valueChanges'
                       }
+                    },
+                    subscribe: {
+                      'ethics_describe': {
+                        onValueUpdate: [{
+                          fieldName: 'ethics_approval:subscribedto:ethics_describe',
+                          debug: 'ethics_approval:subscribedto:ethics_describe',
+                          action: 'setProp',
+                          valueTest: [
+                            'human_participant_data', 'ethics_approval_required'
+                          ],
+                          props: [
+                            {key: 'value', val: 'yes', val2: 'no', keepIfYes: true}
+                          ]
+                        }]
+                      }
                     }
                   }
                 },
@@ -1042,27 +1061,27 @@ module.exports = {
                       },{
                         value: "animal_use",
                         label: "@dmpt-ethics:describe:animal_use",
-                        publishTag: ""
+                        publishTag: "ethics_approval_required"
                       },
                       {
                         value: "gmos",
                         label: "@dmpt-ethics:describe:gmos",
-                        publishTag: ""
+                        publishTag: "ethics_approval_required"
                       },
                       {
                         value: "infectious_materials_pathogens_cytotoxic_substances",
                         label: "@dmpt-ethics:describe:infectious_materials_pathogens_cytotoxic_substances",
-                        publishTag: ""
+                        publishTag: "ethics_approval_required"
                       },
                       {
                         value: "ionizing_radiation",
                         label: "@dmpt-ethics:describe:ionizing_radiation",
-                        publishTag: ""
+                        publishTag: "ethics_approval_required"
                       },
                       {
                         value: "clinical_trials",
                         label: "@dmpt-ethics:describe:clinical_trials",
-                        publishTag: ""
+                        publishTag: "ethics_approval_required"
                       },
                       {
                         value: "commercially_sensitive_data",
@@ -1087,6 +1106,9 @@ module.exports = {
                     ],
                     publish: {
                       onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      },
+                      onValueUpdate: {
                         modelEventSource: 'valueChanges'
                       }
                     }
@@ -2638,7 +2660,16 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'HtmlRaw',
+                  compClass: 'HtmlRawComponent',
+                  definition: {
+                    name: "attach-licences-prefix",
+                    value: '<h5>If ethics approval required, please attach licences or agreements</h5>'
+                  }
+                },
+                {
                   class: "SaveButton",
+                  editOnly: true,
                   definition: {
                     label: 'Attach copy of license or agreement documents (not implemented)',
                     closeOnSave: true,
