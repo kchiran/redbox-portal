@@ -61,7 +61,8 @@ export module Controllers {
       'removeUserView',
       'getPermissions',
       'getDataStream',
-      'addDataStreams'
+      'addDataStreams',
+      'listRecords'
     ];
 
     /**
@@ -450,6 +451,112 @@ export module Controllers {
      **************************************** Override magic methods **********************************
      **************************************************************************************************
      */
+
+     private getDocMetadata(doc) {
+       var metadata = {};
+       for(var key in doc){
+         if(key.indexOf('authorization_') != 0 && key.indexOf('metaMetadata_') != 0) {
+           metadata[key] = doc[key];
+         }
+         if(key == 'authorization_editRoles') {
+           metadata[key] = doc[key];
+         }
+       }
+       return metadata;
+     }
+
+     protected getRecords(workflowState, recordType, start,rows,user, roles, brand, editAccessOnly=undefined, packageType = undefined, sort=undefined) {
+       const username = user.username;
+       if (!_.isUndefined(recordType) && !_.isEmpty(recordType)) {
+         recordType = recordType.split(',');
+       }
+       if (!_.isUndefined(packageType) && !_.isEmpty(packageType)) {
+         packageType = packageType.split(',');
+       }
+       var response = DashboardService.getRecords(workflowState,recordType, start,rows,username,roles,brand,editAccessOnly, packageType, sort);
+
+       return response.map(results => {
+
+         var totalItems = results["response"]["numFound"];
+         var startIndex = results["response"]["start"];
+         var noItems = 10;
+         var pageNumber = (startIndex / noItems) + 1;
+
+         var response = {};
+         response["totalItems"] = totalItems;
+         response["currentPage"] = pageNumber;
+         response["noItems"] = noItems;
+
+         var items = [];
+         var docs = results["response"]["docs"];
+
+         for (var i = 0; i < docs.length; i++) {
+           var doc = docs[i];
+           var item = {};
+           item["oid"] = doc["redboxOid"];
+           item["title"] = doc["metadata"]["title"];
+           item["metadata"]= this.getDocMetadata(doc);
+           item["dateCreated"] =  doc["date_object_created"][0];
+           item["dateModified"] = doc["date_object_modified"][0];
+           item["hasEditAccess"] = RecordsService.hasEditAccess(brand, user, roles, doc);
+           items.push(item);
+         }
+
+         response["items"] = items;
+         return Observable.of(response);
+       });
+     }
+
+     public listRecords(req, res) {
+       //sails.log.debug('api-list-records');
+       const brand = BrandingService.getBrand(req.session.branding);
+       const editAccessOnly = req.query.editOnly;
+
+       var roles = [];
+       var username = "guest";
+       let user = {};
+       if (req.isAuthenticated()) {
+         roles = req.user.roles;
+         user = req.user;
+         username = req.user.username;
+       } else {
+         // assign default role if needed...
+         user = {username: username};
+         roles = [];
+         roles.push(RolesService.getDefUnathenticatedRole(brand));
+       }
+       const recordType = req.param('recordType');
+       const workflowState = req.param('state');
+       const start = req.param('start');
+       const rows = req.param('rows');
+       const packageType = req.param('packageType');
+       const sort = req.param('sort');
+       if(rows > 20){
+         var error = {
+          "code": 400,
+          "contactEmail": null,
+          "description": "You have reached the maximum of request available; Max rows per query 20",
+          "homeRef": "/",
+          "reasonPhrase": "Bad Request",
+          "uri": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1"
+        };
+        res.status(400);
+        res.json(error);
+       } else {
+         // sails.log.debug(`getRecords: ${recordType} ${workflowState} ${start}`);
+         // sails.log.debug(`${rows} ${packageType} ${sort}`);
+         this.getRecords(workflowState, recordType, start, rows, user, roles, brand, editAccessOnly, packageType, sort).flatMap(results => {
+             return results;
+           }).subscribe(response => {
+             res.json(response);
+           }, error => {
+             sails.log.error("Error:");
+             sails.log.error(error);
+             var err = error['error'];
+             res.json(err);
+           });
+       }
+     }
   }
 }
 
