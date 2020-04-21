@@ -479,12 +479,14 @@ export module Controllers {
 
          var totalItems = results["response"]["numFound"];
          var startIndex = results["response"]["start"];
-         var noItems = 10;
-         var pageNumber = (startIndex / noItems) + 1;
+         var noItems = rows;
+         var pageNumber = Math.floor((startIndex / noItems) + 1);
 
          var response = {};
          response["totalItems"] = totalItems;
-         response["currentPage"] = pageNumber;
+         if(startIndex < totalItems) {
+           response["currentPage"] = pageNumber;
+         }
 
          var items = [];
          var docs = results["response"]["docs"];
