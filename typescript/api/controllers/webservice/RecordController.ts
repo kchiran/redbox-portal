@@ -465,7 +465,7 @@ export module Controllers {
        return metadata;
      }
 
-     protected getRecords(workflowState, recordType, start,rows,user, roles, brand, editAccessOnly=undefined, packageType = undefined, sort=undefined) {
+     protected getRecords(workflowState, recordType, start, rows, user, roles, brand, editAccessOnly=undefined, packageType = undefined, sort=undefined) {
        const username = user.username;
        if (!_.isUndefined(recordType) && !_.isEmpty(recordType)) {
          recordType = recordType.split(',');
@@ -473,7 +473,7 @@ export module Controllers {
        if (!_.isUndefined(packageType) && !_.isEmpty(packageType)) {
          packageType = packageType.split(',');
        }
-       var response = DashboardService.getRecords(workflowState,recordType, start,rows,username,roles,brand,editAccessOnly, packageType, sort);
+       var response = DashboardService.getRecords(workflowState, recordType, start, rows, username, roles, brand, editAccessOnly, packageType, sort);
 
        return response.map(results => {
 
@@ -485,7 +485,6 @@ export module Controllers {
          var response = {};
          response["totalItems"] = totalItems;
          response["currentPage"] = pageNumber;
-         response["noItems"] = noItems;
 
          var items = [];
          var docs = results["response"]["docs"];
@@ -501,7 +500,7 @@ export module Controllers {
            item["hasEditAccess"] = RecordsService.hasEditAccess(brand, user, roles, doc);
            items.push(item);
          }
-
+         response["noItems"] = items.length;
          response["items"] = items;
          return Observable.of(response);
        });
