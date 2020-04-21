@@ -827,33 +827,6 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    required: true,
-                    name: 'ethics_sensitive_data',
-                    label: '@dmpt-ethics:sensitive_data',
-                    help: '@dmpt-ethics:sensitive_data:help',
-                    controlType: 'radio',
-                    options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: "iscs_confidential"
-                      },
-                      {
-                        value: "no",
-                        label: "No",
-                        publishTag: "iscs_sensitive"
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    }
-                  }
-                },
-                {
                   class: 'TextField',
                   definition: {
                     editable: false,
@@ -872,16 +845,16 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'ethics_sensitive_data': {
-                        onItemSelect: [{
-                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_sensitive_data',
-                          action: 'setProp',
-                          valueTest: ['iscs_confidential'],
-                          props: [
-                            {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: '@dmpt-ethics:iscs:sensitive'},
-                          ]
-                        }]
-                      },
+                      // 'ethics_sensitive_data': {
+                      //   onItemSelect: [{
+                      //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_sensitive_data',
+                      //     action: 'setProp',
+                      //     valueTest: ['iscs_confidential'],
+                      //     props: [
+                      //       {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: '@dmpt-ethics:iscs:sensitive'},
+                      //     ]
+                      //   }]
+                      // },
                       // 'ethics_describe': {
                       //   onItemSelect: [{
                       //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
@@ -902,146 +875,6 @@ module.exports = {
                       //     ]
                       //   }]
                       // }
-                    }
-                  }
-                },
-                {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    required: true,
-                    name: 'ethics_approval',
-                    label: '@dmpt-ethics:approval',
-                    help: '@dmpt-ethics:approval:help',
-                    controlType: 'radio',
-                    options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: "ethics_approval"
-                      },
-                      {
-                        value: "no",
-                        label: "No",
-                        publishTag: "ethics_approval"
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          fieldName: 'ethics_approval:subscribedto:ethics_describe',
-                          debug: 'ethics_approval:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          valueTest: [
-                            'human_participant_data', 'ethics_approval_required'
-                          ],
-                          props: [
-                            {key: 'value', val: 'yes', val2: 'no', keepIfYes: true}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    required: false,
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_approval_type',
-                    label: '@dmpt-ethics:approval_type',
-                    help: '@dmpt-ethics:approval_type:help',
-                    controlType: 'radio',
-                    options: [{
-                        value: "Local Research Office (human research of low or negligible risk only) ?",
-                        label: "@dmpt-ethics:approval_type:local_research_office",
-                        publishTag: "iscs_sensitive"
-                      },
-                      {
-                        value: "committee",
-                        label: "@dmpt-ethics:approval_type:committee",
-                        publishTag: "iscs_confidential"
-                      },
-                      {
-                        value: "program",
-                        label: "@dmpt-ethics:approval_type:program",
-                        publishTag: "iscs_sensitive"
-                      },
-                      {
-                        value: "animal",
-                        label: "@dmpt-ethics:approval_type:animal",
-                        publishTag: "iscs_sensitive"
-                      },
-                      {
-                        value: "biosafety",
-                        label: "@dmpt-ethics:approval_type:biosafety",
-                        publishTag: "iscs_sensitive"
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      },
-                      onValueUpdate: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe: {
-                      'ethics_approval': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_approval_type:subscribedto:ethics_approval',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'visible', val: true, val2: false},
-                            {key: 'required', val: true, val2: false},
-                            {key: 'value', val: '', val2: ''}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    visible: true,
-                    value: '',
-                    name: 'ethics_approval_type_display',
-                    type: 'p',
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          fieldName: 'ethics_approval_type_display:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          valueTest: ['ethics_describe'],
-                          props: [
-                            {key: 'value', val: 'ethics_describe', val2: ''}
-                          ]
-                        }]
-                      },
-                      'ethics_approval_type': {
-                        onValueUpdate: [{
-                          fieldName: 'ethics_approval_type_display:subscribedto:ethics_approval_type',
-                          action: 'setProp',
-                          valueTest: ['committee', 'iscs_confidential'],
-                          props: [
-                            {key: 'value', val: '@dmpt-ethics:iscs:confidential:notice', val2: ''}
-                          ]
-                        }]
-                      }
                     }
                   }
                 },
@@ -1102,6 +935,11 @@ module.exports = {
                         value: "other_sensitive",
                         label: "@dmpt-ethics:describe:other_sensitive",
                         publishTag: ""
+                      },
+                      {
+                        value: "none",
+                        label: "@dmpt-ethics:describe:none",
+                        publishTag: ""
                       }
                     ],
                     publish: {
@@ -1115,65 +953,35 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'TextField',
-                  definition: {
-                  visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_human_participant_data_severity_risk',
-                    label: '@dmpt-ethics:human_participant_data:severity_risk',
-                    help: '@ethics:human-participant-data:severity_risk:help',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_describe': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_human_participant_data_severity_risk',
-                          action: 'setProp',
-                          valueTest: ['human_participant_data'],
-                          props: [
-                            {key: 'required', val: true, val2: false},
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     required: true,
                     visible: false,
                     visibilityCriteria: true,
-                    name: 'ethics_human_participant_data_consent',
-                    label: '@dmpt-ethics:human_participant_data:consent',
-                    help: '@dmpt-ethics:human_participant_data:consent:help',
+                    name: 'ethics_human_participant_data_individual',
+                    label: '@dmpt-ethics:human_participant_data:individual',
+                    help: '@dmpt-ethics:human_participant_data:individual:help',
                     controlType: 'radio',
                     options: [{
-                        value: "prospective",
-                        label: "@dmpt-ethics:human_participant_data:prospective"
+                        value: "personal",
+                        label: "@dmpt-ethics:human_participant_data:personal"
                       },
                       {
-                        value: "existing",
-                        label: "@dmpt-ethics:human_participant_data:existing",
+                        value: "sensitive_personal",
+                        label: "@dmpt-ethics:human_participant_data:sensitive_personal",
                         publishTag: "iscs_confidential"
                       },
                       {
-                        value: "waiver",
-                        label: "@dmpt-ethics:human_participant_data:waiver",
-                        publishTag: "iscs_sensitive"
-                      },
-                      {
-                        value: "not_required",
-                        label: "@dmpt-ethics:human_participant_data:not_required",
+                        value: "health",
+                        label: "@dmpt-ethics:human_participant_data:health",
                         publishTag: "iscs_sensitive"
                       }
                     ],
                     subscribe: {
                       'ethics_describe': {
                         onItemSelect: [{
-                          fieldName: 'ethics_human_participant_data_consent',
+                          fieldName: 'ethics_human_participant_data_individuals',
                           action: 'setProp',
                           valueTest: ['human_participant_data'],
                           props: [
@@ -1225,6 +1033,30 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
+                  visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_human_participant_data_severity_risk',
+                    label: '@dmpt-ethics:human_participant_data:severity_risk',
+                    help: '@ethics:human-participant-data:severity_risk:help',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable': {
+                        onItemSelect: [{
+                          fieldName: 'ethics_human_participant_data_severity_risk',
+                          action: 'setProp',
+                          valueTest: ['ethics_identifiable'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
                     visible: false,
                     visibilityCriteria: true,
                     name: 'ethics_identifiable_other_countries',
@@ -1250,42 +1082,21 @@ module.exports = {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
-                    visible: false,
-                    visibilityCriteria: {
-                      type: 'function',
-                      action: 'updateVisibility',
-                      debug: 'ethics_sensitivities',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
-                    },
-                    name: 'ethics_sensitivities',
-                    label: '@dmpt-ethics:ethics_sensitivities',
-                    help: '@dmpt-ethics:ethics_sensitivities:help',
-                    controlType: 'checkbox',
+                    required: true,
+                    name: 'ethics_approval',
+                    label: '@dmpt-ethics:approval',
+                    help: '@dmpt-ethics:approval:help',
+                    controlType: 'radio',
                     options: [{
-                        value: "health_records",
-                        label: "@dmpt-ethics:ethics_sensitivities:health_records"
+                        value: "yes",
+                        label: "Yes",
+                        publishTag: "ethics_approval"
                       },
                       {
-                        value: "aboriginal_torres_strait",
-                        label: "@dmpt-ethics:ethics_sensitivities:aboriginal_torres_strait"
-                      },
-                      {
-                        value: "indigenous_cultural_intelectual_property",
-                        label: "@dmpt-ethics:ethics_sensitivities:indigenous_cultural_intelectual_property"
-                      },
-                      {
-                        value: "third_party",
-                        label: "@dmpt-ethics:ethics_sensitivities:third_party"
-                      },
-                      {
-                        value: "private_sensitive",
-                        label: "@dmpt-ethics:ethics_sensitivities:private_sensitive"
-                      },
-                      {
-                        value: "other_private_information",
-                        label: "@dmpt-ethics:ethics_sensitivities:other_private_information"
-                      },
+                        value: "no",
+                        label: "No",
+                        publishTag: "ethics_approval"
+                      }
                     ],
                     publish: {
                       onItemSelect: {
@@ -1293,25 +1104,16 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'ethics_identifiable': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_sensitivities:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          valueTest: ['ethics_identifiable'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      },
-                      'human_participant_data_identifiable' : {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_sensitivities:subscribedto:human_participant_data_identifiable',
+                          fieldName: 'ethics_approval:subscribedto:ethics_describe',
+                          debug: 'ethics_approval:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
+                          valueTest: [
+                            'human_participant_data', 'ethics_approval_required'
+                          ],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: 'yes', val2: 'no', keepIfYes: true}
                           ]
                         }]
                       }
