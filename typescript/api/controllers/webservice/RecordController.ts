@@ -452,6 +452,14 @@ export module Controllers {
      **************************************************************************************************
      */
 
+     /* Ad-hoc methods for listing records via api
+     * Using DashboardService for getRecords similar (copied from
+     * DashboardController) to DashboardService
+     * Can be used for building reports or SPAs for redbox
+     * TODO: Refactor DashboardController to use this and move DashboardService.getRecords
+     * to RecordsService
+     */
+
      private getDocMetadata(doc) {
        var metadata = {};
        for(var key in doc){
