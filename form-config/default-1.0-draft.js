@@ -979,8 +979,8 @@ module.exports = {
                       }
                     ],
                     subscribe: {
-                      'ethics_describe': {
-                        onItemSelect: [{
+                      'human_participant_data': {
+                        onValueUpdate: [{
                           fieldName: 'ethics_human_participant_data_individuals',
                           action: 'setProp',
                           valueTest: ['human_participant_data'],
