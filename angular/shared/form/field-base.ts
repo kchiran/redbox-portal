@@ -487,69 +487,45 @@ export class FieldBase<T> {
     const found = config['valueTest'].find((val) => {
       return val === value;
     });
-    if(found) {
+    if(found && checked) {
       setChange = true;
     }
-    if (setChange && checked) {
-      _.each(config['props'], (prop) => {
-        if (prop.key === 'required') {
-          this.setRequired(prop.val);
+    _.each(config['props'], (prop) => {
+      this.setPropValue(prop, setChange, config['debug']);
+    });
+
+  }
+
+  setPropValue(prop, setChange, debug) {
+    if(debug) {
+      console.log(`config: ${debug}`);
+    }
+    if (prop.key === 'required') {
+      if(setChange) {
+        this.setRequired(prop.val);
+      } else {
+        this.setRequired(!prop.val);
+      }
+    } else if (prop.key === 'value') {
+      if(prop.clear && !setChange) {
+        if(this.formModel) {
+          this.setValue('');
+        } else {
+          this.value = null;
         }
-        else if (prop.key === 'value') {
-          if(this.formModel) {
-            this.setValue(this.getTranslated(prop.val, undefined));
-          } else {
-            this.value = this.getTranslated(prop.val, undefined);
-          }
+      } else if(setChange){
+        if(this.formModel) {
+          this.setValue(this.getTranslated(prop.val, undefined));
+        } else {
+          this.value = this.getTranslated(prop.val, undefined);
         }
-        else if (prop.key === 'visible') {
-          setTimeout(() => {
-            this.setVisibility(prop.val);
-          });
-        }
-      });
-    } else if (setChange){
-      console.log('setChange and notChecked');
-      _.each(config['props'], (prop) => {
-        if(config['debug'] === 'ethics_approval:subscribedto:ethics_describe'){
-          console.log(`this value: ${value}`);
-          debugger;
-        }
-        if(!prop.keepIfYes && (_.isUndefined(value) || value === '')) {
-          if (prop.key === 'required') {
-            this.setRequired(this.getTranslated(prop.val2, undefined));
-          }
-          else if (prop.key === 'value') {
-            if(this.value) {
-              this.setValue(this.getTranslated(prop.val2, undefined), true);
-            }
-          }
-          else if (prop.key === 'visible') {
-            this.setVisibility(this.getTranslated(prop.val2, undefined));
-          }
-        }
-      });
-    } else {
-      console.log('not setChange');
-      _.each(config['props'], (prop) => {
-        if(config['debug'] === 'ethics_approval:subscribedto:ethics_describe'){
-          console.log(`this value: ${value}`);
-          debugger;
-        }
-        if(!prop.keepIfYes && (_.isUndefined(value) || value === '')) {
-          if (prop.key === 'required') {
-            this.setRequired(this.getTranslated(prop.val2, undefined));
-          }
-          else if (prop.key === 'value') {
-            if(this.value) {
-              this.setValue(this.getTranslated(prop.val2, undefined), true);
-            }
-          }
-          else if (prop.key === 'visible') {
-            this.setVisibility(this.getTranslated(prop.val2, undefined));
-          }
-        }
-      });
+      }
+    } else if (prop.key === 'visible') {
+      if(setChange) {
+        this.setVisibility(prop.val);
+      }else {
+        this.setVisibility(!prop.val);
+      }
     }
   }
 
