@@ -1347,8 +1347,8 @@ module.exports = {
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1470,48 +1470,7 @@ module.exports = {
                     }
                   }
                 },
-                {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: {
-                      type: 'function',
-                      action: 'updateVisibility',
-                      debug: 'ethics_identifiable_transfered',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
-                    },
-                    name: 'ethics_identifiable_transfered_out',
-                    label: '@dmpt-ethics:identifiable:transfered_out',
-                    help: '@dmpt-ethics:identifiable:transfered_out:help',
-                    controlType: 'radio',
-                    options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'ethics_identifiable_transfered_yes'
-                      },
-                      {
-                        value: "no",
-                        label: "No",
-                        publishTag: 'ethics_identifiable_transfered_no'
-                      }
-                    ],
-                    subscribe: {
-                      'human_participant_data_identifiable': {
-                        onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_transfered',
-                          action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          props: [
-                            {key: 'value', val: ''},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
+
                 {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
@@ -1531,17 +1490,12 @@ module.exports = {
                     options: [{
                         value: "yes",
                         label: "Yes",
-                        publishTag: 'ethics_identifiable_transfered_out'
+                        publishTag: 'ethics_identifiable_transfered_yes'
                       },
                       {
                         value: "no",
                         label: "No",
-                        publishTag: 'ethics_identifiable_transfered_out'
-                      },
-                      {
-                        value: "additional password (other than authentication)",
-                        label: "additional password (other than authentication)",
-                        publishTag: 'ethics_identifiable_transfered_out'
+                        publishTag: 'ethics_identifiable_transfered_no'
                       }
                     ],
                     publish: {
@@ -1552,12 +1506,12 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_transfered_out',
+                          debug: 'ethics_identifiable_transfered_out',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1575,12 +1529,59 @@ module.exports = {
                     subscribe: {
                       'ethics_identifiable_transfered_out': {
                         onItemSelect: [{
-                          fieldName: 'ethics_identifiable_transfered_out_yes',
+                          debug: 'ethics_identifiable_transfered_yes',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_identifiable_transfered_yes'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_deidentify',
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
+                    },
+                    name: 'ethics_identifiable_deidentify',
+                    label: '@dmpt-ethics:identifiable:deidentify',
+                    help: '@dmpt-ethics:identifiable:transfered_out:help',
+                    controlType: 'radio',
+                    options: [{
+                        value: "yes",
+                        label: "Yes",
+                        publishTag: 'ethics_identifiable_deidentify_yes'
+                      },
+                      {
+                        value: "no",
+                        label: "No",
+                        publishTag: 'ethics_identifiable_deidentify_no'
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'human_participant_data_identifiable': {
+                        onValueUpdate: [{
+                          fieldName: 'ethics_identifiable_deidentify',
+                          action: 'setProp',
+                          valueTest: ['human_participant_data_identifiable'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1591,22 +1592,16 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: {
-                      type: 'function',
-                      action: 'updateVisibility',
-                      debug: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
-                    },
-                    name: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
-                    label: '@dmpt-dc:accessRights:share_data:data_de_identify',
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_deidentify_no',
+                    label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
-                        onValueUpdate: [{
-                          fieldName: 'dmpt_ethics_dc_access_rights_share_data_de_identify',
+                      'ethics_identifiable_deidentify': {
+                        onItemSelect: [{
+                          debug: 'ethics_identifiable_deidentify_no',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
+                          valueTest: ['ethics_identifiable_deidentify_no'],
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1616,6 +1611,52 @@ module.exports = {
                     }
                   }
                 },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_deidentify_yes_how_when',
+                    label: '@dmpt-ethics:identifiable:deidentify:yes:how_when',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_deidentify': {
+                        onItemSelect: [{
+                          debug: 'ethics_identifiable_deidentify_yes_how_when',
+                          action: 'setProp',
+                          valueTest: ['ethics_identifiable_deidentify_yes'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_deidentify_yes_where',
+                    label: '@dmpt-ethics:identifiable:deidentify:yes:where',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_deidentify': {
+                        onItemSelect: [{
+                          debug: 'ethics_identifiable_deidentify_yes_where',
+                          action: 'setProp',
+                          valueTest: ['ethics_identifiable_deidentify_yes'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },                
                 //Removed it since it is in the same tab// {
                 //   class: 'Container',
                 //   compClass: 'TextBlockComponent',
@@ -2113,145 +2154,6 @@ module.exports = {
                           fieldName: 'dmpt_ethics_dc_access_rights_not_available',
                           action: 'setProp',
                           valueTest: ['dc_access_rights_not_available'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'SelectionField',
-                  compClass: 'SelectionFieldComponent',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: {
-                      type: 'function',
-                      action: 'updateVisibility',
-                      debug: 'ethics_identifiable_de_identify',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
-                    },
-                    name: 'ethics_identifiable_de_identify',
-                    label: '@dmpt-ethics:identifiable:de_identify',
-                    help: '@dmpt-ethics:identifiable:transfered_out:help',
-                    controlType: 'radio',
-                    options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'ethics_identifiable_de_identify_yes'
-                      },
-                      {
-                        value: "no",
-                        label: "No",
-                        publishTag: 'ethics_identifiable_de_identify_no'
-                      }
-                    ],
-                    publish: {
-                      onItemSelect: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe: {
-                      'human_participant_data_identifiable': {
-                        onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_de_identify',
-                          action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_not_de_identify',
-                    label: '@dmpt-ethics:identifiable:not_de_identify',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['no'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_yes_de_identify_how_when',
-                    label: '@dmpt-ethics:identifiable:yes_de_identify:how_when',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_yes_de_identify_who_access',
-                    label: '@dmpt-ethics:identifiable:yes_de_identify:who_access',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['yes'],
-                          props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: true,
-                    name: 'ethics_identifiable_yes_de_identify_link_files',
-                    label: '@dmpt-ethics:identifiable:yes_de_identify:link_files',
-                    type: 'text',
-                    subscribe: {
-                      'ethics_identifiable_de_identify': {
-                        onItemSelect: [{
-                          fieldName: 'ethics_identifiable_not_de_identify',
-                          action: 'setProp',
-                          valueTest: ['yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false}
