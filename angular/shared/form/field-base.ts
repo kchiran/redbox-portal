@@ -484,16 +484,23 @@ export class FieldBase<T> {
       value = change;
       checked = true;
     }
-    const found = config['valueTest'].find((val) => {
-      return val === value;
-    });
-    if(found && checked) {
-      setChange = true;
+    if(config['setPublishedValue']) {
+      if(this.formModel) {
+        this.setValue(this.getTranslated(value, undefined));
+      } else {
+        this.value = this.getTranslated(value, undefined);
+      }
+    } else {
+      const found = config['valueTest'].find((val) => {
+        return val === value;
+      });
+      if(found && checked) {
+        setChange = true;
+      }
+      _.each(config['props'], (prop) => {
+        this.setPropValue(prop, setChange, config['debug']);
+      });
     }
-    _.each(config['props'], (prop) => {
-      this.setPropValue(prop, setChange, config['debug']);
-    });
-
   }
 
   setPropValue(prop, setChange, debug) {

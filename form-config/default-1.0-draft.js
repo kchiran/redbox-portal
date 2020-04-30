@@ -81,11 +81,11 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: false,
+        visible: true,
         visibilityCriteria: true,
-        name: 'human_participant_data_identifiable_open_consent',
-        label: 'human_participant_data_identifiable_open_consent',
-        publishTag: 'human_participant_data_identifiable_open_consent',
+        name: 'human_participant_data_identifiable_consent',
+        label: 'human_participant_data_identifiable_consent',
+        publishTag: 'human_participant_data_identifiable_consent',
         type: 'text',
         publish: {
           onValueUpdate: {
@@ -95,40 +95,10 @@ module.exports = {
         subscribe: {
           'ethics_identifiable_informed_consent_publish': {
             onItemSelect: [{
-              fieldName: 'human_participant_data_identifiable:subscribedto:ethics_describe',
+              debug: 'onItemSelect:human_participant_data_identifiable_consent:subscribedto:ethics_identifiable_informed_consent_publish',
               action: 'setProp',
-              valueTest: ['ethics_identifiable_informed_consent_yes'],
-              props: [
-                {key: 'value', val: 'human_participant_data_identifiable_open_consent', val2: ''},
-              ]
-            }]
-          }
-        }
-      }
-    },
-    {
-      class: 'TextField',
-      definition: {
-        visible: false,
-        visibilityCriteria: true,
-        name: 'human_participant_data_identifiable_no_open_consent',
-        label: 'human_participant_data_identifiable_no_open_consent',
-        publishTag: 'human_participant_data_identifiable_no_open_consent',
-        type: 'text',
-        publish: {
-          onValueUpdate: {
-            modelEventSource: 'valueChanges'
-          }
-        },
-        subscribe: {
-          'ethics_identifiable_informed_consent_publish': {
-            onItemSelect: [{
-              fieldName: 'human_participant_data_identifiable_no_open_consent',
-              action: 'setProp',
-              valueTest: ['ethics_identifiable_informed_consent_no'],
-              props: [
-                {key: 'value', val: 'human_participant_data_identifiable_no_open_consent', val2: ''},
-              ]
+              setPublishedValue: true,
+              props: []
             }]
           }
         }
@@ -1268,9 +1238,9 @@ module.exports = {
                   definition: {
                     visible: false,
                     visibilityCriteria: true,
-                    name: 'ethics_identifiable_informed_consent_no_collection',
-                    label: '@dmpt-ethics:identifiable:informed_consent:no:collection',
-                    help: '@dmpt-ethics:identifiable:informed_consent:collection"help',
+                    name: 'ethics_identifiable_collection',
+                    label: '@dmpt-ethics:identifiable:collection',
+                    help: '@dmpt-ethics:identifiable:informed_consent:collection:help',
                     controlType: 'checkbox',
                     options: [{
                         value: "eresearch_store",
@@ -1291,7 +1261,7 @@ module.exports = {
                       {
                         value: "others",
                         label: "Others",
-                        publishTag: 'ethics_identifiable_informed_consent_no_others'
+                        publishTag: 'ethics_identifiable_collection_others'
                       }
                     ],
                     publish: {
@@ -1319,18 +1289,89 @@ module.exports = {
                   definition: {
                     visible: false,
                     visibilityCriteria: true,
-                    name: 'ethics_identifiable_informed_consent_no_collection_other',
+                    name: 'ethics_identifiable_collection_other',
+                    label: 'Plese specify other means of collection',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_identifiable_collection': {
+                        onItemSelect: [{
+                          debug: 'onItemSelect:ethics_identifiable_informed_consent_no_collection_other:subscribedto:ethics_identifiable_collection_others',
+                          action: 'setProp',
+                          valueTest: ['ethics_identifiable_collection_others'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_storage',
+                    label: '@dmpt-ethics:identifiable:storage',
+                    help: '@dmpt-ethics:identifiable:storage:help',
+                    controlType: 'checkbox',
+                    options: [{
+                        value: "eresearch_store",
+                        label: "eResearch Store"
+                      },
+                      {
+                        value: "onedrive",
+                        label: "OneDrive"
+                      },
+                      {
+                        value: "redcap",
+                        label: "RedCap"
+                      },
+                      {
+                        value: "other",
+                        label: "Other",
+                        publishTag: 'ethics_identifiable_storage_other'
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'human_participant_data_identifiable': {
+                        onValueUpdate: [{
+                          fieldName: 'ethics_identifiable_informed_consent_no_collection',
+                          action: 'setProp',
+                          valueTest: ['human_participant_data_identifiable'],
+                          props: [
+                            {key: 'value', val: '', val2: ''},
+                            {key: 'visible', val: true, val2: false},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_identifiable_storage_other',
                     label: 'Plese specify other means of storage',
                     type: 'text',
                     subscribe: {
-                      'ethics_identifiable_informed_consent_no_collection': {
+                      'ethics_identifiable_storage': {
                         onItemSelect: [{
-                          fieldName: 'ethics_identifiable_informed_consent_no_others',
+                          debug: 'ethics_identifiable_storage_other',
                           action: 'setProp',
-                          valueTest: ['ethics_identifiable_informed_consent_no_others'],
+                          valueTest: ['ethics_identifiable_storage_other'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
                           ]
                         }]
                       }
@@ -1356,12 +1397,12 @@ module.exports = {
                     options: [{
                         value: "yes",
                         label: "Yes",
-                        publishTag: 'ethics_identifiable_informed_consent_yes'
+                        publishTag: 'human_participant_data_identifiable_open_consent'
                       },
                       {
                         value: "no",
                         label: "No",
-                        publishTag: 'ethics_identifiable_informed_consent_no',
+                        publishTag: 'human_participant_data_identifiable_informed_consent',
                       }
                     ],
                     publish: {
@@ -1372,12 +1413,12 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_informed_consent_publish',
+                          debug: 'ethics_identifiable_informed_consent_publish:subscribedto:human_participant_data_identifiable',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
                           ]
                         }]
                       }
@@ -1393,8 +1434,8 @@ module.exports = {
                       type: 'function',
                       action: 'updateVisibility',
                       debug: 'ethics_identifiable_additional_security',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
+                      field: 'human_participant_data_identifiable_consent',
+                      fieldValue : 'human_participant_data_identifiable_informed_consent'
                     },
                     name: 'ethics_identifiable_additional_security',
                     label: '@dmpt-ethics:identifiable:additional_security',
@@ -1415,14 +1456,14 @@ module.exports = {
                       }
                     ],
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'human_participant_data_identifiable_consent': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_additional_security',
+                          debug: 'onValueUpdate:ethics_identifiable_additional_security:subscribedto:human_participant_data_identifiable_consent',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
+                          valueTest: ['human_participant_data_identifiable_informed_consent'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1437,7 +1478,7 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_transfered_out',
+                      debug: 'ethics_identifiable_transfered',
                       field: 'human_participant_data_identifiable',
                       fieldValue : 'human_participant_data_identifiable'
                     },
@@ -1448,28 +1489,23 @@ module.exports = {
                     options: [{
                         value: "yes",
                         label: "Yes",
-                        publishTag: 'yes'
+                        publishTag: 'ethics_identifiable_transfered_yes'
                       },
                       {
                         value: "no",
                         label: "No",
-                        publishTag: 'no'
-                      },
-                      {
-                        value: "additional password (other than authentication)",
-                        label: "additional password (other than authentication)",
-                        publishTag: 'no'
+                        publishTag: 'ethics_identifiable_transfered_no'
                       }
                     ],
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_transfered_out',
+                          fieldName: 'ethics_identifiable_transfered',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1572,8 +1608,8 @@ module.exports = {
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
                           ]
                         }]
                       }
@@ -1809,21 +1845,21 @@ module.exports = {
                       type: 'function',
                       action: 'updateVisibility',
                       debug: 'dmpt_ethics_dc_access_rights_share_data',
-                      field: 'human_participant_data_identifiable_no_open_consent',
-                      fieldValue : 'human_participant_data_identifiable_no_open_consent'
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
                     },
                     name: 'dmpt_ethics_dc_access_rights_share_data',
                     label: '@dmpt-dc:accessRights:share_data',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable_no_open_consent': {
+                      'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'dmpt_ethics_dc_access_rights_share_data',
+                          debug: 'onValueUpdate:dmpt_ethics_dc_access_rights_share_data:subscribedto:human_participant_data_identifiable',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable_no_open_consent'],
+                          valueTest: ['human_participant_data_identifiable'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
                           ]
                         }]
                       }
@@ -1839,8 +1875,8 @@ module.exports = {
                       type: 'function',
                       action: 'updateVisibility',
                       debug: 'dmpt_ethics_dc_access_rights_share_data',
-                      field: 'human_participant_data_identifiable_no_open_consent',
-                      fieldValue : 'human_participant_data_identifiable_no_open_consent'
+                      field: 'human_participant_data_identifiable_informed_consent',
+                      fieldValue : 'human_participant_data_identifiable_informed_consent'
                     },
                     name: 'dmpt_ethics_dc_access_rights_data_retained_secondary',
                     label: '@dmpt-dc:accessRights:data_retained_secondary',
@@ -1857,14 +1893,14 @@ module.exports = {
                       }
                     ],
                     subscribe: {
-                      'human_participant_data_identifiable_no_open_consent': {
+                      'human_participant_data_identifiable_consent': {
                         onValueUpdate: [{
-                          fieldName: 'dmpt_ethics_dc_access_rights_share_data',
+                          debug: 'onValueUpdate:human_participant_data_identifiable_consent:subscribedto:dmpt_ethics_dc_access_rights_share_data',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable_no_open_consent'],
+                          valueTest: ['human_participant_data_identifiable_informed_consent'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
                           ]
                         }]
                       }
