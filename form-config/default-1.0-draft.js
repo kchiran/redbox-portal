@@ -81,7 +81,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: true,
+        visible: false,
         visibilityCriteria: true,
         name: 'human_participant_data_identifiable_consent',
         label: 'human_participant_data_identifiable_consent',
@@ -1147,6 +1147,58 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'SelectionField',
+                  compClass: 'DropdownFieldComponent',
+                  definition: {
+                    name: 'vivo:Dataset_dc:location_rdf:PlainLiteral',
+                    label: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral',
+                    help: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-help',
+                    options: [{
+                        value: "",
+                        label: "@dmpt-select:Empty"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space"
+                      },
+                      {
+                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other",
+                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other"
+                      }
+                    ],
+                    required: false,
+                    validationMessages: {
+                      required: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-required"
+                    }
+                  }
+                },
+                {
+                  class: 'TextArea',
+                  compClass: 'TextAreaComponent',
+                  definition: {
+                    name: 'vivo:Dataset_dc:location_skos:note',
+                    label: '@dmpt-vivo:Dataset_dc:location_skos:note',
+                    rows: 5,
+                    columns: 10
+                  }
+                },
+                {
                   /* hide this field
                   class: 'TextArea',
                   compClass: 'TextAreaComponent',*/
@@ -1656,7 +1708,7 @@ module.exports = {
                       }
                     }
                   }
-                },                
+                },
                 //Removed it since it is in the same tab// {
                 //   class: 'Container',
                 //   compClass: 'TextBlockComponent',
@@ -1698,7 +1750,7 @@ module.exports = {
                   definition: {
                     name: 'redbox:retentionPeriod_dc:date',
                     label: '@dmpt-redbox:retentionPeriod_dc:date',
-                    help: '@dmpt-redbox:retentionPeriod_dc:date-help',
+                    help: '@dmpt-redbox:retentionPeriod_dc:date:help',
                     options: [{
                         value: "",
                         label: "@dmpt-select:Empty"
@@ -1714,6 +1766,10 @@ module.exports = {
                       {
                         value: "7years",
                         label: "@dmpt-redbox:retentionPeriod_dc:date-7years"
+                      },
+                      {
+                        value: "15years",
+                        label: "@dmpt-redbox:retentionPeriod_dc:date-15years"
                       },
                       {
                         value: "25years",
@@ -1802,6 +1858,26 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'TextField',
+                  definition: {
+                    name: 'dataLicensingAccess_manager',
+                    label: '@dmpt-dataLicensingAccess_manager',
+                    type: 'text',
+                    readOnly: true,
+                    subscribe: {
+                      'contributor_data_manager': {
+                        onValueUpdate: [{
+                          action: 'utilityService.concatenate',
+                          fields: ['text_full_name'],
+                          delim: ''
+                        }]
+                      }
+                    },
+                    value: '@user_name'
+                  },
+                  variableSubstitutionFields: ['value']
+                },
+                {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
@@ -1815,12 +1891,12 @@ module.exports = {
                     options: [{
                         value: "yes",
                         label: "Yes",
-                        publishTag: 'ethics_data_destroy_after_retention'
+                        publishTag: 'ethics_data_destroy_after_retention_yes'
                       },
                       {
                         value: "no",
                         label: "No",
-                        publishTag: 'ethics_data_destroy_after_retention',
+                        publishTag: 'ethics_data_destroy_after_retention_no',
                       }
                     ],
                     publish: {
@@ -1843,7 +1919,7 @@ module.exports = {
                         onItemSelect: [{
                           fieldName: 'ethics_data_destroy_after_retention_what',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_destroy_after_retention_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -1867,40 +1943,11 @@ module.exports = {
                         onItemSelect: [{
                           fieldName: 'ethics_data_destroy_after_retention_when',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_destroy_after_retention_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
                             {key: 'required', val: true, val2: false}
-                          ]
-                        }]
-                      }
-                    }
-                  }
-                },
-                {
-                  class: 'TextField',
-                  definition: {
-                    visible: false,
-                    visibilityCriteria: {
-                      type: 'function',
-                      action: 'updateVisibility',
-                      debug: 'dmpt_ethics_dc_access_rights_share_data',
-                      field: 'human_participant_data_identifiable',
-                      fieldValue : 'human_participant_data_identifiable'
-                    },
-                    name: 'dmpt_ethics_dc_access_rights_share_data',
-                    label: '@dmpt-dc:accessRights:share_data',
-                    type: 'text',
-                    subscribe: {
-                      'human_participant_data_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:dmpt_ethics_dc_access_rights_share_data:subscribedto:human_participant_data_identifiable',
-                          action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          props: [
-                            {key: 'value', val: ''},
-                            {key: 'visible', val: true}
                           ]
                         }]
                       }
@@ -1915,14 +1962,14 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'dmpt_ethics_dc_access_rights_share_data',
-                      field: 'human_participant_data_identifiable_informed_consent',
+                      debug: 'dmpt_ethics_dc_access_rights_data_retained_secondary',
+                      field: 'human_participant_data_identifiable_consent',
                       fieldValue : 'human_participant_data_identifiable_informed_consent'
                     },
                     name: 'dmpt_ethics_dc_access_rights_data_retained_secondary',
                     label: '@dmpt-dc:accessRights:data_retained_secondary',
                     help: '@dmpt-dc:accessRights:data_retained_secondary:help',
-                    defaultValue: 'null',
+                    defaultValue: 'no',
                     controlType: 'radio',
                     options: [{
                         value: "extended_consent",
@@ -1947,27 +1994,6 @@ module.exports = {
                       }
                     }
                   }
-                },
-
-                {
-                  class: 'TextField',
-                  definition: {
-                    name: 'dataLicensingAccess_manager',
-                    label: '@dmpt-dataLicensingAccess_manager',
-                    type: 'text',
-                    readOnly: true,
-                    subscribe: {
-                      'contributor_data_manager': {
-                        onValueUpdate: [{
-                          action: 'utilityService.concatenate',
-                          fields: ['text_full_name'],
-                          delim: ''
-                        }]
-                      }
-                    },
-                    value: '@user_name'
-                  },
-                  variableSubstitutionFields: ['value']
                 }
               ]
             }
@@ -2051,58 +2077,6 @@ module.exports = {
                     name: 'dc:rightsHolder_dc:description',
                     label: '@dmpt-dc:rightsHolder_dc:description',
                     help: '@dmpt-dc:rightsHolder_dc:description-help',
-                    rows: 5,
-                    columns: 10
-                  }
-                },
-                {
-                  class: 'SelectionField',
-                  compClass: 'DropdownFieldComponent',
-                  definition: {
-                    name: 'vivo:Dataset_dc:location_rdf:PlainLiteral',
-                    label: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral',
-                    help: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-help',
-                    options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space"
-                      },
-                      {
-                        label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other"
-                      }
-                    ],
-                    required: false,
-                    validationMessages: {
-                      required: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-required"
-                    }
-                  }
-                },
-                {
-                  class: 'TextArea',
-                  compClass: 'TextAreaComponent',
-                  definition: {
-                    name: 'vivo:Dataset_dc:location_skos:note',
-                    label: '@dmpt-vivo:Dataset_dc:location_skos:note',
                     rows: 5,
                     columns: 10
                   }
