@@ -402,6 +402,7 @@
   "@dmpt-ethics:data:secondary_third_party:ownership:other": "Other",
   "@dmpt-ethics:data:secondary_third_party": "Are you using any secondary or third-party data?",
   "@dmpt-ethics:data:secondary_third_party:held": "Is the data:",
+  "@dmpt-ethics:data:secondary_third_party:custodians": "Have the data custodian/s, if any, agreed to provide access to the data for use in the proposed research?",
   "@dmpt-ethics:data:secondary_third_party:ownership_type": "What ownership type governs your use of the data?",
   "@dmpt-ethics:data:secondary_third_party:security": "If your access & use is governed by a license or other agreement, outline any special requirements that we need to be aware of regarding: 1. Security:",
   "@dmpt-ethics:data:secondary_third_party:disposal": "2. Disposal:",

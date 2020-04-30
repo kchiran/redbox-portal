@@ -2279,8 +2279,48 @@ module.exports = {
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_data_secondary_third_party_custodians',
+                    label: '@dmpt-ethics:data:secondary_third_party:custodians',
+                    help: '@dmpt-ethics:data:secondary_third_party:custodians:help',
+                    controlType: 'radio',
+                    options: [{
+                        value: "yes",
+                        label: "Yes"
+                      },
+                      {
+                        value: "no",
+                        label: "No"
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'ethics_data_secondary_third_party': {
+                        onItemSelect: [{
+                          debug: 'ethics_data_secondary_third_party_custodians',
+                          action: 'setProp',
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
+                            {key: 'required', val: true}
                           ]
                         }]
                       }
@@ -2308,6 +2348,10 @@ module.exports = {
                       {
                         value: "purchase",
                         label: "Purchase"
+                      },
+                      {
+                        value: "research_project_agreement_contract",
+                        label: "research project agreement/contract"
                       },
                       {
                         value: "other",
