@@ -109,6 +109,33 @@ module.exports = {
       definition: {
         visible: false,
         visibilityCriteria: true,
+        name: 'indigenous_cultural_intelectual_property',
+        label: 'indigenous_cultural_intelectual_property',
+        publishTag: 'indigenous_cultural_intelectual_property',
+        type: 'text',
+        publish: {
+          onValueUpdate: {
+            modelEventSource: 'valueChanges'
+          }
+        },
+        subscribe: {
+          'ethics_describe': {
+            onItemSelect: [{
+              action: 'setProp',
+              valueTest: ['indigenous_cultural_intelectual_property'],
+              props: [
+                {key: 'value', val: 'indigenous_cultural_intelectual_property', clear: true}
+              ]
+            }]
+          }
+        }
+      }
+    },
+    {
+      class: 'TextField',
+      definition: {
+        visible: false,
+        visibilityCriteria: true,
         name: 'ethics_third_party',
         label: 'ethics_third_party',
         publishTag: 'ethics_third_party',
@@ -907,7 +934,7 @@ module.exports = {
                       {
                         value: "indigenous_cultural_intelectual_property",
                         label: "@dmpt-ethics:describe:indigenous_cultural_intelectual_property",
-                        publishTag: ""
+                        publishTag: "indigenous_cultural_intelectual_property"
                       },
                       {
                         value: "other_sensitive",
@@ -2138,6 +2165,54 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'TextField',
+                  definition: {
+                  visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_indigenous_data_ownership',
+                    label: '@dmpt-ethics:data:indigenous:data_ownership',
+                    help: '@dmpt-ethics:data:indigenous:data_ownership:help',
+                    type: 'text',
+                    subscribe: {
+                      'indigenous_cultural_intelectual_property': {
+                        onValueUpdate: [{
+                          fieldName: 'onValueUpdate:ethics_indigenous_data_ownership:subscribedto:indigenous_cultural_intelectual_property',
+                          action: 'setProp',
+                          valueTest: ['indigenous_cultural_intelectual_property'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_indigenous_data_access',
+                    label: '@dmpt-ethics:data:indigenous:data_access',
+                    help: '@dmpt-ethics:data:indigenous:data_access:help',
+                    type: 'text',
+                    subscribe: {
+                      'indigenous_cultural_intelectual_property': {
+                        onValueUpdate: [{
+                          fieldName: 'onValueUpdate:ethics_indigenous_data_access:subscribedto:indigenous_cultural_intelectual_property',
+                          action: 'setProp',
+                          valueTest: ['indigenous_cultural_intelectual_property'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
@@ -2151,12 +2226,12 @@ module.exports = {
                     options: [{
                         value: "no",
                         label: "No",
-                        publishTag: 'ethics_data_secondary_third_party',
+                        publishTag: 'ethics_data_secondary_third_party_no',
                       },
                       {
                         value: "yes",
                         label: "Yes",
-                        publishTag: 'ethics_data_secondary_third_party'
+                        publishTag: 'ethics_data_secondary_third_party_yes'
                       }
                     ],
                     publish: {
@@ -2202,7 +2277,7 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_held',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2236,19 +2311,48 @@ module.exports = {
                       },
                       {
                         value: "other",
-                        label: "Other, please specify"
+                        label: "Other, please specify",
+                        publishTag: 'ethics_data_secondary_third_party_ownership_type_other'
                       }
                     ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
                     subscribe: {
                       'ethics_data_secondary_third_party': {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_ownership_type',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
                             {key: 'required', val: true, val2: false}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'TextField',
+                  definition: {
+                  visible: false,
+                    visibilityCriteria: true,
+                    name: 'ethics_data_secondary_third_party_ownership_type_other',
+                    label: '@dmpt-ethics:data:secondary_third_party:ownership:other',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_data_secondary_third_party_ownership_type': {
+                        onItemSelect: [{
+                          debug: 'ethics_data_secondary_third_party_ownership_type_other',
+                          action: 'setProp',
+                          valueTest: ['ethics_data_secondary_third_party_ownership_type_other'],
+                          props: [
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -2269,7 +2373,7 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_security',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2293,7 +2397,7 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_disposal',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2317,7 +2421,7 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_attribution',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2341,7 +2445,7 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_access_arrangements',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2365,7 +2469,7 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_data_secondary_third_party_other',
                           action: 'setProp',
-                          valueTest: ['yes'],
+                          valueTest: ['ethics_data_secondary_third_party_yes'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
