@@ -269,8 +269,8 @@ export class FieldBase<T> {
                   }
                 }
               }
-              console.log(`Emitting data:`);
-              console.log(`eventName: ${eventName} emitData: ${emitData} value: ${value}`);
+              //console.log(`Emitting data:`);
+              //console.log(`eventName: ${eventName} emitData: ${emitData} value: ${value}`);
               this.emitEvent(eventName, emitData, value);
             }
           });
@@ -385,6 +385,9 @@ export class FieldBase<T> {
   public setVisibility(data) {
     if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria.type == 'function') {
       const fn:any = _.get(this, this.visibilityCriteria.action);
+      if(this.visibilityCriteria.debug) {
+        console.log(`visibilityCriteria: ${this.visibilityCriteria.debug}`);
+      }
       if (fn) {
         let boundFunction = fn;
         if(this.visibilityCriteria.action.indexOf(".") == -1) {
@@ -393,7 +396,7 @@ export class FieldBase<T> {
           var objectName = this.visibilityCriteria.action.substring(0,this.visibilityCriteria.action.indexOf("."));
           boundFunction = fn.bind(this[objectName]);
         }
-        console.log(`visibilityCriteria: ${this.visibilityCriteria.name}`);
+        //console.log(`visibilityCriteria: ${this.visibilityCriteria.name}`);
         this.visible = boundFunction(data, this.visibilityCriteria);
       }
     } else {
@@ -477,6 +480,7 @@ export class FieldBase<T> {
     let value;
     let checked;
     let setChange = false;
+    let setUncheck = false;
     if (_.isObject(change)) {
       value = change.value;
       checked = change.checked;
@@ -484,29 +488,45 @@ export class FieldBase<T> {
       value = change;
       checked = true;
     }
-    if(config['setPublishedValue']) {
+    if(config['valueCase']) {
+      let caseSet;
+      _.each(config['valueCase'], (cases) => {
+        if(cases['val'] === value) {
+          value = cases['set'];
+          caseSet = true;
+          return false;
+        }
+      });
+      if(caseSet) {
+        this.setValue(this.getTranslated(value, undefined));
+      }
+    } else if(config['valueSet']) {
       if(this.formModel) {
         this.setValue(this.getTranslated(value, undefined));
       } else {
         this.value = this.getTranslated(value, undefined);
       }
-    } else {
+    } else if(config['valueTest']) {
       const found = config['valueTest'].find((val) => {
         return val === value;
       });
       if(found && checked) {
         setChange = true;
       }
+      if(found && !checked){
+        setChange = true;
+        setUncheck = true;
+      }
       _.each(config['props'], (prop) => {
-        this.setPropValue(prop, setChange, config['debug']);
+        this.setPropValue(prop, setChange, setUncheck, config['debug']);
       });
     }
   }
 
-  setPropValue(prop, setChange, debug) {
-    if(debug) {
-      console.log(`config: ${debug}`);
-    }
+  setPropValue(prop, setChange, setUncheck, debug) {
+    // if(debug) {
+    //   console.log(`config: ${debug}`);
+    // }
     if (prop.key === 'required') {
       if(setChange) {
         this.setRequired(prop.val);
@@ -514,13 +534,13 @@ export class FieldBase<T> {
         this.setRequired(!prop.val);
       }
     } else if (prop.key === 'value') {
-      if(prop.clear && !setChange) {
+      if(prop.clear && setUncheck) {
         if(this.formModel) {
           this.setValue('');
         } else {
           this.value = null;
         }
-      } else if(setChange){
+      } else if(setChange && !setUncheck){
         if(this.formModel) {
           this.setValue(this.getTranslated(prop.val, undefined));
         } else {
@@ -537,13 +557,13 @@ export class FieldBase<T> {
   }
 
   updateVisibility(visible, config) {
-    console.log(`updateVisibility: ${config['debug']}`);
     const fieldName = config['field'];
     const fieldValue = config['fieldValue'];
     let field;
     if(this.fieldMap[fieldName]) {
       field = this.fieldMap[fieldName]['field'];
       if(field && field['value'] === fieldValue) {
+        //console.log(`updateVisibility to true: ${config['debug']}`);
         return true;
       } else {
         return false

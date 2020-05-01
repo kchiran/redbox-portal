@@ -268,8 +268,8 @@ export class SelectionFieldComponent extends SelectionComponent {
   }
 
   onChange(opt:any, event:any) {
-    console.log('onChange, SelectionFieldComponent');
-    console.log(opt);
+    // console.log('onChange, SelectionFieldComponent');
+    // console.log(opt);
     let formcontrol:any = this.getFormControl();
     if(formcontrol && formcontrol.length > 0){
       if (event.target.checked) {

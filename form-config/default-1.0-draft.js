@@ -17,7 +17,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: false,
+        visible: true,
         visibilityCriteria: true,
         name: 'human_participant_data',
         label: 'human_participant_data',
@@ -97,8 +97,7 @@ module.exports = {
             onItemSelect: [{
               debug: 'onItemSelect:human_participant_data_identifiable_consent:subscribedto:ethics_identifiable_informed_consent_publish',
               action: 'setProp',
-              setPublishedValue: true,
-              props: []
+              valueSet: true
             }]
           }
         }
@@ -107,7 +106,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: false,
+        visible: true,
         visibilityCriteria: true,
         name: 'indigenous_cultural_intelectual_property',
         label: 'indigenous_cultural_intelectual_property',
@@ -850,36 +849,34 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      // 'ethics_sensitive_data': {
-                      //   onItemSelect: [{
-                      //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_sensitive_data',
-                      //     action: 'setProp',
-                      //     valueTest: ['iscs_confidential'],
-                      //     props: [
-                      //       {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: '@dmpt-ethics:iscs:sensitive'},
-                      //     ]
-                      //   }]
-                      // },
-                      // 'ethics_describe': {
-                      //   onItemSelect: [{
-                      //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
-                      //     action: 'setProp',
-                      //     valueTest: ['ethics_describe'],
-                      //     props: [
-                      //       {key: 'value', val: 'ethics_describe', val2: ''},
-                      //     ]
-                      //   }]
-                      // },
-                      // 'ethics_approval_type': {
-                      //   onValueUpdate: [{
-                      //     fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_approval_type',
-                      //     action: 'setProp',
-                      //     valueTest: ['committee', 'iscs_confidential'],
-                      //     props: [
-                      //       {key: 'value', val: '@dmpt-ethics:iscs:confidential', val2: ''}
-                      //     ]
-                      //   }]
-                      // }
+                      'ethics_describe': {
+                        onItemSelect: [{
+                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
+                          action: 'setProp',
+                          valueCase: [
+                            {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
+                            {val: 'ethics_approval_required', set: '@dmpt-ethics:iscs:sensitive'},
+                            {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
+                            {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
+                            {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
+                            {val: 'commercially_sensitive_data', set: '@dmpt-ethics:iscs:confidential'},
+                            {val: 'clinical_trials', set: '@dmpt-ethics:iscs:confidential'},
+                            {val: 'policed_data', set: '@dmpt-ethics:iscs:confidential'},
+                            {val: 'other_sensitive', set: '@dmpt-ethics:iscs:confidential'},
+                          ]
+                        }]
+                      },
+                      'ethics_human_participant_data_individual': {
+                        onItemSelect: [{
+                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
+                          action: 'setProp',
+                          valueCase: [
+                            {val: 'personal', set: '@dmpt-ethics:iscs:confidential'},
+                            {val: 'sensitive_personal', set: '@dmpt-ethics:iscs:confidential'},
+                            {val: 'health', set: '@dmpt-ethics:iscs:confidential'},
+                          ]
+                        }]
+                      }
                     }
                   }
                 },
@@ -919,17 +916,17 @@ module.exports = {
                       {
                         value: "clinical_trials",
                         label: "@dmpt-ethics:describe:clinical_trials",
-                        publishTag: "ethics_approval_required"
+                        publishTag: "ethics_approval_required",
                       },
                       {
                         value: "commercially_sensitive_data",
                         label: "@dmpt-ethics:describe:commercially_sensitive_data",
-                        publishTag: ""
+                        publishTag: "commercially_sensitive_data",
                       },
                       {
                         value: "policed_data",
                         label: "@dmpt-ethics:describe:policed_data",
-                        publishTag: ""
+                        publishTag: "policed_data"
                       },
                       {
                         value: "indigenous_cultural_intelectual_property",
@@ -939,12 +936,12 @@ module.exports = {
                       {
                         value: "other_sensitive",
                         label: "@dmpt-ethics:describe:other_sensitive",
-                        publishTag: ""
+                        publishTag: "other_sensitive"
                       },
                       {
                         value: "none",
                         label: "@dmpt-ethics:describe:none",
-                        publishTag: ""
+                        publishTag: "none"
                       }
                     ],
                     publish: {
@@ -963,24 +960,31 @@ module.exports = {
                   definition: {
                     required: true,
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_human_participant_data_individual',
+                      field: 'human_participant_data',
+                      fieldValue : 'human_participant_data'
+                    },
                     name: 'ethics_human_participant_data_individual',
                     label: '@dmpt-ethics:human_participant_data:individual',
                     help: '@dmpt-ethics:human_participant_data:individual:help',
                     controlType: 'radio',
                     options: [{
                         value: "personal",
-                        label: "@dmpt-ethics:human_participant_data:personal"
+                        label: "@dmpt-ethics:human_participant_data:personal",
+                        publishTag: "personal"
                       },
                       {
                         value: "sensitive_personal",
                         label: "@dmpt-ethics:human_participant_data:sensitive_personal",
-                        publishTag: "iscs_confidential"
+                        publishTag: "sensitive_personal"
                       },
                       {
                         value: "health",
                         label: "@dmpt-ethics:human_participant_data:health",
-                        publishTag: "iscs_sensitive"
+                        publishTag: "health"
                       }
                     ],
                     subscribe: {
@@ -1025,9 +1029,9 @@ module.exports = {
                           action: 'setProp',
                           valueTest: ['human_participant_data'],
                           props: [
-                            {key: 'visible', val: true, val2: false},
-                            {key: 'required', val: true, val2: false},
-                            {key: 'value', val: '', val2: ''}
+                            {key: 'visible', val: true},
+                            {key: 'required', val: true},
+                            {key: 'value', val: ''}
                           ]
                         }]
                       }
