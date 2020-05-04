@@ -120,6 +120,7 @@ module.exports = {
         subscribe: {
           'ethics_describe': {
             onItemSelect: [{
+              debug: 'onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe',
               action: 'setProp',
               valueTest: ['indigenous_cultural_intelectual_property'],
               props: [
@@ -888,6 +889,7 @@ module.exports = {
                     name: 'ethics_describe',
                     label: '@dmpt-ethics:describe',
                     help: '@dmpt-ethics:describe:help',
+                    value: ['none'],
                     controlType: 'checkbox',
                     options: [{
                         value: "human_participant_data",
@@ -1917,7 +1919,7 @@ module.exports = {
                     name: 'ethics_data_destroy_after_retention',
                     label: '@dmpt-ethics:data:destroy_after_retention',
                     help: '@dmpt-ethics:identifiable:destroy_after_retention:help',
-                    defaultValue: 'no',
+                    //defaultValue: 'yes',
                     controlType: 'radio',
                     options: [{
                         value: "yes",
@@ -1952,9 +1954,9 @@ module.exports = {
                           action: 'setProp',
                           valueTest: ['ethics_data_destroy_after_retention_yes'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                            {key: 'required', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
+                            {key: 'required', val: true,}
                           ]
                         }]
                       }
@@ -1962,23 +1964,52 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'TextField',
+                  class: 'DateTime',
                   definition: {
                     visible: false,
                     visibilityCriteria: true,
-                    name: 'ethics_data_destroy_after_retention_when',
-                    label: '@dmpt-ethics:data:destroy_after_retention:when',
-                    type: 'text',
+                    name: "ethics_data_destroy_after_retention_when",
+                    label: "@dmpt-ethics:data:destroy_after_retention:when",
+                    help: '@dmpt-ethics:data:destroy_after_retention:when:help',
+                    datePickerOpts: {
+                      format: 'dd/mm/yyyy',
+                      startView: 2,
+                      icon: 'fa fa-calendar',
+                      autoclose: true
+                    },
+                    timePickerOpts: false,
+                    hasClearButton: false,
+                    valueFormat: 'YYYY-MM-DD',
+                    displayFormat: 'DD/MM/YYYY',
+                    publish: {
+                      onValueUpdate: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
                     subscribe: {
+                      title: {
+                        onItemSelect: [
+                          {
+                            action: 'reset'
+                          },
+                          {
+                            action: 'utilityService.convertToDateFormat',
+                            field: 'startDate',
+                            delim: ',',
+                            formatOrigin: 'DD-MMM-YY',
+                            formatTarget: 'YYYY-MM-DD'
+                          }
+                        ]
+                      },
                       'ethics_data_destroy_after_retention': {
                         onItemSelect: [{
-                          fieldName: 'ethics_data_destroy_after_retention_when',
+                          debug: 'ethics_data_destroy_after_retention_when:subscribedto:ethics_data_destroy_after_retention',
                           action: 'setProp',
                           valueTest: ['ethics_data_destroy_after_retention_yes'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
-                            {key: 'required', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true},
+                            {key: 'required', val: true}
                           ]
                         }]
                       }

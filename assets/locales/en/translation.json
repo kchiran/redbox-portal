@@ -396,7 +396,7 @@
   "@dmpt-ethics:ethics_sensitivities:other_private_information": "Other private information",
   "@dmpt-ethics:data:destroy_after_retention": "Have you made commitments to destroy part of the data prior to end of retention period (e.g original recordings, linking/code files)?",
   "@dmpt-ethics:data:destroy_after_retention:what": "Which data?",
-  "@dmpt-ethics:data:destroy_after_retention:when": "When should it be destroyed? TODO: make a date plugin dd/mm/yyyy",
+  "@dmpt-ethics:data:destroy_after_retention:when": "When should it be destroyed?",
   "@dmpt-ethics:data:indigenous:data_ownership": "For projects working with Indigenous participants: Briefly outline the steps you are taking to negotiate the ownership of research results and data with Indigenous participants and community groups:",
   "@dmpt-ethics:data:indigenous:data_access": "Briefly outline the steps you are taking to negotiate the storage of, and community access to, research results and data:",
   "@dmpt-ethics:data:secondary_third_party:ownership:other": "Other",

@@ -268,8 +268,8 @@ export class SelectionFieldComponent extends SelectionComponent {
   }
 
   onChange(opt:any, event:any) {
-    // console.log('onChange, SelectionFieldComponent');
-    // console.log(opt);
+    console.log('onChange, SelectionFieldComponent');
+    console.log(opt);
     let formcontrol:any = this.getFormControl();
     if(formcontrol && formcontrol.length > 0){
       if (event.target.checked) {
@@ -683,7 +683,7 @@ Based on: https://bootstrap-datepicker.readthedocs.io/en/stable/
 @Component({
   selector: 'date-time',
   template: `
-  <div *ngIf="field.editMode" [formGroup]='form' class="form-group">
+  <div *ngIf="field.editMode && field.visible" [formGroup]='form' class="form-group">
     <span class="label-font">
       {{field.label}} {{ getRequiredLabelStr()}}
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
@@ -695,7 +695,7 @@ Based on: https://bootstrap-datepicker.readthedocs.io/en/stable/
       <div class="text-danger" *ngIf="field.validationMessages?.required">{{field.validationMessages.required}}</div>
     </div>
   </div>
-  <li *ngIf="!field.editMode" class="key-value-pair">
+  <li *ngIf="!field.editMode && field.visible" class="key-value-pair">
     <span class="key" *ngIf="field.label">{{field.label}}</span>
     <span class="value">{{field.formatValueForDisplay()}}</span>
   </li>
@@ -710,7 +710,7 @@ export class DateTimeComponent extends SimpleComponent {
   @ViewChild('dateTime') public dateTime: any;
 
   ngAfterViewInit() {
-    if (this.field.editMode) {
+    if (this.field.editMode && this.field.visible) {
       jQuery(`#${this.dateTime.idDatePicker}`).attr('aria-label', this.field.label);
     }
   }

@@ -476,7 +476,9 @@ export class FieldBase<T> {
 
   setProp(change: any, config: any) {
 
-    //console.log(`Set Props: ${config['debug']}`);
+    if(config['debug'] ==='onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe') {
+      console.log(`setProps: ${config['debug']}`);
+    }
     let value;
     let checked;
     let setChange = false;
@@ -517,6 +519,9 @@ export class FieldBase<T> {
         setChange = true;
         setUncheck = true;
       }
+      // if(!found && checked) {
+      //   setUncheck = true;
+      // }
       _.each(config['props'], (prop) => {
         this.setPropValue(prop, setChange, setUncheck, config['debug']);
       });
@@ -524,9 +529,9 @@ export class FieldBase<T> {
   }
 
   setPropValue(prop, setChange, setUncheck, debug) {
-    // if(debug) {
-    //   console.log(`config: ${debug}`);
-    // }
+    if(debug ==='onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe') {
+      console.log(`config: ${debug}`);
+    }
     if (prop.key === 'required') {
       if(setChange) {
         this.setRequired(prop.val);
@@ -563,7 +568,7 @@ export class FieldBase<T> {
     if(this.fieldMap[fieldName]) {
       field = this.fieldMap[fieldName]['field'];
       if(field && field['value'] === fieldValue) {
-        //console.log(`updateVisibility to true: ${config['debug']}`);
+        console.log(`updateVisibility to true: ${config['debug']}`);
         return true;
       } else {
         return false
