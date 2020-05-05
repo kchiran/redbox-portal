@@ -291,7 +291,7 @@ export class SelectionFieldComponent extends SelectionComponent {
         this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
       }
       if(this.field.publish.onValueUpdate) {
-        this.field.onValueUpdate.emit({value: opt['publishTag'], checked: true});
+        this.field.onValueUpdate.emit({value: opt['publishTag'], checked: event.target.checked});
       }
     }
   }

@@ -17,7 +17,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: true,
+        visible: false,
         visibilityCriteria: true,
         name: 'human_participant_data',
         label: 'human_participant_data',
@@ -31,6 +31,7 @@ module.exports = {
         subscribe: {
           'ethics_describe': {
             onItemSelect: [{
+              debug: 'onItemSelect:human_participant_data:subscribedto:ethics_describe',
               action: 'setProp',
               valueTest: ['human_participant_data'],
               props: [
@@ -58,7 +59,7 @@ module.exports = {
         subscribe: {
           'ethics_identifiable': {
             onItemSelect: [{
-              fieldName: 'human_participant_data_identifiable:subscribedto:ethics_describe',
+              debug: 'onItemSelect:human_participant_data_identifiable:subscribedto:ethics_describe',
               action: 'setProp',
               valueTest: ['ethics_identifiable'],
               props: [
@@ -106,7 +107,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: true,
+        visible: false,
         visibilityCriteria: true,
         name: 'indigenous_cultural_intelectual_property',
         label: 'indigenous_cultural_intelectual_property',
@@ -852,7 +853,7 @@ module.exports = {
                     subscribe: {
                       'ethics_describe': {
                         onItemSelect: [{
-                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
+                          debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueCase: [
                             {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
@@ -869,7 +870,7 @@ module.exports = {
                       },
                       'ethics_human_participant_data_individual': {
                         onItemSelect: [{
-                          fieldName: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
+                          debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueCase: [
                             {val: 'personal', set: '@dmpt-ethics:iscs:confidential'},
@@ -889,7 +890,6 @@ module.exports = {
                     name: 'ethics_describe',
                     label: '@dmpt-ethics:describe',
                     help: '@dmpt-ethics:describe:help',
-                    value: ['none'],
                     controlType: 'checkbox',
                     options: [{
                         value: "human_participant_data",
@@ -995,6 +995,7 @@ module.exports = {
                           debug: 'onValueUpdate:ethics_human_participant_data_individuals:subscribedto:human_participant_data',
                           action: 'setProp',
                           valueTest: ['human_participant_data'],
+                          valueFalse: '',
                           props: [
                             {key: 'visible', val: true},
                             {key: 'required', val: true},
@@ -1030,6 +1031,7 @@ module.exports = {
                           debug: 'onValueUpdate:ethics_identifiable:subscribedto:human_participant_data',
                           action: 'setProp',
                           valueTest: ['human_participant_data'],
+                          valueFalse: '',
                           props: [
                             {key: 'visible', val: true},
                             {key: 'required', val: true},
@@ -1052,9 +1054,10 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'onValueUpdate:ethics_human_participant_data_severity_risk:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_human_participant_data_severity_risk:subscribedto:human_participant_data_identifiable',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -1076,9 +1079,10 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'onValueUpdate:ethics_identifiable_other_countries:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_other_countries:subscribedto:human_participant_data_identifiable',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -1116,14 +1120,13 @@ module.exports = {
                     subscribe: {
                       'ethics_describe': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_approval:subscribedto:ethics_describe',
                           debug: 'ethics_approval:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueTest: [
                             'human_participant_data', 'ethics_approval_required'
                           ],
                           props: [
-                            {key: 'value', val: 'yes', val2: 'no', keepIfYes: true}
+                            {key: 'value', val: 'yes'}
                           ]
                         }]
                       }
@@ -1305,9 +1308,10 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_data',
+                          debug: 'ethics_identifiable_data',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -1357,9 +1361,10 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_informed_consent_no_collection',
+                          debug: 'ethics_identifiable_informed_consent_no_collection',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -1428,7 +1433,7 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_informed_consent_no_collection',
+                          debug: 'ethics_identifiable_informed_consent_no_collection',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
                           props: [
@@ -1501,6 +1506,7 @@ module.exports = {
                           debug: 'ethics_identifiable_informed_consent_publish:subscribedto:human_participant_data_identifiable',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1546,6 +1552,7 @@ module.exports = {
                           debug: 'onValueUpdate:ethics_identifiable_additional_security:subscribedto:human_participant_data_identifiable_consent',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable_informed_consent'],
+                          valueFalse: 'yes',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -1594,6 +1601,7 @@ module.exports = {
                           debug: 'ethics_identifiable_transfered_out',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -1617,6 +1625,7 @@ module.exports = {
                           debug: 'ethics_identifiable_transfered_yes',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_transfered_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1661,9 +1670,10 @@ module.exports = {
                     subscribe: {
                       'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          fieldName: 'ethics_identifiable_deidentify',
+                          debug: 'ethics_identifiable_deidentify',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -1687,6 +1697,7 @@ module.exports = {
                           debug: 'ethics_identifiable_deidentify_no',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_deidentify_no'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1710,6 +1721,7 @@ module.exports = {
                           debug: 'ethics_identifiable_deidentify_yes_how_when',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_deidentify_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1733,6 +1745,7 @@ module.exports = {
                           debug: 'ethics_identifiable_deidentify_yes_where',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_deidentify_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1943,16 +1956,17 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: false,
                     name: 'ethics_data_destroy_after_retention_what',
                     label: '@dmpt-ethics:data:destroy_after_retention:what',
                     type: 'text',
                     subscribe: {
                       'ethics_data_destroy_after_retention': {
                         onItemSelect: [{
-                          fieldName: 'ethics_data_destroy_after_retention_what',
+                          debug: 'ethics_data_destroy_after_retention_what',
                           action: 'setProp',
                           valueTest: ['ethics_data_destroy_after_retention_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -1967,7 +1981,7 @@ module.exports = {
                   class: 'DateTime',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: false,
                     name: "ethics_data_destroy_after_retention_when",
                     label: "@dmpt-ethics:data:destroy_after_retention:when",
                     help: '@dmpt-ethics:data:destroy_after_retention:when:help',
@@ -2006,6 +2020,7 @@ module.exports = {
                           debug: 'ethics_data_destroy_after_retention_when:subscribedto:ethics_data_destroy_after_retention',
                           action: 'setProp',
                           valueTest: ['ethics_data_destroy_after_retention_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -2048,6 +2063,7 @@ module.exports = {
                           debug: 'onValueUpdate:human_participant_data_identifiable_consent:subscribedto:dmpt_ethics_dc_access_rights_share_data',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable_informed_consent'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -2187,9 +2203,10 @@ module.exports = {
                     subscribe: {
                       'dc:accessRights': {
                         onItemSelect: [{
-                          fieldName: 'dmpt_ethics_dc_access_rights_not_available',
+                          debug: 'dmpt_ethics_dc_access_rights_not_available',
                           action: 'setProp',
                           valueTest: ['dc_access_rights_not_available'],
+                          valueFalse: ['mediated, by permission from the data manager','open access under license'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false}
@@ -2211,7 +2228,7 @@ module.exports = {
                     subscribe: {
                       'indigenous_cultural_intelectual_property': {
                         onValueUpdate: [{
-                          fieldName: 'onValueUpdate:ethics_indigenous_data_ownership:subscribedto:indigenous_cultural_intelectual_property',
+                          debug: 'onValueUpdate:ethics_indigenous_data_ownership:subscribedto:indigenous_cultural_intelectual_property',
                           action: 'setProp',
                           valueTest: ['indigenous_cultural_intelectual_property'],
                           props: [
@@ -2235,7 +2252,7 @@ module.exports = {
                     subscribe: {
                       'indigenous_cultural_intelectual_property': {
                         onValueUpdate: [{
-                          fieldName: 'onValueUpdate:ethics_indigenous_data_access:subscribedto:indigenous_cultural_intelectual_property',
+                          debug: 'onValueUpdate:ethics_indigenous_data_access:subscribedto:indigenous_cultural_intelectual_property',
                           action: 'setProp',
                           valueTest: ['indigenous_cultural_intelectual_property'],
                           props: [
@@ -2313,6 +2330,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_held',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -2352,6 +2370,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_custodians',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -2405,6 +2424,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_ownership_type',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2429,6 +2449,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_ownership_type_other',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_ownership_type_other'],
+                          valueFalse: ['open_license','commercial_license','purchase','research_project_agreement_contract'],
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -2453,6 +2474,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_security',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2477,6 +2499,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_disposal',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2501,6 +2524,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_attribution',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2525,6 +2549,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_access_arrangements',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},
@@ -2549,6 +2574,7 @@ module.exports = {
                           debug: 'ethics_data_secondary_third_party_other',
                           action: 'setProp',
                           valueTest: ['ethics_data_secondary_third_party_yes'],
+                          valueFalse: 'no',
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false},

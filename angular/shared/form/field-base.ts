@@ -476,16 +476,14 @@ export class FieldBase<T> {
 
   setProp(change: any, config: any) {
 
-    if(config['debug'] ==='onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe') {
+    if(config['debug'] === "onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe") {
       console.log(`setProps: ${config['debug']}`);
     }
     let value;
     let checked;
-    let setChange = false;
-    let setUncheck = false;
     if (_.isObject(change)) {
       value = change.value;
-      checked = change.checked;
+      checked = _.isUndefined(change.checked) ? false : change.checked;
     } else {
       value = change;
       checked = true;
@@ -509,43 +507,37 @@ export class FieldBase<T> {
         this.value = this.getTranslated(value, undefined);
       }
     } else if(config['valueTest']) {
-      const found = config['valueTest'].find((val) => {
-        return val === value;
-      });
-      if(found && checked) {
-        setChange = true;
+      if(_.includes(config['valueTest'], value)) {
+        _.each(config['props'], (prop) => {
+          this.setPropValue(prop, checked, config['debug']);
+        });
       }
-      if(found && !checked){
-        setChange = true;
-        setUncheck = true;
+      else if(_.includes(config['valueFalse'], value)) {
+        _.each(config['props'], (prop) => {
+          this.setPropValue(prop, false, config['debug']);
+        });
       }
-      // if(!found && checked) {
-      //   setUncheck = true;
-      // }
-      _.each(config['props'], (prop) => {
-        this.setPropValue(prop, setChange, setUncheck, config['debug']);
-      });
     }
   }
 
-  setPropValue(prop, setChange, setUncheck, debug) {
-    if(debug ==='onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe') {
+  setPropValue(prop, checked, debug) {
+    if(debug === "onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe") {
       console.log(`config: ${debug}`);
     }
     if (prop.key === 'required') {
-      if(setChange) {
+      if(checked) {
         this.setRequired(prop.val);
       } else {
         this.setRequired(!prop.val);
       }
     } else if (prop.key === 'value') {
-      if(prop.clear && setUncheck) {
+      if(prop.clear && !checked) {
         if(this.formModel) {
           this.setValue('');
         } else {
           this.value = null;
         }
-      } else if(setChange && !setUncheck){
+      } else if(checked){
         if(this.formModel) {
           this.setValue(this.getTranslated(prop.val, undefined));
         } else {
@@ -553,10 +545,12 @@ export class FieldBase<T> {
         }
       }
     } else if (prop.key === 'visible') {
-      if(setChange) {
-        this.setVisibility(prop.val);
-      }else {
-        this.setVisibility(!prop.val);
+      if(checked) {
+        //this.setVisibility(prop.val);
+        this.visible = prop.val;
+      } else if(!checked) {
+        this.visible = !prop.val;
+        //this.setVisibility(!prop.val);
       }
     }
   }
