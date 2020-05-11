@@ -27,6 +27,7 @@ import { ActionButton, ActionButtonComponent } from './form/action-button.compon
 import { RelatedObjectDataField, RelatedObjectDataComponent } from './form/field-relatedobjectdata.component';
 import { RelatedObjectSelectorComponent, RelatedObjectSelectorField } from './form/field-relatedobjectselector.component';
 import { DataLocationComponent, DataLocationField } from './form/field-datalocation.component';
+import { RelatedFileUploadComponent, RelatedFileUploadField } from './form/field-relatedfileupload.component';
 import { PublishDataLocationSelectorComponent, PublishDataLocationSelectorField } from './form/field-publishdatalocationselector.component'
 import { MapField, MapComponent } from './form/field-map.component';
 import { GenericGroupComponent, RepeatableGroupComponent } from './form/field-group.component';
@@ -64,6 +65,7 @@ export const fieldClasses=  {
   'RecordMetadataRetriever':{ 'meta': RecordMetadataRetrieverField, 'comp': RecordMetadataRetrieverComponent},
   'RelatedObjectSelector':{ 'meta': RelatedObjectSelectorField, 'comp': RelatedObjectSelectorComponent},
   'DataLocation':{ 'meta': DataLocationField, 'comp': DataLocationComponent},
+  'RelatedFileUpload':{ 'meta': RelatedFileUploadField, 'comp': RelatedFileUploadComponent},
   'WorkspaceSelectorField' : { 'meta': WorkspaceSelectorField, 'comp': [WorkspaceSelectorComponent, WorkspaceSelectorFieldComponent, WorkspaceSelectComponent, WorkspaceSelectFieldComponent] },
   'PublishDataLocationSelector':{ 'meta': PublishDataLocationSelectorField, 'comp': PublishDataLocationSelectorComponent},
   'TabNavButton': {'meta': TabNavButton, 'comp': TabNavButtonComponent},

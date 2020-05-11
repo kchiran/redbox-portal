@@ -13,6 +13,9 @@ module.exports = {
     "saveSuccess": ["@dmpt-form-save-success"],
     "saveError": ["@dmpt-form-save-error"]
   },
+  attachmentFields: [
+    "licences_agreements"
+  ],
   fields: [
     {
       class: 'TextField',
@@ -2587,21 +2590,28 @@ module.exports = {
                 {
                   class: 'HtmlRaw',
                   compClass: 'HtmlRawComponent',
+                  editOnly: true,
                   definition: {
                     name: "attach-licences-prefix",
                     value: '<h5>If ethics approval required, please attach licences or agreements</h5>'
                   }
                 },
                 {
-                  class: "SaveButton",
-                  editOnly: true,
+                  class: 'RelatedFileUpload',
+                  compClass: 'RelatedFileUploadComponent',
                   definition: {
-                    label: 'Attach copy of license or agreement documents (not implemented)',
-                    closeOnSave: true,
-                    redirectLocation: '/@branding/@portal/dashboard/default',
-                    disabledExpression: '<%= _.isEmpty(relatedRecordId) %>'
-                  },
-                  variableSubstitutionFields: ['redirectLocation']
+                    name: "licences_agreements",
+                    maxFileSize: 1073741824, // <- Configure web server to match this
+                    maxNumberOfFiles: 50,
+                    notesEnabled: true,
+                    locationHeader: 'Files asociated with this plan',
+                    notesHeader: '@dataLocations-notes',
+                    uppyDashboardNote: '@dataLocations-uploader-note',
+                    attachmentText: 'Add attachment(s)',
+                    attachmentTextDisabled: 'Save your plan to attach files',
+                    help: 'Upload your licence or agreements here. You can only upload after you save your plan.',
+                    label: 'Licences or Agreements:'
+                  }
                 }
               ]
             }
