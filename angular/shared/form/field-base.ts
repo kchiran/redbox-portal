@@ -404,6 +404,12 @@ export class FieldBase<T> {
     }
   }
 
+  public checkIfVisible() {
+    if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria.type == 'function') {
+      this.setVisibility(this.visibilityCriteria);
+    }
+  }
+
   public replaceValWithConfig(val) {
     _.forOwn(this.appConfig, (configVal, configKey) => {
       val = val.replace(new RegExp(`@${configKey}`, 'g'), configVal);
@@ -559,7 +565,7 @@ export class FieldBase<T> {
     const fieldName = config['field'];
     const fieldValue = config['fieldValue'];
     let field;
-    if(this.fieldMap[fieldName]) {
+    if(this.fieldMap && this.fieldMap[fieldName]) {
       field = this.fieldMap[fieldName]['field'];
       if(field && field['value'] === fieldValue) {
         console.log(`updateVisibility to true: ${config['debug']}`);

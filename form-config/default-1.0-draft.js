@@ -1618,7 +1618,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_transfered_out_yes',
+                      field: 'ethics_identifiable_transfered_out',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_identifiable_transfered_out_yes',
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
@@ -1690,7 +1696,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_deidentify_no',
+                      field: 'ethics_identifiable_deidentify',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_identifiable_deidentify_no',
                     label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
@@ -1714,7 +1726,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_deidentify_yes_how_when',
+                      field: 'ethics_identifiable_deidentify',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_identifiable_deidentify_yes_how_when',
                     label: '@dmpt-ethics:identifiable:deidentify:yes:how_when',
                     type: 'text',
@@ -1738,7 +1756,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_deidentify_yes_where',
+                      field: 'ethics_identifiable_deidentify',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_identifiable_deidentify_yes_where',
                     label: '@dmpt-ethics:identifiable:deidentify:yes:where',
                     type: 'text',
@@ -1959,7 +1983,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_destroy_after_retention_what',
+                      field: 'ethics_data_destroy_after_retention',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_destroy_after_retention_what',
                     label: '@dmpt-ethics:data:destroy_after_retention:what',
                     type: 'text',
@@ -1984,7 +2014,13 @@ module.exports = {
                   class: 'DateTime',
                   definition: {
                     visible: false,
-                    visibilityCriteria: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_destroy_after_retention_when',
+                      field: 'ethics_data_destroy_after_retention',
+                      fieldValue : 'yes'
+                    },
                     name: "ethics_data_destroy_after_retention_when",
                     label: "@dmpt-ethics:data:destroy_after_retention:when",
                     help: '@dmpt-ethics:data:destroy_after_retention:when:help',
@@ -2025,7 +2061,7 @@ module.exports = {
                           valueTest: ['ethics_data_destroy_after_retention_yes'],
                           valueFalse: 'no',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: null},
                             {key: 'visible', val: true},
                             {key: 'required', val: true}
                           ]
@@ -2199,7 +2235,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'dmpt_ethics_dc_access_rights_not_available',
+                      field: 'dc:accessRights',
+                      fieldValue : 'not available due to sensitivities'
+                    },
                     name: 'dmpt_ethics_dc_access_rights_not_available',
                     label: '@dmpt-dc:accessRights:not_available',
                     type: 'text',
@@ -2301,7 +2343,13 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_held',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_held',
                     label: '@dmpt-ethics:data:secondary_third_party:held',
                     help: '@dmpt-ethics:data:secondary_third_party:held:help',
@@ -2311,20 +2359,20 @@ module.exports = {
                         label: "Privately held data source"
                       },
                       {
-                        value: "Data that is publically available (e.g. webscraping, social media, museums and archives etc)",
-                        label: "Data that is publically available (e.g. webscraping, social media, museums and archives etc)"
+                        value: "Data that is publicly available (e.g. - web scraping, social media, museums and archives etc)",
+                        label: "Data that is publicly available (e.g. - web scraping, social media, museums and archives etc)"
                       },
                       {
-                        value: "Publically held data source (Commonwealth e.g. ABS) ",
-                        label: "Publically held data source (Commonwealth e.g. ABS) "
+                        value: "Publicly held data source (Commonwealth e.g. - ABS) ",
+                        label: "Publicly held data source (Commonwealth e.g. - ABS) "
                       },
                       {
-                        value: "Publically held data source (State e.g. NSW Ministry of Health) ",
-                        label: "Publically held data source (State e.g. NSW Ministry of Health) "
+                        value: "Publicly held data source (State e.g. - NSW Ministry of Health) ",
+                        label: "Publicly held data source (State e.g. - NSW Ministry of Health) "
                       },
                       {
-                        value: "Publically held data source (International e.g. NIH, NASA, NOAA)",
-                        label: "Publically held data source (International e.g. NIH, NASA, NOAA)"
+                        value: "Publicly held data source (International e.g. - NIH, NASA, NOAA)",
+                        label: "Publicly held data source (International e.g. - NIH, NASA, NOAA)"
                       }
                     ],
                     subscribe:{
@@ -2348,7 +2396,13 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_custodians',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_custodians',
                     label: '@dmpt-ethics:data:secondary_third_party:custodians',
                     help: '@dmpt-ethics:data:secondary_third_party:custodians:help',
@@ -2389,7 +2443,13 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_ownership_type',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_ownership_type',
                     label: '@dmpt-ethics:data:secondary_third_party:ownership_type',
                     help: '@dmpt-ethics:data:secondary_third_party:ownership_type:ownership_type',
@@ -2442,7 +2502,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_ownership_type_other',
+                      field: 'ethics_data_secondary_third_party_ownership_type',
+                      fieldValue : 'other'
+                    },
                     name: 'ethics_data_secondary_third_party_ownership_type_other',
                     label: '@dmpt-ethics:data:secondary_third_party:ownership:other',
                     type: 'text',
@@ -2466,7 +2532,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_security',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_security',
                     label: '@dmpt-ethics:data:secondary_third_party:security',
                     help: '@dmpt-ethics:data:secondary_third_party:security:help',
@@ -2491,7 +2563,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_disposal',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_disposal',
                     label: '@dmpt-ethics:data:secondary_third_party:disposal',
                     help: '@dmpt-ethics:data:secondary_third_party:disposal:help',
@@ -2516,7 +2594,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_attribution',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_attribution',
                     label: '@dmpt-ethics:data:secondary_third_party:attribution',
                     help: '@dmpt-ethics:data:secondary_third_party:attribution:help',
@@ -2541,7 +2625,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_access_arrangements',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_access_arrangements',
                     label: '@dmpt-ethics:data:secondary_third_party:access_arrangements',
                     help: '@dmpt-ethics:data:secondary_third_party:access_arrangements:help',
@@ -2566,7 +2656,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_data_secondary_third_party_other',
+                      field: 'ethics_data_secondary_third_party',
+                      fieldValue : 'yes'
+                    },
                     name: 'ethics_data_secondary_third_party_other',
                     label: '@dmpt-ethics:data:secondary_third_party:other',
                     help: '@dmpt-ethics:data:secondary_third_party:other:help',
