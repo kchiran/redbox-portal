@@ -1015,7 +1015,13 @@ module.exports = {
                   variableSubstitutionFields: ['valueCheck'],
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable',
+                      field: 'human_participant_data',
+                      fieldValue : 'human_participant_data'
+                    },
                     valueCheck: '@user_edupersonscopedaffiliation',
                     name: 'ethics_identifiable',
                     checkedWhen: 'student@uts.edu.au',
@@ -1049,7 +1055,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_human_participant_data_severity_risk',
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
+                    },
                     name: 'ethics_human_participant_data_severity_risk',
                     label: '@dmpt-ethics:human_participant_data:severity_risk',
                     help: '@ethics:human-participant-data:severity_risk:help',
@@ -1074,7 +1086,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_human_participant_data_severity_risk',
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
+                    },
                     name: 'ethics_identifiable_other_countries',
                     label: '@dmpt-ethics:identifiable:other_countries',
                     help: '@dmpt-ethics:identifiable:other_countries:help',
@@ -1329,7 +1347,13 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_collection',
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
+                    },
                     name: 'ethics_identifiable_collection',
                     label: '@dmpt-ethics:identifiable:collection',
                     help: '@dmpt-ethics:identifiable:informed_consent:collection:help',
@@ -1381,7 +1405,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_collection_other',
+                      field: 'ethics_identifiable_collection',
+                      fieldValue : 'others'
+                    },
                     name: 'ethics_identifiable_collection_other',
                     label: 'Plese specify other means of collection',
                     type: 'text',
@@ -1405,7 +1435,13 @@ module.exports = {
                   compClass: 'SelectionFieldComponent',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_storage',
+                      field: 'human_participant_data_identifiable',
+                      fieldValue : 'human_participant_data_identifiable'
+                    },
                     name: 'ethics_identifiable_storage',
                     label: '@dmpt-ethics:identifiable:storage',
                     help: '@dmpt-ethics:identifiable:storage:help',
@@ -1452,7 +1488,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_identifiable_storage_other',
+                      field: 'ethics_identifiable_storage',
+                      fieldValue : 'other'
+                    },
                     name: 'ethics_identifiable_storage_other',
                     label: 'Plese specify other means of storage',
                     type: 'text',

@@ -222,7 +222,7 @@ export class DropdownFieldComponent extends SelectionComponent {
       <legend [hidden]="true"><span></span></legend>
         <span *ngFor="let opt of field.selectOptions">
           <!-- radio type hard-coded otherwise accessor directive will not work! -->
-          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null " (change)="onChange(opt, $event)" [attr.selected]="getControlFromOption(opt)" [attr.checked]="getControlFromOption(opt)">
+          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null " (change)="onChange(opt, $event)">
           <input *ngIf="!isRadio()" type="{{field.controlType}}" name="{{field.name}}" [id]="field.name + '_' + opt.value" [value]="opt.value" (change)="onChange(opt, $event)" [attr.selected]="getControlFromOption(opt)" [attr.checked]="getControlFromOption(opt)" [attr.disabled]="field.readOnly ? '' : null ">
           <label for="{{field.name + '_' + opt.value}}" class="radio-label">{{ opt.label }}</label>
           <br/>
@@ -268,22 +268,20 @@ export class SelectionFieldComponent extends SelectionComponent {
   }
 
   onChange(opt:any, event:any) {
-    console.log('onChange, SelectionFieldComponent');
-    console.log(opt);
     let formcontrol:any = this.getFormControl();
-    if(formcontrol && formcontrol.length > 0){
-      if (event.target.checked) {
+    if (event.target.checked) {
+      if(_.isObject(formcontrol.push)) {
         formcontrol.push(new FormControl(opt.value));
-      } else {
-        let idx = null;
-        _.forEach(formcontrol.controls, (ctrl, i) => {
-          if (ctrl.value == opt.value) {
-            idx = i;
-            return false;
-          }
-        });
-        formcontrol.removeAt(idx);
-      }
+      } // else is a radio button and already has the value... Not sure if anything else is required.
+    } else {
+      let idx = null;
+      _.forEach(formcontrol.controls, (ctrl, i) => {
+        if (ctrl.value == opt.value) {
+          idx = i;
+          return false;
+        }
+      });
+      formcontrol.removeAt(idx);
     }
     if(this.field.publish) {
       // Some perf
