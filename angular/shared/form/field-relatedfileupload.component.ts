@@ -108,6 +108,9 @@ export class RelatedFileUploadField extends FieldBase<any> {
     this.setValue(this.value);
   }
 
+  updateNote(opt:any, event:any) {
+    this.fieldMap._rootComp.needsSave = true;
+  }
 
 
 }

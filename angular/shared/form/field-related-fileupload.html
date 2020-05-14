@@ -31,7 +31,7 @@
               </ng-container>
             </td>
             <td *ngIf="field.notesEnabled">
-              <input *ngIf="field.editMode" type='text' [ngClass]="form-control" [(ngModel)]="dataLocation.notes" [attr.aria-label]="field.notesHeader"/>
+              <input *ngIf="field.editMode" type='text' [ngClass]="form-control" [(ngModel)]="dataLocation.notes" [attr.aria-label]="field.notesHeader" (change)="field.updateNote(opt, $event)"/>
               <span *ngIf="!field.editMode">{{ dataLocation.notes }}</span>
             </td>
             <td *ngIf="field.editMode">
