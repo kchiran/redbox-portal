@@ -936,7 +936,8 @@ module.exports = {
                       {
                         value: "indigenous_cultural_intelectual_property",
                         label: "@dmpt-ethics:describe:indigenous_cultural_intelectual_property",
-                        publishTag: "indigenous_cultural_intelectual_property"
+                        publishTag: "indigenous_cultural_intelectual_property",
+                        modifies: ['ethics_indigenous_data_ownership','ethics_indigenous_data_access']
                       },
                       {
                         value: "other_sensitive",
@@ -2307,7 +2308,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                   visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_indigenous_data_ownership',
+                      field: 'indigenous_cultural_intelectual_property',
+                      fieldValue : 'indigenous_cultural_intelectual_property'
+                    },
                     name: 'ethics_indigenous_data_ownership',
                     label: '@dmpt-ethics:data:indigenous:data_ownership',
                     help: '@dmpt-ethics:data:indigenous:data_ownership:help',
@@ -2318,6 +2325,7 @@ module.exports = {
                           debug: 'onValueUpdate:ethics_indigenous_data_ownership:subscribedto:indigenous_cultural_intelectual_property',
                           action: 'setProp',
                           valueTest: ['indigenous_cultural_intelectual_property'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},
@@ -2331,7 +2339,13 @@ module.exports = {
                   class: 'TextField',
                   definition: {
                     visible: false,
-                    visibilityCriteria: true,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_indigenous_data_access',
+                      field: 'indigenous_cultural_intelectual_property',
+                      fieldValue : 'indigenous_cultural_intelectual_property'
+                    },
                     name: 'ethics_indigenous_data_access',
                     label: '@dmpt-ethics:data:indigenous:data_access',
                     help: '@dmpt-ethics:data:indigenous:data_access:help',
@@ -2342,6 +2356,7 @@ module.exports = {
                           debug: 'onValueUpdate:ethics_indigenous_data_access:subscribedto:indigenous_cultural_intelectual_property',
                           action: 'setProp',
                           valueTest: ['indigenous_cultural_intelectual_property'],
+                          valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true},

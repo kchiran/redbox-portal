@@ -247,10 +247,31 @@ export class DropdownFieldComponent extends SelectionComponent {
     </ng-container>
 
   </div>
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="selectionComponent" aria-hidden="true" id="selection-component">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirm Changes</h4>
+          <p>The next values will be cleared</p>
+          <p *ngFor="let f of defer.fields">
+            <strong>{{f.field.label}}</strong><br/>
+            {{f.control.value}}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" (click)="confirmChange(true)">Yes</button>
+          <button type="button" class="btn btn-primary" (click)="confirmChange(false)">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
   `,
 })
 export class SelectionFieldComponent extends SelectionComponent {
   static clName = 'SelectionFieldComponent';
+  defer: any = {};
+  defered: boolean = false;
+  confirmChanges: boolean = true;
 
   isValArray() {
     return _.isArray(this.field.value);
@@ -267,13 +288,29 @@ export class SelectionFieldComponent extends SelectionComponent {
     return control;
   }
 
-  onChange(opt:any, event:any) {
+  onChange(opt:any, event:any, defered) {
+    defered = defered || !_.isUndefined(defered);
     let formcontrol:any = this.getFormControl();
     if (event.target.checked) {
       if(_.isObject(formcontrol.push)) {
         formcontrol.push(new FormControl(opt.value));
       } // else is a radio button and already has the value... Not sure if anything else is required.
     } else {
+      if(opt['modifies'] && !defered) {
+        const fieldName = this.field['name'];
+        let fields = this.fieldMap;
+        this.defer['fields'] = [];
+        opt['modifies'].some(e => {
+        if(!_.isEmpty(fields[e].control.value)) {
+          jQuery("#selection-component").modal({backdrop: 'static', keyboard: false, show: true});
+          this.defer['opt'] = opt;
+          this.defer['event'] = event;
+          this.defer['fields'].push(fields[e]);
+          this.confirmChanges = false;
+        }
+      });
+    }
+    if(!defered) {
       let idx = null;
       _.forEach(formcontrol.controls, (ctrl, i) => {
         if (ctrl.value == opt.value) {
@@ -283,8 +320,8 @@ export class SelectionFieldComponent extends SelectionComponent {
       });
       formcontrol.removeAt(idx);
     }
-    if(this.field.publish) {
-      // Some perf
+  }
+  if(this.field.publish && this.confirmChanges) {
       if(this.field.publish.onItemSelect) {
         this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
       }
@@ -292,6 +329,15 @@ export class SelectionFieldComponent extends SelectionComponent {
         this.field.onValueUpdate.emit({value: opt['publishTag'], checked: event.target.checked});
       }
     }
+  }
+
+  confirmChange(doConfirm) {
+    jQuery("#selection-component").modal('hide');
+    this.confirmChanges = doConfirm;
+    const defer = this.defer;
+    this.defer = {};
+    defer.event.target.checked = !doConfirm;
+    this.onChange(defer.opt, defer.event, true);
   }
 }
 

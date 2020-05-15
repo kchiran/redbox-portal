@@ -481,10 +481,6 @@ export class FieldBase<T> {
   }
 
   setProp(change: any, config: any) {
-
-    if(config['debug'] === "onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe") {
-      console.log(`setProps: ${config['debug']}`);
-    }
     let value;
     let checked;
     if (_.isObject(change)) {
@@ -527,9 +523,6 @@ export class FieldBase<T> {
   }
 
   setPropValue(prop, checked, debug) {
-    if(debug === "onItemSelect:indigenous_cultural_intelectual_property:subscribedto:ethics_describe") {
-      console.log(`config: ${debug}`);
-    }
     if (prop.key === 'required') {
       if(checked) {
         this.setRequired(prop.val);

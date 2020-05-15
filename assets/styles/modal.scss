@@ -1,0 +1,18 @@
+//Center Modal on screen (for bootstrap 3; remove with bootstrap v4)
+.modal {
+    height: 100%;
+
+    .modal-dialog {
+        top: 50% !important;
+        margin-top:0;
+        margin-bottom:0;
+    }
+
+    //keep proper transitions on fade in
+    &.fade .modal-dialog {
+        transform: translateY(-100%) !important;
+    }
+    &.in .modal-dialog {
+        transform: translateY(-50%) !important;
+    }
+}
