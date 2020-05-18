@@ -555,12 +555,15 @@ export class FieldBase<T> {
   }
 
   updateVisibility(visible, config) {
+    if(config['debug']){
+      console.log(config['debug']);
+    }
     const fieldName = config['field'];
     const fieldValue = config['fieldValue'];
     let field;
     if(this.fieldMap && this.fieldMap[fieldName]) {
       field = this.fieldMap[fieldName]['field'];
-      if(field && field['value'] === fieldValue) {
+      if(field && _.includes(field['value'], fieldValue)) {
         console.log(`updateVisibility to true: ${config['debug']}`);
         return true;
       } else {

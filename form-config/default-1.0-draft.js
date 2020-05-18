@@ -1378,7 +1378,8 @@ module.exports = {
                       {
                         value: "others",
                         label: "Others",
-                        publishTag: 'ethics_identifiable_collection_others'
+                        publishTag: 'ethics_identifiable_collection_others',
+                        modifies: ['ethics_identifiable_collection_other']
                       }
                     ],
                     publish: {
@@ -1422,6 +1423,7 @@ module.exports = {
                           debug: 'onItemSelect:ethics_identifiable_informed_consent_no_collection_other:subscribedto:ethics_identifiable_collection_others',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_collection_others'],
+                          valueFalse: ['eresearch_store', 'onedrive', 'redcap', 'qualtrics'],
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -1462,7 +1464,8 @@ module.exports = {
                       {
                         value: "other",
                         label: "Other",
-                        publishTag: 'ethics_identifiable_storage_other'
+                        publishTag: 'ethics_identifiable_storage_other',
+                        modifies: ['ethics_identifiable_storage_other']
                       }
                     ],
                     publish: {
@@ -1505,6 +1508,7 @@ module.exports = {
                           debug: 'ethics_identifiable_storage_other',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_storage_other'],
+                          valueFalse: ['eresearch_store', 'onedrive', 'redcap'],
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}

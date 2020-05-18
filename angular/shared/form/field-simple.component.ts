@@ -247,7 +247,7 @@ export class DropdownFieldComponent extends SelectionComponent {
     </ng-container>
 
   </div>
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="selectionComponent" aria-hidden="true" id="selection-component">
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="selectionComponent" aria-hidden="true" id="{{ 'modal_' + field.name }}">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -302,7 +302,7 @@ export class SelectionFieldComponent extends SelectionComponent {
         this.defer['fields'] = [];
         opt['modifies'].some(e => {
         if(!_.isEmpty(fields[e].control.value)) {
-          jQuery("#selection-component").modal({backdrop: 'static', keyboard: false, show: true});
+          jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
           this.defer['opt'] = opt;
           this.defer['event'] = event;
           this.defer['fields'].push(fields[e]);
@@ -332,7 +332,8 @@ export class SelectionFieldComponent extends SelectionComponent {
   }
 
   confirmChange(doConfirm) {
-    jQuery("#selection-component").modal('hide');
+    const fieldName = this.field['name'];
+    jQuery(`#modal_${fieldName}`).modal('hide');
     this.confirmChanges = doConfirm;
     const defer = this.defer;
     this.defer = {};
