@@ -70,6 +70,7 @@ export class FieldBase<T> {
   requiredIfHasValue: any[];
   selectFor: string;
   defaultSelect: string;
+  hasValueLabel: string;
 
   @Output() public onValueUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() public onValueLoaded: EventEmitter<any> = new EventEmitter<any>();
@@ -130,6 +131,7 @@ export class FieldBase<T> {
     this.visible = _.isUndefined(options['visible']) ? true : options['visible'];
     this.visibilityCriteria = options['visibilityCriteria'];
     this.requiredIfHasValue = options['requiredIfHasValue'] || [];
+    this.hasValueLabel = options['hasValueLabel'] || 'Multiple Values';
 
     if (this.groupName) {
       this.hasGroup = true;
@@ -523,6 +525,9 @@ export class FieldBase<T> {
   }
 
   setPropValue(prop, checked, debug) {
+    if(debug) {
+      console.log(debug);
+    }
     if (prop.key === 'required') {
       if(checked) {
         this.setRequired(prop.val);
@@ -534,7 +539,13 @@ export class FieldBase<T> {
         if(this.formModel) {
           this.setValue('');
         } else {
-          this.value = null;
+          if(Array.isArray(this.value)) {
+            // Since there is no formArray.clear(); in this version of angular:
+            this.getControl().controls = [];
+            this.getControl().setValue([]);
+          } else {
+            this.value = null;
+          }
         }
       } else if(checked){
         if(this.formModel) {
@@ -571,6 +582,22 @@ export class FieldBase<T> {
       }
     } else {
       return false;
+    }
+  }
+
+  getFieldDisplay(f) {
+    let valueLabel = f.control.value;
+    const options = f.field.options.options;
+    if(options) {
+      if(Array.isArray(valueLabel)){
+        valueLabel = this.hasValueLabel;
+      }else {
+        valueLabel = options.find(o=>f.control.value===o.value).label;
+      }
+    }
+    return {
+      valueLabel: valueLabel === true ? '' : valueLabel,
+      label: f.field.label
     }
   }
 }

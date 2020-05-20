@@ -254,8 +254,8 @@ export class DropdownFieldComponent extends SelectionComponent {
           <h4 class="modal-title">Confirm Changes</h4>
           <p>The next values will be cleared</p>
           <p *ngFor="let f of defer.fields">
-            <strong>{{f.field.label}}</strong><br/>
-            {{f.control.value}}
+            <strong>{{f.label}}</strong><br/>
+            {{f.valueLabel}}
           </p>
         </div>
         <div class="modal-footer">
@@ -296,16 +296,18 @@ export class SelectionFieldComponent extends SelectionComponent {
         formcontrol.push(new FormControl(opt.value));
       } // else is a radio button and already has the value... Not sure if anything else is required.
     } else {
-      if(opt['modifies'] && !defered) {
-        const fieldName = this.field['name'];
-        let fields = this.fieldMap;
-        this.defer['fields'] = [];
-        opt['modifies'].some(e => {
-        if(!_.isEmpty(fields[e].control.value)) {
+    if(opt['modifies'] && !defered) {
+      const fieldName = this.field['name'];
+      let fields = this.fieldMap;
+      this.defer['fields'] = new Array();
+      opt['modifies'].some(e => {
+        const contval = this.fieldMap[e].control.value;
+        //this.fieldMap[e].control.getRawValue();
+        if(!_.isEmpty(contval) || contval) {
           jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
           this.defer['opt'] = opt;
           this.defer['event'] = event;
-          this.defer['fields'].push(fields[e]);
+          this.defer['fields'].push(this.field.getFieldDisplay(this.fieldMap[e]));
           this.confirmChanges = false;
         }
       });
@@ -821,17 +823,64 @@ export class SpacerComponent extends SimpleComponent {
       <label for="{{ field.name }}" class="radio-label">{{ field.label }} <button *ngIf="field.editMode && field.help" type="button" class="btn btn-default" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button></label>
       <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
     </div>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="toggleComponent" aria-hidden="true" id="{{ 'modal_' + field.name }}">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Confirm Changes</h4>
+            <p>The next values will be cleared</p>
+            <p *ngFor="let f of defer.fields">
+              <strong>{{f.label}}</strong><br/>
+              {{f.valueLabel}}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" (click)="confirmChange(true)">Yes</button>
+            <button type="button" class="btn btn-primary" (click)="confirmChange(false)">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
   `
 })
 export class ToggleComponent extends SimpleComponent {
   field: Toggle;
+  defer: any = {};
+  confirmChanges: boolean = true;
 
-  onChange(opt:any, event:any) {
+  onChange(opt:any, event:any, defered) {
+    defered = defered || !_.isUndefined(defered);
     console.log(`ToggleComponent, onChanged Checked: ${event.target.checked}`);
-    if(this.field.publish) {
+    if(opt['modifies'] && !defered) {
+      const fieldName = this.field['name'];
+      let fields = this.fieldMap;
+      this.defer['fields'] = new Array();
+      opt['modifies'].some(e => {
+        const contval = this.fieldMap[e].control.value;
+        //this.fieldMap[e].control.getRawValue();
+        if(!_.isEmpty(contval) || contval) {
+          jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
+          this.defer['opt'] = opt;
+          this.defer['event'] = event;
+          this.defer['fields'].push(this.field.getFieldDisplay(this.fieldMap[e]));
+          this.confirmChanges = false;
+        }
+      });
+    }
+    if(this.field.publish && this.confirmChanges) {
       setTimeout(() => {
         this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
       });
     }
+  }
+
+  confirmChange(doConfirm) {
+    const fieldName = this.field['name'];
+    jQuery(`#modal_${fieldName}`).modal('hide');
+    this.confirmChanges = doConfirm;
+    const defer = this.defer;
+    this.defer = {};
+    defer.event.target.checked = !doConfirm;
+    this.onChange(defer.opt, defer.event, true);
   }
 }

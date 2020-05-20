@@ -897,7 +897,8 @@ module.exports = {
                     options: [{
                         value: "human_participant_data",
                         label: "@dmpt-ethics:describe:human_participant_data",
-                        publishTag: "human_participant_data"
+                        publishTag: "human_participant_data",
+                        modifies: ['ethics_human_participant_data_individual', 'ethics_identifiable']
                       },{
                         value: "animal_use",
                         label: "@dmpt-ethics:describe:animal_use",
@@ -1030,6 +1031,16 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:help',
                     controlType: 'checkbox',
                     publishTag: 'ethics_identifiable',
+                    modifies: [
+                      'ethics_human_participant_data_severity_risk',
+                      'ethics_identifiable_other_countries',
+                      'ethics_identifiable_data',
+                      'ethics_identifiable_collection',
+                      'ethics_identifiable_storage',
+                      'ethics_identifiable_informed_consent_publish',
+                      'ethics_identifiable_transfered_out',
+                      'ethics_identifiable_deidentify'
+                    ],
                     publish: {
                       onItemSelect: {
                         modelEventSource: 'valueChanges'
@@ -1075,7 +1086,7 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
                         }]
@@ -1106,7 +1117,7 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
                         }]
@@ -1335,8 +1346,8 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: '', clear: true},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1395,8 +1406,8 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false},
+                            {key: 'value', val: '', clear: true},
+                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1479,8 +1490,9 @@ module.exports = {
                           debug: 'ethics_identifiable_informed_consent_no_collection',
                           action: 'setProp',
                           valueTest: ['human_participant_data_identifiable'],
+                          valueFalse: '',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
                         }]
@@ -1558,7 +1570,7 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
                           ]
                         }]
@@ -1653,7 +1665,7 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
                         }]
@@ -1731,7 +1743,7 @@ module.exports = {
                           valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
                         }]
