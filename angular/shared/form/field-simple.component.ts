@@ -303,7 +303,7 @@ export class SelectionFieldComponent extends SelectionComponent {
       opt['modifies'].some(e => {
         const contval = this.fieldMap[e].control.value;
         //this.fieldMap[e].control.getRawValue();
-        if(!_.isEmpty(contval) || contval) {
+        if(!_.isEmpty(contval) || contval === true) {
           jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
           this.defer['opt'] = opt;
           this.defer['event'] = event;
@@ -858,7 +858,7 @@ export class ToggleComponent extends SimpleComponent {
       opt['modifies'].some(e => {
         const contval = this.fieldMap[e].control.value;
         //this.fieldMap[e].control.getRawValue();
-        if(!_.isEmpty(contval) || contval) {
+        if(!_.isEmpty(contval) || contval === true) {
           jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
           this.defer['opt'] = opt;
           this.defer['event'] = event;
