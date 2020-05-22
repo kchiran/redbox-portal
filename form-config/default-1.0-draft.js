@@ -806,7 +806,7 @@ module.exports = {
           {
             class: "Container",
             definition: {
-              id: "new-ethics",
+              id: "ethics",
               label: "@dmpt-ethics-tab",
               fields: [{
                   class: 'Container',
@@ -1421,12 +1421,12 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_collection_other',
+                      debug: 'ethics_identifiable_collection_other_text',
                       field: 'ethics_identifiable_collection',
                       fieldValue : 'others'
                     },
-                    name: 'ethics_identifiable_collection_other',
-                    label: 'Plese specify other means of collection',
+                    name: 'ethics_identifiable_collection_other_text',
+                    label: 'Please specify other means of collection',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_collection': {
@@ -1507,12 +1507,12 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_storage_other',
+                      debug: 'ethics_identifiable_storage_other_text',
                       field: 'ethics_identifiable_storage',
                       fieldValue : 'other'
                     },
-                    name: 'ethics_identifiable_storage_other',
-                    label: 'Plese specify other means of storage',
+                    name: 'ethics_identifiable_storage_other_text',
+                    label: 'Please specify other means of storage',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_storage': {
@@ -1595,17 +1595,17 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:additional_security:help',
                     controlType: 'radio',
                     options: [{
-                        value: "physical lock",
-                        label: "physical lock",
+                        value: "physical_lock",
+                        label: "Physical Lock",
                         publishTag: 'ethics_identifiable_additional_security'
                       },
                       {
                         value: "encryption",
-                        label: "encryption"
+                        label: "Encryption"
                       },
                       {
-                        value: "additional password (other than authentication)",
-                        label: "additional password (other than authentication)"
+                        value: "additional_password",
+                        label: "Additional Password (other than authentication)"
                       }
                     ],
                     subscribe: {
@@ -1680,11 +1680,11 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_transfered_out_yes',
+                      debug: 'ethics_identifiable_transfered_out_yes_text',
                       field: 'ethics_identifiable_transfered_out',
                       fieldValue : 'yes'
                     },
-                    name: 'ethics_identifiable_transfered_out_yes',
+                    name: 'ethics_identifiable_transfered_out_yes_text',
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
                     subscribe: {
@@ -1758,17 +1758,17 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_deidentify_no',
+                      debug: 'ethics_identifiable_deidentify_no_text',
                       field: 'ethics_identifiable_deidentify',
                       fieldValue : 'yes'
                     },
-                    name: 'ethics_identifiable_deidentify_no',
+                    name: 'ethics_identifiable_deidentify_no_text',
                     label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_deidentify': {
                         onItemSelect: [{
-                          debug: 'ethics_identifiable_deidentify_no',
+                          debug: 'ethics_identifiable_deidentify_no_text',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_deidentify_no'],
                           valueFalse: 'no',
@@ -2428,24 +2428,24 @@ module.exports = {
                     help: '@dmpt-ethics:data:secondary_third_party:held:help',
                     controlType: 'checkbox',
                     options: [{
-                        value: "Privately held data source",
-                        label: "Privately held data source"
+                        value: "privately_held",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:privately"
                       },
                       {
-                        value: "Data that is publicly available (e.g. - web scraping, social media, museums and archives etc)",
-                        label: "Data that is publicly available (e.g. - web scraping, social media, museums and archives etc)"
+                        value: "publicly_available",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_available"
                       },
                       {
-                        value: "Publicly held data source (Commonwealth e.g. - ABS) ",
-                        label: "Publicly held data source (Commonwealth e.g. - ABS) "
+                        value: "publicly_held_commonwealth",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_held_commonwealth"
                       },
                       {
-                        value: "Publicly held data source (State e.g. - NSW Ministry of Health) ",
-                        label: "Publicly held data source (State e.g. - NSW Ministry of Health) "
+                        value: "publicly_held_state",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_held_state"
                       },
                       {
-                        value: "Publicly held data source (International e.g. - NIH, NASA, NOAA)",
-                        label: "Publicly held data source (International e.g. - NIH, NASA, NOAA)"
+                        value: "publicly_held_international",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_held_international"
                       }
                     ],
                     subscribe:{
