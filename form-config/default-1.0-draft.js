@@ -1760,7 +1760,7 @@ module.exports = {
                       action: 'updateVisibility',
                       debug: 'ethics_identifiable_deidentify_no_text',
                       field: 'ethics_identifiable_deidentify',
-                      fieldValue : 'yes'
+                      fieldValue : 'no'
                     },
                     name: 'ethics_identifiable_deidentify_no_text',
                     label: '@dmpt-ethics:identifiable:deidentify_no',
@@ -1771,7 +1771,7 @@ module.exports = {
                           debug: 'ethics_identifiable_deidentify_no_text',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_deidentify_no'],
-                          valueFalse: 'no',
+                          valueFalse: 'yes',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
