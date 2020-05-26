@@ -965,7 +965,7 @@ module.exports = {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
-                    required: true,
+                    required: false,
                     visible: false,
                     visibilityCriteria: {
                       type: 'function',
@@ -2265,7 +2265,6 @@ module.exports = {
                     name: 'dc:accessRights',
                     label: '@dmpt-dc:accessRights',
                     help: '@dmpt-dc:accessRights-help',
-                    defaultValue: 'null',
                     controlType: 'radio',
                     options: [{
                         value: "@dmpt-dc:accessRights-manager",
