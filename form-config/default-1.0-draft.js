@@ -2021,7 +2021,6 @@ module.exports = {
                     required: true,
                     name: 'ethics_data_destroy_after_retention',
                     label: '@dmpt-ethics:data:destroy_after_retention',
-                    help: '@dmpt-ethics:identifiable:destroy_after_retention:help',
                     //defaultValue: 'yes',
                     controlType: 'radio',
                     options: [{
@@ -2617,7 +2616,6 @@ module.exports = {
                     },
                     name: 'ethics_data_secondary_third_party_security',
                     label: '@dmpt-ethics:data:secondary_third_party:security',
-                    help: '@dmpt-ethics:data:secondary_third_party:security:help',
                     type: 'text',
                     subscribe: {
                       'ethics_data_secondary_third_party': {
@@ -2648,7 +2646,6 @@ module.exports = {
                     },
                     name: 'ethics_data_secondary_third_party_disposal',
                     label: '@dmpt-ethics:data:secondary_third_party:disposal',
-                    help: '@dmpt-ethics:data:secondary_third_party:disposal:help',
                     type: 'text',
                     subscribe: {
                       'ethics_data_secondary_third_party': {
@@ -2679,7 +2676,6 @@ module.exports = {
                     },
                     name: 'ethics_data_secondary_third_party_attribution',
                     label: '@dmpt-ethics:data:secondary_third_party:attribution',
-                    help: '@dmpt-ethics:data:secondary_third_party:attribution:help',
                     type: 'text',
                     subscribe: {
                       'ethics_data_secondary_third_party': {
@@ -2710,7 +2706,6 @@ module.exports = {
                     },
                     name: 'ethics_data_secondary_third_party_access_arrangements',
                     label: '@dmpt-ethics:data:secondary_third_party:access_arrangements',
-                    help: '@dmpt-ethics:data:secondary_third_party:access_arrangements:help',
                     type: 'text',
                     subscribe: {
                       'ethics_data_secondary_third_party': {
@@ -2741,7 +2736,6 @@ module.exports = {
                     },
                     name: 'ethics_data_secondary_third_party_other',
                     label: '@dmpt-ethics:data:secondary_third_party:other',
-                    help: '@dmpt-ethics:data:secondary_third_party:other:help',
                     type: 'text',
                     subscribe: {
                       'ethics_data_secondary_third_party': {
