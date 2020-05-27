@@ -497,7 +497,7 @@ export class FieldBase<T> {
       _.each(config['valueCase'], (cases) => {
         if(cases['val'] === value) {
           value = cases['set'];
-          caseSet = true;
+          caseSet = checked;
           return false;
         }
       });

@@ -859,11 +859,10 @@ module.exports = {
                           debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueCase: [
-                            {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'ethics_approval_required', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
                             {val: 'commercially_sensitive_data', set: '@dmpt-ethics:iscs:confidential'},
                             {val: 'clinical_trials', set: '@dmpt-ethics:iscs:confidential'},
                             {val: 'policed_data', set: '@dmpt-ethics:iscs:confidential'},
@@ -922,7 +921,7 @@ module.exports = {
                       {
                         value: "clinical_trials",
                         label: "@dmpt-ethics:describe:clinical_trials",
-                        publishTag: "ethics_approval_required",
+                        publishTag: "clinical_trials",
                       },
                       {
                         value: "commercially_sensitive_data",
@@ -994,6 +993,11 @@ module.exports = {
                         publishTag: "health"
                       }
                     ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
                     subscribe: {
                       'human_participant_data': {
                         onValueUpdate: [{
@@ -1156,7 +1160,7 @@ module.exports = {
                           debug: 'ethics_approval:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueTest: [
-                            'human_participant_data', 'ethics_approval_required'
+                            'human_participant_data', 'ethics_approval_required', 'clinical_trials'
                           ],
                           props: [
                             {key: 'value', val: 'yes'}
