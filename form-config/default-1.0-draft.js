@@ -859,7 +859,7 @@ module.exports = {
                           debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueCase: [
-                            // {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
+                            {val: 'human_participant_data', set: '@dmpt-ethics:iscs:confidential'},
                             // {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
                             // {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
                             // {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
