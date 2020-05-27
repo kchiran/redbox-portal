@@ -806,7 +806,7 @@ module.exports = {
           {
             class: "Container",
             definition: {
-              id: "new-ethics",
+              id: "ethics",
               label: "@dmpt-ethics-tab",
               fields: [{
                   class: 'Container',
@@ -859,11 +859,10 @@ module.exports = {
                           debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueCase: [
-                            {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'ethics_approval_required', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'human_participant_data', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
+                            // {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
                             {val: 'commercially_sensitive_data', set: '@dmpt-ethics:iscs:confidential'},
                             {val: 'clinical_trials', set: '@dmpt-ethics:iscs:confidential'},
                             {val: 'policed_data', set: '@dmpt-ethics:iscs:confidential'},
@@ -922,7 +921,7 @@ module.exports = {
                       {
                         value: "clinical_trials",
                         label: "@dmpt-ethics:describe:clinical_trials",
-                        publishTag: "ethics_approval_required",
+                        publishTag: "clinical_trials",
                       },
                       {
                         value: "commercially_sensitive_data",
@@ -965,7 +964,7 @@ module.exports = {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
-                    required: true,
+                    required: false,
                     visible: false,
                     visibilityCriteria: {
                       type: 'function',
@@ -994,6 +993,11 @@ module.exports = {
                         publishTag: "health"
                       }
                     ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
                     subscribe: {
                       'human_participant_data': {
                         onValueUpdate: [{
@@ -1156,7 +1160,7 @@ module.exports = {
                           debug: 'ethics_approval:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueTest: [
-                            'human_participant_data', 'ethics_approval_required'
+                            'human_participant_data', 'ethics_approval_required', 'clinical_trials'
                           ],
                           props: [
                             {key: 'value', val: 'yes'}
@@ -1421,12 +1425,12 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_collection_other',
+                      debug: 'ethics_identifiable_collection_other_text',
                       field: 'ethics_identifiable_collection',
                       fieldValue : 'others'
                     },
-                    name: 'ethics_identifiable_collection_other',
-                    label: 'Plese specify other means of collection',
+                    name: 'ethics_identifiable_collection_other_text',
+                    label: 'Please specify other means of collection',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_collection': {
@@ -1507,12 +1511,12 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_storage_other',
+                      debug: 'ethics_identifiable_storage_other_text',
                       field: 'ethics_identifiable_storage',
                       fieldValue : 'other'
                     },
-                    name: 'ethics_identifiable_storage_other',
-                    label: 'Plese specify other means of storage',
+                    name: 'ethics_identifiable_storage_other_text',
+                    label: 'Please specify other means of storage',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_storage': {
@@ -1595,17 +1599,17 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:additional_security:help',
                     controlType: 'radio',
                     options: [{
-                        value: "physical lock",
-                        label: "physical lock",
+                        value: "physical_lock",
+                        label: "Physical Lock",
                         publishTag: 'ethics_identifiable_additional_security'
                       },
                       {
                         value: "encryption",
-                        label: "encryption"
+                        label: "Encryption"
                       },
                       {
-                        value: "additional password (other than authentication)",
-                        label: "additional password (other than authentication)"
+                        value: "additional_password",
+                        label: "Additional Password (other than authentication)"
                       }
                     ],
                     subscribe: {
@@ -1680,11 +1684,11 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_transfered_out_yes',
+                      debug: 'ethics_identifiable_transfered_out_yes_text',
                       field: 'ethics_identifiable_transfered_out',
                       fieldValue : 'yes'
                     },
-                    name: 'ethics_identifiable_transfered_out_yes',
+                    name: 'ethics_identifiable_transfered_out_yes_text',
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
                     subscribe: {
@@ -1758,20 +1762,20 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_identifiable_deidentify_no',
+                      debug: 'ethics_identifiable_deidentify_no_text',
                       field: 'ethics_identifiable_deidentify',
-                      fieldValue : 'yes'
+                      fieldValue : 'no'
                     },
-                    name: 'ethics_identifiable_deidentify_no',
+                    name: 'ethics_identifiable_deidentify_no_text',
                     label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_deidentify': {
                         onItemSelect: [{
-                          debug: 'ethics_identifiable_deidentify_no',
+                          debug: 'ethics_identifiable_deidentify_no_text',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_deidentify_no'],
-                          valueFalse: 'no',
+                          valueFalse: 'yes',
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
@@ -2265,7 +2269,6 @@ module.exports = {
                     name: 'dc:accessRights',
                     label: '@dmpt-dc:accessRights',
                     help: '@dmpt-dc:accessRights-help',
-                    defaultValue: 'null',
                     controlType: 'radio',
                     options: [{
                         value: "@dmpt-dc:accessRights-manager",
@@ -2428,24 +2431,24 @@ module.exports = {
                     help: '@dmpt-ethics:data:secondary_third_party:held:help',
                     controlType: 'checkbox',
                     options: [{
-                        value: "Privately held data source",
-                        label: "Privately held data source"
+                        value: "privately_held",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:privately"
                       },
                       {
-                        value: "Data that is publicly available (e.g. - web scraping, social media, museums and archives etc)",
-                        label: "Data that is publicly available (e.g. - web scraping, social media, museums and archives etc)"
+                        value: "publicly_available",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_available"
                       },
                       {
-                        value: "Publicly held data source (Commonwealth e.g. - ABS) ",
-                        label: "Publicly held data source (Commonwealth e.g. - ABS) "
+                        value: "publicly_held_commonwealth",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_held_commonwealth"
                       },
                       {
-                        value: "Publicly held data source (State e.g. - NSW Ministry of Health) ",
-                        label: "Publicly held data source (State e.g. - NSW Ministry of Health) "
+                        value: "publicly_held_state",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_held_state"
                       },
                       {
-                        value: "Publicly held data source (International e.g. - NIH, NASA, NOAA)",
-                        label: "Publicly held data source (International e.g. - NIH, NASA, NOAA)"
+                        value: "publicly_held_international",
+                        label: "@dmpt-ethics:data:secondary_third_party:held:publicly_held_international"
                       }
                     ],
                     subscribe:{
