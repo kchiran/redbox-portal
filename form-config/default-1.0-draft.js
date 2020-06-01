@@ -897,7 +897,10 @@ module.exports = {
                         value: "human_participant_data",
                         label: "@dmpt-ethics:describe:human_participant_data",
                         publishTag: "human_participant_data",
-                        modifies: ['ethics_human_participant_data_individual', 'ethics_identifiable']
+                        modifies: [
+                          'ethics_human_participant_data_individual',
+                          'ethics_identifiable'
+                        ]
                       },{
                         value: "animal_use",
                         label: "@dmpt-ethics:describe:animal_use",
@@ -937,7 +940,10 @@ module.exports = {
                         value: "indigenous_cultural_intelectual_property",
                         label: "@dmpt-ethics:describe:indigenous_cultural_intelectual_property",
                         publishTag: "indigenous_cultural_intelectual_property",
-                        modifies: ['ethics_indigenous_data_ownership','ethics_indigenous_data_access']
+                        modifies: [
+                          'ethics_indigenous_data_ownership',
+                          'ethics_indigenous_data_access'
+                        ]
                       },
                       {
                         value: "other_sensitive",

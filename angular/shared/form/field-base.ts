@@ -483,14 +483,19 @@ export class FieldBase<T> {
   }
 
   setProp(change: any, config: any) {
+    let defered = false;
     let value;
     let checked;
     if (_.isObject(change)) {
       value = change.value;
+      defered = _.isUndefined(change.defered) ? false : change.defered;
       checked = _.isUndefined(change.checked) ? false : change.checked;
     } else {
       value = change;
       checked = true;
+    }
+    if(config['defer'] && !defered) {
+      return;
     }
     if(config['valueCase']) {
       let caseSet;

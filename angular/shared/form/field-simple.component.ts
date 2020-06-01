@@ -222,7 +222,7 @@ export class DropdownFieldComponent extends SelectionComponent {
       <legend [hidden]="true"><span></span></legend>
         <span *ngFor="let opt of field.selectOptions">
           <!-- radio type hard-coded otherwise accessor directive will not work! -->
-          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null " (change)="onChange(opt, $event)">
+          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null " (change)="onChange(opt, $event)" [attr.checked]="getControlFromOption(opt)">
           <input *ngIf="!isRadio()" type="{{field.controlType}}" name="{{field.name}}" [id]="field.name + '_' + opt.value" [value]="opt.value" (change)="onChange(opt, $event)" [attr.selected]="getControlFromOption(opt)" [attr.checked]="getControlFromOption(opt)" [attr.disabled]="field.readOnly ? '' : null ">
           <label for="{{field.name + '_' + opt.value}}" class="radio-label">{{ opt.label }}</label>
           <br/>
@@ -288,49 +288,21 @@ export class SelectionFieldComponent extends SelectionComponent {
     return control;
   }
 
-  onChange(opt:any, event:any, defered) {
-    defered = defered || !_.isUndefined(defered);
-    let formcontrol:any = this.getFormControl();
-    if (event.target.checked) {
-      if(_.isObject(formcontrol.push)) {
-        formcontrol.push(new FormControl(opt.value));
-      } // else is a radio button and already has the value... Not sure if anything else is required.
-    } else {
-    if(opt['modifies'] && !defered) {
-      const fieldName = this.field['name'];
-      let fields = this.fieldMap;
-      this.defer['fields'] = new Array();
-      opt['modifies'].some(e => {
-        const contval = this.fieldMap[e].control.value;
-        //this.fieldMap[e].control.getRawValue();
-        if(!_.isEmpty(contval) || contval === true) {
-          jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
-          this.defer['opt'] = opt;
-          this.defer['event'] = event;
-          this.defer['fields'].push(this.field.getFieldDisplay(this.fieldMap[e]));
-          this.confirmChanges = false;
-        }
-      });
-    }
-    if(!defered) {
-      let idx = null;
-      _.forEach(formcontrol.controls, (ctrl, i) => {
-        if (ctrl.value == opt.value) {
-          idx = i;
-          return false;
-        }
-      });
-      formcontrol.removeAt(idx);
-    }
-  }
-  if(this.field.publish && this.confirmChanges) {
-      if(this.field.publish.onItemSelect) {
-        this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
+  modifies(opt, event, defered) {
+    const fieldName = this.field['name'];
+    let fields = this.fieldMap;
+    this.defer['fields'] = new Array();
+    _.each(opt['modifies'], e => {
+      const contval = this.fieldMap[e].control.value;
+      //this.fieldMap[e].control.getRawValue();
+      if(!_.isEmpty(contval) || contval === true) {
+        jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
+        this.defer['opt'] = opt;
+        this.defer['event'] = event;
+        this.defer['fields'].push(this.field.getFieldDisplay(this.fieldMap[e]));
+        this.confirmChanges = false;
       }
-      if(this.field.publish.onValueUpdate) {
-        this.field.onValueUpdate.emit({value: opt['publishTag'], checked: event.target.checked});
-      }
-    }
+    });
   }
 
   confirmChange(doConfirm) {
@@ -338,10 +310,58 @@ export class SelectionFieldComponent extends SelectionComponent {
     jQuery(`#modal_${fieldName}`).modal('hide');
     this.confirmChanges = doConfirm;
     const defer = this.defer;
+    if(this.isRadio()) {
+      // modifies is not available for radio
+      defer.event.target.checked = doConfirm;
+      if(!doConfirm) {
+        const revert = this.defer['opt']['revert']
+        this.field.setValue(revert);
+        defer.opt = _.find(this.field.options.options, {value: revert});
+      }
+    } else {
+      defer.event.target.checked = !doConfirm;
+    }
     this.defer = {};
-    defer.event.target.checked = !doConfirm;
     this.onChange(defer.opt, defer.event, true);
   }
+
+  onChange(opt:any, event:any, defered) {
+    defered = defered || !_.isUndefined(defered);
+    let formcontrol:any = this.getFormControl();
+    if (event.target.checked) {
+      if(_.isObject(formcontrol.push)) {
+        formcontrol.push(new FormControl(opt.value));
+      } else if(this.isRadio()) {
+        // modifies is not available for radio
+        if(opt['modifies'] && !defered) {
+          this.modifies(opt, event, defered);
+        }
+      }
+    } else {
+      if(opt['modifies'] && !defered) {
+        this.modifies(opt, event, defered);
+      }
+      if(!defered) {
+        let idx = null;
+        _.forEach(formcontrol.controls, (ctrl, i) => {
+          if (ctrl.value == opt.value) {
+            idx = i;
+            return false;
+          }
+        });
+        formcontrol.removeAt(idx);
+      }
+  }
+  if(this.field.publish && this.confirmChanges) {
+      if(this.field.publish.onItemSelect) {
+        this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked, defered: defered});
+      }
+      if(this.field.publish.onValueUpdate) {
+        this.field.onValueUpdate.emit({value: opt['publishTag'], checked: event.target.checked, defered: defered});
+      }
+    }
+  }
+
 }
 
 
