@@ -1721,7 +1721,7 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_deidentify',
                     label: '@dmpt-ethics:identifiable:deidentify',
-                    help: '@dmpt-ethics:identifiable:transfered_out:help',
+                    help: '@dmpt-ethics:identifiable:deidentify:help',
                     controlType: 'radio',
                     options: [{
                         value: "yes",
@@ -1998,6 +1998,7 @@ module.exports = {
                   definition: {
                     name: 'dataLicensingAccess_manager',
                     label: '@dmpt-dataLicensingAccess_manager',
+                    help: '@dmpt-dataLicensingAccess_manager:help'
                     type: 'text',
                     readOnly: true,
                     subscribe: {
@@ -2527,7 +2528,7 @@ module.exports = {
                     },
                     name: 'ethics_data_secondary_third_party_ownership_type',
                     label: '@dmpt-ethics:data:secondary_third_party:ownership_type',
-                    help: '@dmpt-ethics:data:secondary_third_party:ownership_type:ownership_type',
+                    help: '@dmpt-ethics:data:secondary_third_party:ownership_type:help',
                     controlType: 'radio',
                     options: [{
                         value: "open_license",
@@ -2759,7 +2760,7 @@ module.exports = {
                   editOnly: true,
                   definition: {
                     name: "attach-licences-prefix",
-                    value: '<h5>If ethics approval required, please attach licences or agreements</h5>'
+                    value: '<h5>Please attach ethics approvals, licences or agreements if applicable</h5>'
                   }
                 },
                 {
