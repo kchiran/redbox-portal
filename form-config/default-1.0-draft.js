@@ -2004,7 +2004,7 @@ module.exports = {
                   definition: {
                     name: 'dataLicensingAccess_manager',
                     label: '@dmpt-dataLicensingAccess_manager',
-                    help: '@dmpt-dataLicensingAccess_manager:help'
+                    help: '@dmpt-dataLicensingAccess_manager:help',
                     type: 'text',
                     readOnly: true,
                     subscribe: {
