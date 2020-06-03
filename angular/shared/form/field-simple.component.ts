@@ -289,6 +289,7 @@ export class SelectionFieldComponent extends SelectionComponent {
   }
 
   modifies(opt, event, defered) {
+    this.confirmChanges = true;
     const fieldName = this.field['name'];
     let fields = this.fieldMap;
     this.defer['fields'] = new Array();
@@ -303,6 +304,9 @@ export class SelectionFieldComponent extends SelectionComponent {
         this.confirmChanges = false;
       }
     });
+    if(this.confirmChanges) {
+      this.onChange(opt, event, true);
+    }
   }
 
   confirmChange(doConfirm) {
@@ -332,7 +336,7 @@ export class SelectionFieldComponent extends SelectionComponent {
       if(_.isObject(formcontrol.push)) {
         formcontrol.push(new FormControl(opt.value));
       } else if(this.isRadio()) {
-        // modifies is not available for radio
+        // modifies defers the changes on radio
         if(opt['modifies'] && !defered) {
           this.modifies(opt, event, defered);
         }

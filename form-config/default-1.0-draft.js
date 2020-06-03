@@ -1732,12 +1732,21 @@ module.exports = {
                     options: [{
                         value: "yes",
                         label: "Yes",
-                        publishTag: 'ethics_identifiable_deidentify_yes'
+                        publishTag: 'ethics_identifiable_deidentify_yes',
+                        revert: "no",
+                        modifies:[
+                          'ethics_identifiable_deidentify_no_text'
+                        ]
                       },
                       {
                         value: "no",
                         label: "No",
-                        publishTag: 'ethics_identifiable_deidentify_no'
+                        publishTag: 'ethics_identifiable_deidentify_no',
+                        revert: "yes",
+                        modifies:[
+                          'ethics_identifiable_deidentify_yes_how_when',
+                          'ethics_identifiable_deidentify_yes_where'
+                        ]
                       }
                     ],
                     publish: {
@@ -1780,10 +1789,11 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_identifiable_deidentify_no_text',
                           action: 'setProp',
-                          valueTest: ['ethics_identifiable_deidentify_no'],
-                          valueFalse: 'yes',
+                          defer: true,
+                          valueTest: ['no', 'ethics_identifiable_deidentify_no'],
+                          valueFalse: ['yes', 'ethics_identifiable_deidentify_yes'],
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
                           ]
                         }]
@@ -1810,10 +1820,11 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_identifiable_deidentify_yes_how_when',
                           action: 'setProp',
-                          valueTest: ['ethics_identifiable_deidentify_yes'],
-                          valueFalse: 'no',
+                          defer: true,
+                          valueTest: ['yes','ethics_identifiable_deidentify_yes'],
+                          valueFalse: ['no', 'ethics_identifiable_deidentify_no'],
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
                           ]
                         }]
@@ -1840,10 +1851,11 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_identifiable_deidentify_yes_where',
                           action: 'setProp',
-                          valueTest: ['ethics_identifiable_deidentify_yes'],
-                          valueFalse: 'no',
+                          defer: true,
+                          valueTest: ['yes', 'ethics_identifiable_deidentify_yes'],
+                          valueFalse: ['no', 'ethics_identifiable_deidentify_no'],
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
                           ]
                         }]
