@@ -1400,7 +1400,7 @@ module.exports = {
                         value: "others",
                         label: "Others",
                         publishTag: 'ethics_identifiable_collection_others',
-                        modifies: ['ethics_identifiable_collection_other']
+                        modifies: ['ethics_identifiable_collection_other_text']
                       }
                     ],
                     publish: {
@@ -1486,7 +1486,7 @@ module.exports = {
                         value: "other",
                         label: "Other",
                         publishTag: 'ethics_identifiable_storage_other',
-                        modifies: ['ethics_identifiable_storage_other']
+                        modifies: ['ethics_identifiable_storage_other_text']
                       }
                     ],
                     publish: {

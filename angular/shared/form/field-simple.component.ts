@@ -305,6 +305,7 @@ export class SelectionFieldComponent extends SelectionComponent {
       }
     });
     if(this.confirmChanges) {
+      this.defer = {};
       this.onChange(opt, event, true);
     }
   }
