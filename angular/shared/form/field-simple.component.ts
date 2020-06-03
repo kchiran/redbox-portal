@@ -339,6 +339,8 @@ export class SelectionFieldComponent extends SelectionComponent {
         // modifies defers the changes on radio
         if(opt['modifies'] && !defered) {
           this.modifies(opt, event, defered);
+        } else {
+          defered = true;
         }
       }
     } else {

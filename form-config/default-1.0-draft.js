@@ -1659,7 +1659,9 @@ module.exports = {
                       {
                         value: "no",
                         label: "No",
-                        publishTag: 'ethics_identifiable_transfered_no'
+                        publishTag: 'ethics_identifiable_transfered_no',
+                        revert: "yes",
+                        modifies: ['ethics_identifiable_transfered_out_yes_text']
                       }
                     ],
                     publish: {
@@ -1702,10 +1704,11 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'ethics_identifiable_transfered_yes',
                           action: 'setProp',
-                          valueTest: ['ethics_identifiable_transfered_yes'],
-                          valueFalse: 'no',
+                          defer: true,
+                          valueTest: ['yes', 'ethics_identifiable_transfered_yes'],
+                          valueFalse: ['no', 'ethics_identifiable_transfered_no'],
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
                           ]
                         }]
