@@ -1468,7 +1468,6 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_storage',
                     label: '@dmpt-ethics:identifiable:storage',
-                    help: '@dmpt-ethics:identifiable:storage:help',
                     controlType: 'checkbox',
                     options: [{
                         value: "eresearch_store",
