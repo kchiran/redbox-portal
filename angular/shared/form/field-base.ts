@@ -71,6 +71,8 @@ export class FieldBase<T> {
   selectFor: string;
   defaultSelect: string;
   hasValueLabel: string;
+  confirmChangesLabel: string;
+  confirmChangesParagraphLabel: string;
 
   @Output() public onValueUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() public onValueLoaded: EventEmitter<any> = new EventEmitter<any>();
@@ -131,7 +133,9 @@ export class FieldBase<T> {
     this.visible = _.isUndefined(options['visible']) ? true : options['visible'];
     this.visibilityCriteria = options['visibilityCriteria'];
     this.requiredIfHasValue = options['requiredIfHasValue'] || [];
-    this.hasValueLabel = options['hasValueLabel'] || 'Multiple Values';
+    this.hasValueLabel = this.getTranslated(options['hasValueLabel'], 'Multiple Values');
+    this.confirmChangesLabel = this.getTranslated(options['confirmChangesLabel'], 'Confirm Changes');
+    this.confirmChangesParagraphLabel = this.getTranslated(options['confirmChangesParagraphLabel'], 'The following values will be cleared');
 
     if (this.groupName) {
       this.hasGroup = true;

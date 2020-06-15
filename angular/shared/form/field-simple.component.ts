@@ -251,8 +251,8 @@ export class DropdownFieldComponent extends SelectionComponent {
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Confirm Changes</h4>
-          <p>The next values will be cleared</p>
+          <h4 class="modal-title">{{field.confirmChangesLabel}}</h4>
+          <p>{{field.confirmChangesParagraphLabel}}</p>
           <p *ngFor="let f of defer.fields">
             <strong>{{f.label}}</strong><br/>
             {{f.valueLabel}}
@@ -854,8 +854,8 @@ export class SpacerComponent extends SimpleComponent {
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Confirm Changes</h4>
-            <p>The next values will be cleared</p>
+            <h4 class="modal-title">{{ field.confirmChangesLabel }}</h4>
+            <p>{{ field.confirmChangesParagraphLabel }}</p>
             <p *ngFor="let f of defer.fields">
               <strong>{{f.label}}</strong><br/>
               {{f.valueLabel}}

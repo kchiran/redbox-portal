@@ -20,7 +20,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: true,
+        visible: false,
         visibilityCriteria: true,
         name: 'human_participant_data',
         label: 'human_participant_data',
@@ -48,7 +48,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: true,
+        visible: false,
         visibilityCriteria: true,
         name: 'human_participant_data_identifiable',
         label: 'human_participant_data_identifiable',
@@ -941,6 +941,9 @@ module.exports = {
                     name: 'ethics_describe',
                     label: '@dmpt-ethics:describe',
                     help: '@dmpt-ethics:describe:help',
+                    hasValueLabel: '@select-confirm-changes-multivalues',
+                    confirmChangesLabel: '@select-confirm-changes',
+                    confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'checkbox',
                     options: [{
                         value: "human_participant_data",
@@ -1098,6 +1101,9 @@ module.exports = {
                     name: 'ethics_identifiable',
                     label: '@dmpt-ethics:identifiable',
                     help: '@dmpt-ethics:identifiable:help',
+                    hasValueLabel: '@select-confirm-changes-multivalues',
+                    confirmChangesLabel: '@select-confirm-changes',
+                    confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'radio',
                     options: [{
                         value: "yes",
@@ -1495,6 +1501,9 @@ module.exports = {
                     name: 'ethics_identifiable_collection',
                     label: '@dmpt-ethics:identifiable:collection',
                     help: '@dmpt-ethics:identifiable:informed_consent:collection:help',
+                    hasValueLabel: '@select-confirm-changes-multivalues',
+                    confirmChangesLabel: '@select-confirm-changes',
+                    confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'checkbox',
                     options: [{
                         value: "eresearch_store",
@@ -1627,6 +1636,9 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_storage',
                     label: '@dmpt-ethics:identifiable:storage',
+                    hasValueLabel: '@select-confirm-changes-multivalues',
+                    confirmChangesLabel: '@select-confirm-changes',
+                    confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'checkbox',
                     options: [{
                         value: "eresearch_store",
@@ -1849,7 +1861,6 @@ module.exports = {
                     }
                   }
                 },
-
                 {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
@@ -1864,6 +1875,9 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_transfered_out',
                     label: '@dmpt-ethics:identifiable:transfered_out',
+                    hasValueLabel: '@select-confirm-changes-multivalues',
+                    confirmChangesLabel: '@select-confirm-changes',
+                    confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     help: '@dmpt-ethics:identifiable:transfered_out:help',
                     controlType: 'radio',
                     options: [{
@@ -1986,6 +2000,9 @@ module.exports = {
                     name: 'ethics_identifiable_deidentify',
                     label: '@dmpt-ethics:identifiable:deidentify',
                     help: '@dmpt-ethics:identifiable:deidentify:help',
+                    hasValueLabel: '@select-confirm-changes-multivalues',
+                    confirmChangesLabel: '@select-confirm-changes',
+                    confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'radio',
                     options: [{
                         value: "yes",
