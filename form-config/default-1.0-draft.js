@@ -20,7 +20,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: false,
+        visible: true,
         visibilityCriteria: true,
         name: 'human_participant_data',
         label: 'human_participant_data',
@@ -48,7 +48,7 @@ module.exports = {
     {
       class: 'TextField',
       definition: {
-        visible: false,
+        visible: true,
         visibilityCriteria: true,
         name: 'human_participant_data_identifiable',
         label: 'human_participant_data_identifiable',
@@ -76,7 +76,7 @@ module.exports = {
         },
         subscribe: {
           'ethics_identifiable': {
-            onItemSelect: [{
+            onValueUpdate: [{
               debug: 'onItemSelect:human_participant_data_identifiable:subscribedto:ethics_describe',
               action: 'setProp',
               valueTest: ['ethics_identifiable'],
@@ -132,7 +132,7 @@ module.exports = {
             }]
           },
           'ethics_identifiable': {
-            onItemSelect: [{
+            onValueUpdate: [{
               debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
               action: 'setProp',
               valueTest: ['yes', 'ethics_identifiable'],
@@ -946,9 +946,22 @@ module.exports = {
                         value: "human_participant_data",
                         label: "@dmpt-ethics:describe:human_participant_data",
                         publishTag: "human_participant_data",
+                        revert: '',
                         modifies: [
                           'ethics_human_participant_data_individual',
-                          'ethics_identifiable'
+                          'ethics_identifiable',
+                          'ethics_human_participant_data_severity_risk',
+                          'ethics_identifiable_other_countries',
+                          'ethics_identifiable_data',
+                          'ethics_identifiable_collection',
+                          'ethics_identifiable_collection_other_text',
+                          'ethics_identifiable_storage',
+                          'ethics_identifiable_storage_other_text',
+                          'ethics_identifiable_informed_consent_publish',
+                          'ethics_identifiable_transfered_out',
+                          'ethics_identifiable_transfered_out_yes_text',
+                          'ethics_identifiable_deidentify',
+                          'ethics_identifiable_deidentify_no_text'
                         ]
                       },{
                         value: "animal_use",
@@ -1101,15 +1114,19 @@ module.exports = {
                           'ethics_identifiable_other_countries',
                           'ethics_identifiable_data',
                           'ethics_identifiable_collection',
+                          'ethics_identifiable_collection_other_text',
                           'ethics_identifiable_storage',
+                          'ethics_identifiable_storage_other_text',
                           'ethics_identifiable_informed_consent_publish',
                           'ethics_identifiable_transfered_out',
-                          'ethics_identifiable_deidentify'
+                          'ethics_identifiable_transfered_out_yes_text',
+                          'ethics_identifiable_deidentify',
+                          'ethics_identifiable_deidentify_no_text'
                         ]
                       }
                     ],
                     publish: {
-                      onItemSelect: {
+                      onValueUpdate: {
                         modelEventSource: 'valueChanges'
                       }
                     },
@@ -1129,7 +1146,7 @@ module.exports = {
                       }
                     }
                   }
-                },                
+                },
                 {
                   class: 'TextField',
                   definition: {
@@ -1146,12 +1163,12 @@ module.exports = {
                     help: '@ethics:human-participant-data:severity_risk:help',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_human_participant_data_severity_risk:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_human_participant_data_severity_risk:subscribedto:ethics_describe',
                           action: 'setProp',
-
-                          valueTest: ['human_participant_data_identifiable'],
+                          defer: true,
+                          valueTest: ['human_participant_data'],
                           valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
@@ -1160,7 +1177,7 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
+                        onValueUpdate: [{
                           debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
@@ -1191,20 +1208,21 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:other_countries:help',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_other_countries:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_other_countries:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
-                        }],
+                        }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
+                        onValueUpdate: [{
                           debug: 'onItemSelect:ethics_identifiable_other_countries:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
@@ -1433,12 +1451,13 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:data:help',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'ethics_identifiable_data',
+                          debug: 'onValueUpdate:ethics_identifiable_data:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1446,8 +1465,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_identifiable_data:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -1509,12 +1528,13 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_collection:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_collection:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1522,8 +1542,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_identifiable_collection:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_identifiable_collection:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -1552,12 +1572,13 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:collection:other',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1577,7 +1598,7 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
+                        onValueUpdate: [{
                           debug: 'onItemSelect:ethics_identifiable_collection_other_text:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
@@ -1635,12 +1656,13 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'ethics_identifiable_informed_consent_no_collection',
+                          debug: 'onValueUpdate:ethics_identifiable_storage:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1648,8 +1670,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onItemSelect:ethics_identifiable_storage:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -1678,12 +1700,13 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:storage:other',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_storage_other_text:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1692,7 +1715,7 @@ module.exports = {
                       },
                       'ethics_identifiable_storage': {
                         onValueUpdate: [{
-                          debug: 'ethics_identifiable_storage_other',
+                          debug: 'onValueUpdate:ethics_identifiable_storage_other_text:subscribedto:ethics_identifiable_storage',
                           action: 'setProp',
                           valueTest: ['ethics_identifiable_storage_other'],
                           valueFalse: ['eresearch_store', 'onedrive', 'redcap'],
@@ -1703,8 +1726,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onItemSelect:ethics_identifiable_storage_other_text:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -1751,21 +1774,22 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'ethics_identifiable_informed_consent_publish:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_informed_consent_publish:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true}
+                            {key: 'visible', val: true},
                           ]
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onItemSelect:ethics_identifiable_informed_consent_publish:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -1861,12 +1885,13 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'ethics_identifiable_transfered_out',
+                          debug: 'onValueUpdate:ethics_identifiable_transfered_out:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1874,8 +1899,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onItemSelect:ethics_identifiable_transfered_out:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -1904,12 +1929,13 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_transfered_out_yes_text:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_transfered_out_yes_text:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -1918,7 +1944,7 @@ module.exports = {
                       },
                       'ethics_identifiable_transfered_out': {
                         onItemSelect: [{
-                          debug: 'ethics_identifiable_transfered_yes',
+                          debug: 'onItemSelect:ethics_identifiable_transfered_out_yes_text:subscribedto:ethics_identifiable_transfered_out',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable_transfered_yes'],
@@ -1930,7 +1956,7 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
+                        onValueUpdate: [{
                           debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
@@ -1987,12 +2013,13 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'ethics_identifiable_deidentify',
+                          debug: 'onValueUpdate:ethics_identifiable_deidentify:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -2000,8 +2027,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_identifiable_deidentify:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -2030,12 +2057,13 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
                     subscribe: {
-                      'human_participant_data_identifiable': {
+                      'ethics_describe': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:human_participant_data_identifiable',
+                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:ethics_describe',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable'],
-                          valueFalse: '',
+                          defer: true,
+                          valueTest: ['human_participant_data'],
+                          valueFalse: [''],
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
@@ -2044,7 +2072,7 @@ module.exports = {
                       },
                       'ethics_identifiable_deidentify': {
                         onItemSelect: [{
-                          debug: 'ethics_identifiable_deidentify_no_text',
+                          debug: ':onItemSelect:ethics_identifiable_deidentify_no_text:subscribedto:ethics_identifiable_deidentify',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['no', 'ethics_identifiable_deidentify_no'],
@@ -2056,8 +2084,8 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
                           valueTest: ['yes', 'ethics_identifiable'],
@@ -2100,7 +2128,7 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
+                        onValueUpdate: [{
                           debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
@@ -2144,7 +2172,7 @@ module.exports = {
                         }]
                       },
                       'ethics_identifiable': {
-                        onItemSelect: [{
+                        onValueUpdate: [{
                           debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
                           action: 'setProp',
                           defer: true,
