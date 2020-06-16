@@ -389,6 +389,7 @@ export class FieldBase<T> {
   }
 
   public setVisibility(data) {
+    let newVisible = this.visible;
     if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria.type == 'function') {
       const fn:any = _.get(this, this.visibilityCriteria.action);
       if(this.visibilityCriteria.debug) {
@@ -403,11 +404,36 @@ export class FieldBase<T> {
           boundFunction = fn.bind(this[objectName]);
         }
         //console.log(`visibilityCriteria: ${this.visibilityCriteria.name}`);
-        this.visible = boundFunction(data, this.visibilityCriteria);
+        newVisible = boundFunction(data, this.visibilityCriteria);
       }
     } else {
-      this.visible = _.isEqual(data, this.visibilityCriteria);
+      newVisible = _.isEqual(data, this.visibilityCriteria);
     }
+    this.updateVisible(newVisible);
+  }
+
+  updateVisible(newVisible) {
+    const that = this;
+    setTimeout(() => {
+      if (!newVisible) {
+        if (that.visible) {
+          // remove validators
+          if (that.formModel) {
+            that.formModel.clearValidators();
+            that.formModel.updateValueAndValidity();
+          }
+        }
+      } else {
+        if (!that.visible) {
+          // restore validators
+          if (that.formModel) {
+            that.formModel.setValidators(that.validators);
+            that.formModel.updateValueAndValidity();
+          }
+        }
+      }
+      that.visible = newVisible;
+    });
   }
 
   public checkIfVisible() {
@@ -566,9 +592,9 @@ export class FieldBase<T> {
     } else if (prop.key === 'visible') {
       if(checked) {
         //this.setVisibility(prop.val);
-        this.visible = prop.val;
+        this.updateVisible(prop.val);
       } else if(!checked) {
-        this.visible = !prop.val;
+        this.updateVisible(!prop.val);
         //this.setVisibility(!prop.val);
       }
     }
