@@ -2726,7 +2726,6 @@ module.exports = {
                     },
                     name: 'ethics_indigenous_data_access',
                     label: '@dmpt-ethics:data:indigenous:data_access',
-                    help: '@dmpt-ethics:data:indigenous:data_access:help',
                     type: 'text',
                     subscribe: {
                       'indigenous_cultural_intelectual_property': {
