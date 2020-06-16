@@ -1166,7 +1166,6 @@ module.exports = {
                     },
                     name: 'ethics_human_participant_data_severity_risk',
                     label: '@dmpt-ethics:human_participant_data:severity_risk',
-                    help: '@dmpt-ethics:human_participant_data:severity_risk:help',
                     type: 'text',
                     subscribe: {
                       'ethics_describe': {
