@@ -1,4 +1,4 @@
-import { Component, Input, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ApplicationRef, ElementRef } from '@angular/core';
+import { Component, Input, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ApplicationRef } from '@angular/core';
 import { FieldBase } from './field-base';
 import { FormControl, FormGroup, FormArray } from '@angular/forms';
 import { SimpleComponent } from './field-simple.component';
@@ -218,5 +218,41 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
       // return model;
       return super.createFormModel();
     }
+  }
+}
+
+export class WorkspaceRegisterField extends FieldBase<any>  {
+  workspaceApps: any[] = [];
+  open: string;
+  saveFirst: string;
+  rdmp: string;
+  workspaceTypeService: WorkspaceTypeService;
+  workspaceApp: any;
+  services: any = [];
+  appLink: string;
+
+  constructor(options: any, injector: any) {
+    super(options, injector);
+    this.open = this.getTranslated(options['open'], options['open']);
+    this.saveFirst = this.getTranslated(options['saveFirst'], options['saveFirst']);
+    this.rdmp = undefined;
+    this.workspaceApps = _.map(options['workspaceApps'] || [], (option) => {
+      option['label'] = this.getTranslated(option['label'], option['label']);
+      option['name'] = '';
+      return option;
+    });
+  }
+
+  init() {
+    this.rdmp = this.fieldMap._rootComp.oid || undefined;
+  }
+
+  registerEvents() {
+    this.fieldMap._rootComp.recordCreated.subscribe(this.setOid.bind(this));
+    this.fieldMap._rootComp.recordSaved.subscribe(this.setOid.bind(this));
+  }
+
+  setOid(o) {
+    this.rdmp = o.oid;
   }
 }

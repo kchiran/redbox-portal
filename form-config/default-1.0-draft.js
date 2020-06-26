@@ -1581,19 +1581,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:collection:other',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_collection': {
                         onValueUpdate: [{
                           debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:ethics_identifiable_collection_others',
@@ -1603,19 +1590,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_identifiable_collection_other_text:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1712,19 +1686,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:storage:other',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_storage_other_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_storage': {
                         onValueUpdate: [{
                           debug: 'onValueUpdate:ethics_identifiable_storage_other_text:subscribedto:ethics_identifiable_storage',
@@ -1734,19 +1695,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_identifiable_storage_other_text:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1943,19 +1891,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_transfered_out_yes_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_transfered_out': {
                         onItemSelect: [{
                           debug: 'onItemSelect:ethics_identifiable_transfered_out_yes_text:subscribedto:ethics_identifiable_transfered_out',
@@ -1966,19 +1901,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -2030,19 +1952,6 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable': {
                         onValueUpdate: [{
                           debug: 'onValueUpdate:ethics_identifiable_deidentify:subscribedto:ethics_identifiable',
@@ -2074,19 +1983,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_deidentify': {
                         onItemSelect: [{
                           debug: ':onItemSelect:ethics_identifiable_deidentify_no_text:subscribedto:ethics_identifiable_deidentify',
@@ -2097,19 +1993,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -2143,19 +2026,6 @@ module.exports = {
                             {key: 'visible', val: true}
                           ]
                         }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
                       }
                     }
                   }
@@ -2185,19 +2055,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -3187,6 +3044,54 @@ module.exports = {
                       {
                         "label": "Type",
                         "property": "type"
+                      }
+                    ]
+                  }
+                },
+                {
+                  class: 'WorkspaceRegisterField',
+                  compClass: 'WorkspaceRegisterFieldComponent',
+                  definition: {
+                    value: '@dmpt-workspaces-associated-heading',
+                    open: 'Register Research Workspace',
+                    saveFirst: 'Save your plan to register a workspace',
+                    type: 'h4',
+                    workspaceApps: [
+                      {
+                        label: "@dmpt-workspace:eresearch-store",
+                        value: "research-workspace-eresearch-store"
+                      },
+                      {
+                        label: "@dmpt-workspace:onedrive",
+                        value: "research-workspace-onedrive"
+                      },
+                      {
+                        label: "@dmpt-workspace:cloudstor",
+                        value: "research-workspace-cloudstor"
+                      },
+                      {
+                        label: "@dmpt-workspace:university-drive",
+                        value: "research-workspace-university-drive"
+                      },
+                      {
+                        label: "@dmpt-workspace:qualtrics",
+                        value: "research-workspace-eresearch-qualtrics"
+                      },
+                      {
+                        label: "@dmpt-workspace:eresearch-limesurvey",
+                        value: "research-workspace-eresearch-limesurvey"
+                      },
+                      {
+                        label: "@dmpt-workspace:hpcc",
+                        value: "research-workspace-eresearch-hpcc"
+                      },
+                      {
+                        label: "@dmpt-workspace:ihpc",
+                        value: "research-workspace-eresearch-ihpc"
+                      },
+                      {
+                        label: "@dmpt-workspace:git-repository",
+                        value: "research-workspace-eresearch-git-repository"
                       }
                     ]
                   }
