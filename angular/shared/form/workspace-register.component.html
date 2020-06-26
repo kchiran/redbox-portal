@@ -1,0 +1,126 @@
+<div [formGroup]='form' *ngIf="field.editMode" [ngClass]="getGroupClass()">
+  <label [attr.for]="field.name">
+    {{field.label}} {{ getRequiredLabelStr()}}
+    <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()"
+            [attr.aria-label]="'help' | translate "><span
+      class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
+  </label>
+  <a *ngIf="field.rdmp" (click)="saveAndOpenWorkspace()" class="btn btn-block btn-primary">
+    {{ field.open }}
+  </a>
+  <a *ngIf="!field.rdmp" [attr.disabled]="field.rdmp ? null : ''" class="btn btn-block btn-secondary">
+    {{ field.saveFirst }}
+  </a>
+  <br/>
+  <div class="modal" id="workspaceRegisterModal" tabindex="-1" role="dialog"
+       aria-labelledby="workspaceRegisterModalTitle">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Register Workspace</h3>
+        </div>
+        <div class="modal-body">
+          <p>To register a workspace select a type from the list and include details.</p>
+          <p><span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow"
+                   [innerHtml]="field.help"></span></p>
+          <form>
+            <div class="form-group" [hidden]="stepHidden[0]">
+              <label for="workspaceRegisterType">Workspace</label>
+              <div *ngIf="!disabledType">
+                <ng2-completer #ngCompleter [(ngModel)]="searchStr" [required]=true [autoMatch]=false
+                               [datasource]="dataService" [minSearchLength]="0"
+                               [ngModelOptions]="{standalone: true}"
+                               [inputClass]="'form-control'" (selected)="onSelect($event)"
+                               [inputId]="'workspaceRegisterType'"
+                               [textNoResults]="'Workspace not listed'"
+                               [openOnClick]=true [clearSelected]="clearSelected">
+                </ng2-completer>
+                <small id="workspaceRegisterTypeHelp" class="form-text text-muted">The type of your
+                  workspace</small>
+              </div>
+              <div *ngIf="disabledType">
+                <div class="card service col-lg-4 col-md-5 col-sm-6 col-xs-12"
+                     style="display: flex; flex-direction: column;width: 30rem;">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h5 class="panel-title card-title" style="margin-top: 1px">
+                        <span>{{ workspaceRegister.workspaceType.label }}</span>
+                      </h5>
+                    </div>
+                    <div class="panel-body workspaces-panel-body">
+                      <img class="card-img-top" style="max-height:100px;"
+                           src="{{ workspaceRegister.workspaceType.image }}"
+                           alt="{{ workspaceRegister.workspaceType.label }}">
+                      <div class="card-body" style="margin-bottom: auto;">
+                        <h5 class="card-title"
+                            style="margin-top: 2px">{{ workspaceRegister.workspaceType.label }}</h5>
+                        <p class="card-text">{{ workspaceRegister.workspaceType.description }}</p>
+                      </div>
+                    </div>
+                    <div class="card-footer" style="margin-top: auto;">
+                      <a class="btn btn-block btn-secondary"
+                         (click)="clearWorkspaceSelected()">Change Workspace
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" [hidden]="stepHidden[1]">
+              <label for="workspaceRegisterName">Name</label>
+              <input type="text" class="form-control" id="workspaceRegisterName" aria-describedby="nameHelp"
+                     [(ngModel)]="workspaceRegister.name" name="workspaceRegisterName" placeholder="Type a Name">
+              <small id="workspaceRegisterNameHelp" class="form-text text-muted">The name of your
+                workspace</small>
+            </div>
+            <div class="form-group" [hidden]="stepHidden[2]">
+              <label for="workspaceRegisterLocation">Location</label>
+              <input type="text" class="form-control" id="workspaceRegisterLocation"
+                     aria-describedby="locationHelp" placeholder="Type a Location"
+                     [(ngModel)]="workspaceRegister.location" name="workspaceRegisterLocation">
+              <small id="workspaceRegisterLocationHelp" class="form-text text-muted">The location or url of
+                your
+                workspace</small>
+            </div>
+            <div class="form-group" [hidden]="stepHidden[3]">
+              <label for="workspaceRegisterDetails">Details</label>
+              <textarea rows="4" cols="50" class="form-control" id="workspaceRegisterDetails"
+                        aria-describedby="detailsHelp" placeholder="Type a Details"
+                        [(ngModel)]="workspaceRegister.details" name="workspaceRegisterDetails"></textarea>
+              <small id="workspaceRegisterDetailsHelp" class="form-text text-muted">
+                Input short details of your workspace
+              </small>
+            </div>
+            <div class="form-group" [hidden]="stepHidden[4]">
+              <p>Workspace: {{ workspaceRegister.workspaceType['label'] }}</p>
+              <p>Name: {{ workspaceRegister.name }}</p>
+              <p>Location: {{ workspaceRegister.location }}</p>
+              <p>Details: {{ workspaceRegister.details }}</p>
+              <br/>
+              <small id="workspaceRegisterConfirmHelp" class="form-text text-muted">Click confirm to register
+                workspace</small><br/>
+              <br/>
+              <button type="button" class="btn btn-primary" (click)="registerWorkspace()">Confirm</button>
+              <br/>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-5 col-xs-offset-5">
+                  <span [hidden]="vstate < 1">
+                    <button type="button" class="btn btn-primary" (click)="step('back')">Back</button>
+                  </span>
+                  <span [hidden]="vstate >= 4">
+                    <button type="button" class="btn btn-primary" (click)="step('next')">Next</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br/>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

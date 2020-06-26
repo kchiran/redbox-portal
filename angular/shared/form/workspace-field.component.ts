@@ -1,4 +1,4 @@
-import { Component, Input, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ApplicationRef } from '@angular/core';
+import { Component, Input, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ApplicationRef, ElementRef } from '@angular/core';
 import { FieldBase } from './field-base';
 import { FormControl, FormGroup, FormArray } from '@angular/forms';
 import { SimpleComponent } from './field-simple.component';
