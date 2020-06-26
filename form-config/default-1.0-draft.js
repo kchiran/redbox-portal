@@ -3049,54 +3049,6 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'WorkspaceRegisterField',
-                  compClass: 'WorkspaceRegisterFieldComponent',
-                  definition: {
-                    value: '@dmpt-workspaces-associated-heading',
-                    open: 'Register Research Workspace',
-                    saveFirst: 'Save your plan to register a workspace',
-                    type: 'h4',
-                    workspaceApps: [
-                      {
-                        label: "@dmpt-workspace:eresearch-store",
-                        value: "research-workspace-eresearch-store"
-                      },
-                      {
-                        label: "@dmpt-workspace:onedrive",
-                        value: "research-workspace-onedrive"
-                      },
-                      {
-                        label: "@dmpt-workspace:cloudstor",
-                        value: "research-workspace-cloudstor"
-                      },
-                      {
-                        label: "@dmpt-workspace:university-drive",
-                        value: "research-workspace-university-drive"
-                      },
-                      {
-                        label: "@dmpt-workspace:qualtrics",
-                        value: "research-workspace-eresearch-qualtrics"
-                      },
-                      {
-                        label: "@dmpt-workspace:eresearch-limesurvey",
-                        value: "research-workspace-eresearch-limesurvey"
-                      },
-                      {
-                        label: "@dmpt-workspace:hpcc",
-                        value: "research-workspace-eresearch-hpcc"
-                      },
-                      {
-                        label: "@dmpt-workspace:ihpc",
-                        value: "research-workspace-eresearch-ihpc"
-                      },
-                      {
-                        label: "@dmpt-workspace:git-repository",
-                        value: "research-workspace-eresearch-git-repository"
-                      }
-                    ]
-                  }
-                },
-                {
                   class: 'Container',
                   compClass: 'TextBlockComponent',
                   editOnly: true,
