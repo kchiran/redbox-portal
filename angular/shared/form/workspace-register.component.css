@@ -38,6 +38,9 @@
 
 }
 
+.ng-invalid.ng-touched , .ng-invalid.ng-dirty{
+  border-bottom: 3px solid red;
+}
 /*
 /deep/ .completer-input {
   display: block;
