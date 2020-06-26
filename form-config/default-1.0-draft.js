@@ -227,17 +227,17 @@ module.exports = {
       definition: {
         cssClasses: "form-inline",
         fields: [{
-            class: "AnchorOrButton",
-            viewOnly: true,
-            definition: {
-              label: '@dmp-edit-record-link',
-              value: '/@branding/@portal/record/edit/@oid',
-              cssClasses: 'btn btn-large btn-info',
-              showPencil: true,
-              controlType: 'anchor'
-            },
-            variableSubstitutionFields: ['value']
+          class: "AnchorOrButton",
+          viewOnly: true,
+          definition: {
+            label: '@dmp-edit-record-link',
+            value: '/@branding/@portal/record/edit/@oid',
+            cssClasses: 'btn btn-large btn-info',
+            showPencil: true,
+            controlType: 'anchor'
           },
+          variableSubstitutionFields: ['value']
+        },
           {
             class: "AnchorOrButton",
             viewOnly: true,
@@ -287,13 +287,13 @@ module.exports = {
               label: "@dmpt-project-tab",
               active: true,
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-project-heading',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-project-heading',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'VocabField',
                   compClass: 'VocabFieldComponent',
@@ -326,8 +326,8 @@ module.exports = {
                     subscribe: {
                       title: {
                         onItemSelect: [{
-                            action: 'reset'
-                          },
+                          action: 'reset'
+                        },
                           {
                             action: 'utilityService.getFirstofArray',
                             field: 'rmId'
@@ -363,8 +363,8 @@ module.exports = {
                     subscribe: {
                       title: {
                         onItemSelect: [{
-                            action: 'reset'
-                          },
+                          action: 'reset'
+                        },
                           {
                             action: 'utilityService.concatenate',
                             fields: [
@@ -405,8 +405,8 @@ module.exports = {
                     subscribe: {
                       title: {
                         onItemSelect: [{
-                            action: 'reset'
-                          },
+                          action: 'reset'
+                        },
                           {
                             action: 'utilityService.splitArrayStringsToArray',
                             field: 'keyword',
@@ -553,8 +553,8 @@ module.exports = {
                       onValueUpdate: {
                         modelEventSource: 'valueChanges',
                         fields: [{
-                            'grant_number': 'grant_number[0]'
-                          },
+                          'grant_number': 'grant_number[0]'
+                        },
                           {
                             'dc_title': 'dc_title'
                           }
@@ -602,13 +602,13 @@ module.exports = {
               id: "people",
               label: "@dmpt-people-tab",
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-people-tab',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-people-tab',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'ContributorField',
                   showHeader: true,
@@ -625,12 +625,12 @@ module.exports = {
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
                     fieldNames: [{
-                        'text_full_name': 'text_full_name'
-                      }, {
-                        'full_name_honorific': 'text_full_name_honorific'
-                      }, {
-                        'email': 'Email[0]'
-                      },
+                      'text_full_name': 'text_full_name'
+                    }, {
+                      'full_name_honorific': 'text_full_name_honorific'
+                    }, {
+                      'email': 'Email[0]'
+                    },
                       {
                         'given_name': 'Given_Name[0]'
                       },
@@ -692,12 +692,12 @@ module.exports = {
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
                     fieldNames: [{
-                        'text_full_name': 'text_full_name'
-                      }, {
-                        'full_name_honorific': 'text_full_name_honorific'
-                      }, {
-                        'email': 'Email[0]'
-                      },
+                      'text_full_name': 'text_full_name'
+                    }, {
+                      'full_name_honorific': 'text_full_name_honorific'
+                    }, {
+                      'email': 'Email[0]'
+                    },
                       {
                         'given_name': 'Given_Name[0]'
                       },
@@ -755,12 +755,12 @@ module.exports = {
                         vocabId: 'Parties AND repository_name:People%20AND%20(*%3A*%20-text_has_appointment:NULL)',
                         sourceType: 'mint',
                         fieldNames: [{
-                            'text_full_name': 'text_full_name'
-                          }, {
-                            'full_name_honorific': 'text_full_name_honorific'
-                          }, {
-                            'email': 'Email[0]'
-                          },
+                          'text_full_name': 'text_full_name'
+                        }, {
+                          'full_name_honorific': 'text_full_name_honorific'
+                        }, {
+                          'email': 'Email[0]'
+                        },
                           {
                             'given_name': 'Given_Name[0]'
                           },
@@ -809,12 +809,12 @@ module.exports = {
                         vocabId: 'Parties AND repository_name:People%20AND%20(*%3A*%20-text_has_appointment:NULL)',
                         sourceType: 'mint',
                         fieldNames: [{
-                            'text_full_name': 'text_full_name'
-                          }, {
-                            'full_name_honorific': 'text_full_name_honorific'
-                          }, {
-                            'email': 'Email[0]'
-                          },
+                          'text_full_name': 'text_full_name'
+                        }, {
+                          'full_name_honorific': 'text_full_name_honorific'
+                        }, {
+                          'email': 'Email[0]'
+                        },
                           {
                             'given_name': 'Given_Name[0]'
                           },
@@ -858,13 +858,13 @@ module.exports = {
               id: "ethics",
               label: "@dmpt-ethics-tab",
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-ethics-heading',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-ethics-heading',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'Container',
                   compClass: 'TextBlockComponent',
@@ -946,31 +946,31 @@ module.exports = {
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'checkbox',
                     options: [{
-                        value: "human_participant_data",
-                        label: "@dmpt-ethics:describe:human_participant_data",
-                        publishTag: "human_participant_data",
-                        revert: '',
-                        modifies: [
-                          'ethics_human_participant_data_individual',
-                          'ethics_identifiable',
-                          'ethics_human_participant_data_severity_risk',
-                          'ethics_identifiable_other_countries',
-                          'ethics_identifiable_data',
-                          'ethics_identifiable_collection',
-                          'ethics_identifiable_collection_other_text',
-                          'ethics_identifiable_storage',
-                          'ethics_identifiable_storage_other_text',
-                          'ethics_identifiable_informed_consent_publish',
-                          'ethics_identifiable_transfered_out',
-                          'ethics_identifiable_transfered_out_yes_text',
-                          'ethics_identifiable_deidentify',
-                          'ethics_identifiable_deidentify_no_text'
-                        ]
-                      },{
-                        value: "animal_use",
-                        label: "@dmpt-ethics:describe:animal_use",
-                        publishTag: "ethics_approval_required"
-                      },
+                      value: "human_participant_data",
+                      label: "@dmpt-ethics:describe:human_participant_data",
+                      publishTag: "human_participant_data",
+                      revert: '',
+                      modifies: [
+                        'ethics_human_participant_data_individual',
+                        'ethics_identifiable',
+                        'ethics_human_participant_data_severity_risk',
+                        'ethics_identifiable_other_countries',
+                        'ethics_identifiable_data',
+                        'ethics_identifiable_collection',
+                        'ethics_identifiable_collection_other_text',
+                        'ethics_identifiable_storage',
+                        'ethics_identifiable_storage_other_text',
+                        'ethics_identifiable_informed_consent_publish',
+                        'ethics_identifiable_transfered_out',
+                        'ethics_identifiable_transfered_out_yes_text',
+                        'ethics_identifiable_deidentify',
+                        'ethics_identifiable_deidentify_no_text'
+                      ]
+                    },{
+                      value: "animal_use",
+                      label: "@dmpt-ethics:describe:animal_use",
+                      publishTag: "ethics_approval_required"
+                    },
                       {
                         value: "gmos",
                         label: "@dmpt-ethics:describe:gmos",
@@ -1049,10 +1049,10 @@ module.exports = {
                     help: '@dmpt-ethics:human_participant_data:individual:help',
                     controlType: 'radio',
                     options: [{
-                        value: "personal",
-                        label: "@dmpt-ethics:human_participant_data:personal",
-                        publishTag: "personal"
-                      },
+                      value: "personal",
+                      label: "@dmpt-ethics:human_participant_data:personal",
+                      publishTag: "personal"
+                    },
                       {
                         value: "sensitive_personal",
                         label: "@dmpt-ethics:human_participant_data:sensitive_personal",
@@ -1106,10 +1106,10 @@ module.exports = {
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: "ethics_identifiable"
-                      },
+                      value: "yes",
+                      label: "Yes",
+                      publishTag: "ethics_identifiable"
+                    },
                       {
                         value: "no",
                         label: "No",
@@ -1156,7 +1156,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -1253,10 +1253,10 @@ module.exports = {
                     help: '@dmpt-ethics:approval:help',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: "ethics_approval"
-                      },
+                      value: "yes",
+                      label: "Yes",
+                      publishTag: "ethics_approval"
+                    },
                       {
                         value: "no",
                         label: "No",
@@ -1296,13 +1296,13 @@ module.exports = {
               id: "dataCollection",
               label: "@dmpt-data-collection-tab",
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-data-collection-heading',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-data-collection-heading',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'TextArea',
                   compClass: 'TextAreaComponent',
@@ -1341,9 +1341,9 @@ module.exports = {
                     label: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral',
                     help: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-help',
                     options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
-                      },
+                      value: "",
+                      label: "@dmpt-select:Empty"
+                    },
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
                         value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
@@ -1506,9 +1506,9 @@ module.exports = {
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'checkbox',
                     options: [{
-                        value: "eresearch_store",
-                        label: "eResearch Store"
-                      },
+                      value: "eresearch_store",
+                      label: "eResearch Store"
+                    },
                       {
                         value: "onedrive",
                         label: "OneDrive"
@@ -1581,19 +1581,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:collection:other',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_collection': {
                         onValueUpdate: [{
                           debug: 'onValueUpdate:ethics_identifiable_collection_other_text:subscribedto:ethics_identifiable_collection_others',
@@ -1603,19 +1590,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_identifiable_collection_other_text:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1641,9 +1615,9 @@ module.exports = {
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'checkbox',
                     options: [{
-                        value: "eresearch_store",
-                        label: "eResearch Store"
-                      },
+                      value: "eresearch_store",
+                      label: "eResearch Store"
+                    },
                       {
                         value: "onedrive",
                         label: "OneDrive"
@@ -1712,19 +1686,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:storage:other',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_storage_other_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_storage': {
                         onValueUpdate: [{
                           debug: 'onValueUpdate:ethics_identifiable_storage_other_text:subscribedto:ethics_identifiable_storage',
@@ -1734,19 +1695,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: ''},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_identifiable_storage_other_text:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -1770,10 +1718,10 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:informed_consent:publish:help',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'human_participant_data_identifiable_open_consent'
-                      },
+                      value: "yes",
+                      label: "Yes",
+                      publishTag: 'human_participant_data_identifiable_open_consent'
+                    },
                       {
                         value: "no",
                         label: "No",
@@ -1832,10 +1780,10 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:additional_security:help',
                     controlType: 'radio',
                     options: [{
-                        value: "physical_lock",
-                        label: "Physical Lock",
-                        publishTag: 'ethics_identifiable_additional_security'
-                      },
+                      value: "physical_lock",
+                      label: "Physical Lock",
+                      publishTag: 'ethics_identifiable_additional_security'
+                    },
                       {
                         value: "encryption",
                         label: "Encryption"
@@ -1881,10 +1829,10 @@ module.exports = {
                     help: '@dmpt-ethics:identifiable:transfered_out:help',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'ethics_identifiable_transfered_yes'
-                      },
+                      value: "yes",
+                      label: "Yes",
+                      publishTag: 'ethics_identifiable_transfered_yes'
+                    },
                       {
                         value: "no",
                         label: "No",
@@ -1943,19 +1891,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_transfered_out_yes_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_transfered_out': {
                         onItemSelect: [{
                           debug: 'onItemSelect:ethics_identifiable_transfered_out_yes_text:subscribedto:ethics_identifiable_transfered_out',
@@ -1966,19 +1901,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -2005,14 +1927,14 @@ module.exports = {
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'ethics_identifiable_deidentify_yes',
-                        revert: "no",
-                        modifies:[
-                          'ethics_identifiable_deidentify_no_text'
-                        ]
-                      },
+                      value: "yes",
+                      label: "Yes",
+                      publishTag: 'ethics_identifiable_deidentify_yes',
+                      revert: "no",
+                      modifies:[
+                        'ethics_identifiable_deidentify_no_text'
+                      ]
+                    },
                       {
                         value: "no",
                         label: "No",
@@ -2030,19 +1952,6 @@ module.exports = {
                       }
                     },
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable': {
                         onValueUpdate: [{
                           debug: 'onValueUpdate:ethics_identifiable_deidentify:subscribedto:ethics_identifiable',
@@ -2074,19 +1983,6 @@ module.exports = {
                     label: '@dmpt-ethics:identifiable:deidentify_no',
                     type: 'text',
                     subscribe: {
-                      'ethics_describe': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['human_participant_data'],
-                          valueFalse: [''],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
-                      },
                       'ethics_identifiable_deidentify': {
                         onItemSelect: [{
                           debug: ':onItemSelect:ethics_identifiable_deidentify_no_text:subscribedto:ethics_identifiable_deidentify',
@@ -2097,19 +1993,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_deidentify_no_text:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -2143,19 +2026,6 @@ module.exports = {
                             {key: 'visible', val: true}
                           ]
                         }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
-                          ]
-                        }]
                       }
                     }
                   }
@@ -2185,19 +2055,6 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true}
-                          ]
-                        }]
-                      },
-                      'ethics_identifiable': {
-                        onValueUpdate: [{
-                          debug: 'onItemSelect:ethics_human_participant_data_severity_risk:subscribedto:ethics_identifiable',
-                          action: 'setProp',
-                          defer: true,
-                          valueTest: ['yes', 'ethics_identifiable'],
-                          valueFalse: ['no', 'ethics_identifiable_no'],
-                          props: [
-                            {key: 'value', val: '', clear: true},
-                            {key: 'visible', val: true},
                           ]
                         }]
                       }
@@ -2232,13 +2089,13 @@ module.exports = {
               id: "retention",
               label: "@dmpt-retention-tab",
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-retention-heading',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-retention-heading',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'SelectionField',
                   compClass: 'DropdownFieldComponent',
@@ -2247,9 +2104,9 @@ module.exports = {
                     label: '@dmpt-redbox:retentionPeriod_dc:date',
                     help: '@dmpt-redbox:retentionPeriod_dc:date:help',
                     options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
-                      },
+                      value: "",
+                      label: "@dmpt-select:Empty"
+                    },
                       {
                         value: "1year",
                         label: "@dmpt-redbox:retentionPeriod_dc:date-1year"
@@ -2291,9 +2148,9 @@ module.exports = {
                     name: 'redbox:retentionPeriod_dc:date_skos:note',
                     label: '@dmpt-redbox:retentionPeriod_dc:date_skos:note',
                     options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
-                      },
+                      value: "",
+                      label: "@dmpt-select:Empty"
+                    },
                       {
                         value: "heritage",
                         label: "@dmpt-redbox:retentionPeriod_dc:date_skos:note-heritage"
@@ -2384,10 +2241,10 @@ module.exports = {
                     //defaultValue: 'yes',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes",
-                        publishTag: 'ethics_data_destroy_after_retention_yes'
-                      },
+                      value: "yes",
+                      label: "Yes",
+                      publishTag: 'ethics_data_destroy_after_retention_yes'
+                    },
                       {
                         value: "no",
                         label: "No",
@@ -2510,9 +2367,9 @@ module.exports = {
                     defaultValue: 'no',
                     controlType: 'radio',
                     options: [{
-                        value: "extended_consent",
-                        label: "@dmpt-dc:accessRights:data_retained_secondary:extended_consent"
-                      },
+                      value: "extended_consent",
+                      label: "@dmpt-dc:accessRights:data_retained_secondary:extended_consent"
+                    },
                       {
                         value: "unspecified_consent",
                         label: "@dmpt-dc:accessRights:data_retained_secondary:unspecified_consent"
@@ -2546,13 +2403,13 @@ module.exports = {
               id: "ownership",
               label: "@dmpt-access-rights-tab",
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-access-rights-heading',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-access-rights-heading',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'SelectionField',
                   compClass: 'DropdownFieldComponent',
@@ -2573,33 +2430,33 @@ module.exports = {
                       {
                         key: 'student@uts.edu.au',
                         value:[{
-                            value: "", label: "@dmpt-select:Empty"
-                          },{
-                            value: "myUni", label: "@dmpt-dc:rightsHolder_dc:name-myUni"
-                          },{
-                            value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
-                          },{
-                            value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
-                          },{
-                            value: "studentJoint", label: "@dmpt-dc:rightsHolder_dc:name-studentJoint"
-                          },{
-                            value: "others", label: "@dmpt-dc:rightsHolder_dc:name-others"
-                          }
+                          value: "", label: "@dmpt-select:Empty"
+                        },{
+                          value: "myUni", label: "@dmpt-dc:rightsHolder_dc:name-myUni"
+                        },{
+                          value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
+                        },{
+                          value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
+                        },{
+                          value: "studentJoint", label: "@dmpt-dc:rightsHolder_dc:name-studentJoint"
+                        },{
+                          value: "others", label: "@dmpt-dc:rightsHolder_dc:name-others"
+                        }
                         ]
                       },
                       {
                         key: 'staff@uts.edu.au',
                         value:[{
-                            value: "", label: "@dmpt-select:Empty"
-                          },{
-                            value: "myUni", label: "@dmpt-dc:rightsHolder_dc:name-myUni"
-                          },{
-                            value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
-                          },{
-                            value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
-                          },{
-                            value: "others", label: "@dmpt-dc:rightsHolder_dc:name-others"
-                          }
+                          value: "", label: "@dmpt-select:Empty"
+                        },{
+                          value: "myUni", label: "@dmpt-dc:rightsHolder_dc:name-myUni"
+                        },{
+                          value: "myUnjount", label: "@dmpt-dc:rightsHolder_dc:name-myUnjount"
+                        },{
+                          value: "student", label: "@dmpt-dc:rightsHolder_dc:name-student"
+                        },{
+                          value: "others", label: "@dmpt-dc:rightsHolder_dc:name-others"
+                        }
                         ]
                       }
                     ],
@@ -2630,10 +2487,10 @@ module.exports = {
                     help: '@dmpt-dc:accessRights-help',
                     controlType: 'radio',
                     options: [{
-                        value: "@dmpt-dc:accessRights-manager",
-                        label: "@dmpt-dc:accessRights-manager",
-                        publishTag: 'dc_access_rights_available'
-                      },
+                      value: "@dmpt-dc:accessRights-manager",
+                      label: "@dmpt-dc:accessRights-manager",
+                      publishTag: 'dc_access_rights_available'
+                    },
                       {
                         value: "@dmpt-dc:accessRights-open",
                         label: "@dmpt-dc:accessRights-open",
@@ -2685,7 +2542,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -2755,10 +2612,10 @@ module.exports = {
                     defaultValue: 'no',
                     controlType: 'radio',
                     options: [{
-                        value: "no",
-                        label: "No",
-                        publishTag: 'ethics_data_secondary_third_party_no',
-                      },
+                      value: "no",
+                      label: "No",
+                      publishTag: 'ethics_data_secondary_third_party_no',
+                    },
                       {
                         value: "yes",
                         label: "Yes",
@@ -2789,9 +2646,9 @@ module.exports = {
                     help: '@dmpt-ethics:data:secondary_third_party:held:help',
                     controlType: 'checkbox',
                     options: [{
-                        value: "privately_held",
-                        label: "@dmpt-ethics:data:secondary_third_party:held:privately"
-                      },
+                      value: "privately_held",
+                      label: "@dmpt-ethics:data:secondary_third_party:held:privately"
+                    },
                       {
                         value: "publicly_available",
                         label: "@dmpt-ethics:data:secondary_third_party:held:publicly_available"
@@ -2842,9 +2699,9 @@ module.exports = {
                     help: '@dmpt-ethics:data:secondary_third_party:custodians:help',
                     controlType: 'radio',
                     options: [{
-                        value: "yes",
-                        label: "Yes"
-                      },
+                      value: "yes",
+                      label: "Yes"
+                    },
                       {
                         value: "no",
                         label: "No"
@@ -2889,9 +2746,9 @@ module.exports = {
                     help: '@dmpt-ethics:data:secondary_third_party:ownership_type:help',
                     controlType: 'radio',
                     options: [{
-                        value: "open_license",
-                        label: "Open license"
-                      },
+                      value: "open_license",
+                      label: "Open license"
+                    },
                       {
                         value: "commercial_license",
                         label: "Commercial license"
@@ -2935,7 +2792,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -2965,7 +2822,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -2995,7 +2852,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -3025,7 +2882,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -3085,7 +2942,7 @@ module.exports = {
                 {
                   class: 'TextField',
                   definition: {
-                  visible: false,
+                    visible: false,
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
@@ -3151,13 +3008,13 @@ module.exports = {
               id: "workspaces",
               label: "@dmpt-workspaces-tab",
               fields: [{
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  definition: {
-                    value: '@dmpt-workspaces-heading',
-                    type: 'h3'
-                  }
-                },
+                class: 'Container',
+                compClass: 'TextBlockComponent',
+                definition: {
+                  value: '@dmpt-workspaces-heading',
+                  type: 'h3'
+                }
+              },
                 {
                   class: 'Container',
                   compClass: 'TextBlockComponent',
@@ -3172,9 +3029,9 @@ module.exports = {
                   definition: {
                     name: 'workspaces',
                     columns: [{
-                        "label": "Name",
-                        "property": "title"
-                      },
+                      "label": "Name",
+                      "property": "title"
+                    },
                       {
                         "label": "Description",
                         "property": "description"
@@ -3187,6 +3044,54 @@ module.exports = {
                       {
                         "label": "Type",
                         "property": "type"
+                      }
+                    ]
+                  }
+                },
+                {
+                  class: 'WorkspaceRegisterField',
+                  compClass: 'WorkspaceRegisterFieldComponent',
+                  definition: {
+                    value: '@dmpt-workspaces-associated-heading',
+                    open: 'Register Research Workspace',
+                    saveFirst: 'Save your plan to register a workspace',
+                    type: 'h4',
+                    workspaceApps: [
+                      {
+                        label: "@dmpt-workspace:eresearch-store",
+                        value: "research-workspace-eresearch-store"
+                      },
+                      {
+                        label: "@dmpt-workspace:onedrive",
+                        value: "research-workspace-onedrive"
+                      },
+                      {
+                        label: "@dmpt-workspace:cloudstor",
+                        value: "research-workspace-cloudstor"
+                      },
+                      {
+                        label: "@dmpt-workspace:university-drive",
+                        value: "research-workspace-university-drive"
+                      },
+                      {
+                        label: "@dmpt-workspace:qualtrics",
+                        value: "research-workspace-eresearch-qualtrics"
+                      },
+                      {
+                        label: "@dmpt-workspace:eresearch-limesurvey",
+                        value: "research-workspace-eresearch-limesurvey"
+                      },
+                      {
+                        label: "@dmpt-workspace:hpcc",
+                        value: "research-workspace-eresearch-hpcc"
+                      },
+                      {
+                        label: "@dmpt-workspace:ihpc",
+                        value: "research-workspace-eresearch-ihpc"
+                      },
+                      {
+                        label: "@dmpt-workspace:git-repository",
+                        value: "research-workspace-eresearch-git-repository"
                       }
                     ]
                   }
@@ -3227,16 +3132,16 @@ module.exports = {
       definition: {
         editOnly: true,
         fields: [{
-            class: "TabNavButton",
-            definition: {
-              id: 'mainTabNav',
-              prevLabel: "@tab-nav-previous",
-              nextLabel: "@tab-nav-next",
-              targetTabContainerId: "mainTab",
-              cssClasses: 'btn btn-primary',
-              endDisplayMode: 'hidden'
-            }
-          },
+          class: "TabNavButton",
+          definition: {
+            id: 'mainTabNav',
+            prevLabel: "@tab-nav-previous",
+            nextLabel: "@tab-nav-next",
+            targetTabContainerId: "mainTab",
+            cssClasses: 'btn btn-primary',
+            endDisplayMode: 'hidden'
+          }
+        },
           {
             class: "Spacer",
             definition: {
