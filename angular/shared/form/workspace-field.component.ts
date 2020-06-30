@@ -1,9 +1,11 @@
 import { Component, Input, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ApplicationRef, ElementRef } from '@angular/core';
 import { FieldBase } from './field-base';
-import { FormControl, FormGroup, FormArray } from '@angular/forms';
+import { FormControl, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { SimpleComponent } from './field-simple.component';
 import * as _ from "lodash";
 import { WorkspaceTypeService } from '../workspace-service';
+import {} from "../workspace-service";
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 declare var jQuery: any;
 declare var $: any;
@@ -230,17 +232,37 @@ export class WorkspaceRegisterField extends FieldBase<any>  {
   workspaceApp: any;
   services: any = [];
   appLink: string;
+  workspaceRegisterForm;
+  submitted = false;
+  workspaceType: WorkspaceType;
+  disabledType: boolean = false;
+  stepHidden = [false,true];
+  clearSelected: boolean = false;
+  searchStr: string;
+  dataService: CompleterData;
+  vstate = 0;
+  completerService: CompleterService;
+  formBuilder: FormBuilder;
 
   constructor(options: any, injector: any) {
     super(options, injector);
+    this.workspaceTypeService = this.getFromInjector(WorkspaceTypeService);
+    this.completerService = this.getFromInjector(CompleterService);
+    this.formBuilder = this.getFromInjector(FormBuilder);
     this.open = this.getTranslated(options['open'], options['open']);
     this.saveFirst = this.getTranslated(options['saveFirst'], options['saveFirst']);
     this.rdmp = undefined;
     this.workspaceApps = _.map(options['workspaceApps'] || [], (option) => {
       option['label'] = this.getTranslated(option['label'], option['label']);
-      option['name'] = '';
       return option;
     });
+    this.workspaceRegisterForm = this.formBuilder.group({
+      name: new FormControl('', Validators.required),
+      location: new FormControl('', Validators.required),
+      details: new FormControl('', Validators.required),
+      workspaceType: new FormControl('', Validators.required),
+    });
+    this.dataService = this.completerService.local(this.workspaceApps, 'label,description,keywords', 'label').imageField("image").descriptionField("description");
   }
 
   init() {
@@ -255,4 +277,50 @@ export class WorkspaceRegisterField extends FieldBase<any>  {
   setOid(o) {
     this.rdmp = o.oid;
   }
+
+  saveAndOpenWorkspace() {
+    this.fieldMap._rootComp.onSubmit().subscribe(response => {
+      this.disabledType = false;
+      this.vstate = 0;
+      this.stepHidden = [false,true];
+      this.workspaceRegisterForm.reset();
+      this.clearSelected = true;
+      this.submitted = false;
+      jQuery('#workspaceRegisterModal').modal({backdrop: 'static', keyboard: false, show: true});
+    });
+  }
+
+  onSelect(event) {
+    this.disabledType = true;
+    this.workspaceType = event['originalObject'];
+    this.stepHidden = [true,false];
+  }
+
+  clearWorkspaceSelected() {
+    this.clearSelected = true;
+    this.disabledType = false;
+    this.stepHidden = [false,true];
+  }
+
+  get f() { return this.workspaceRegisterForm.controls; }
+
+  registerWorkspace(value) {
+    console.log(`registerWorkspace ${value}`);
+    this.workspaceRegisterForm.patchValue({workspaceType: this.workspaceType.value});
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.workspaceRegisterForm.invalid) {
+      return;
+    } else {
+      const workspaceType = this.workspaceType.value;
+      this.workspaceTypeService.createWorkspace(this.rdmp, value, workspaceType);
+    }
+  }
+}
+
+class WorkspaceType{
+  label: string = '';
+  description: string = '';
+  image: string = '';
+  value: string = '';
 }

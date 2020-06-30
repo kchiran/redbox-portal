@@ -5,7 +5,7 @@
             [attr.aria-label]="'help' | translate "><span
       class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
   </label>
-  <a *ngIf="field.rdmp" (click)="saveAndOpenWorkspace()" class="btn btn-block btn-primary">
+  <a *ngIf="field.rdmp" (click)="field.saveAndOpenWorkspace()" class="btn btn-block btn-primary">
     {{ field.open }}
   </a>
   <a *ngIf="!field.rdmp" [attr.disabled]="field.rdmp ? null : ''" class="btn btn-block btn-secondary">
@@ -23,46 +23,46 @@
           <p>To register a workspace select a type from the list and include details.</p>
           <p><span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow"
                    [innerHtml]="field.help"></span></p>
-          <form [formGroup]="workspaceRegisterForm" (ngSubmit)="registerWorkspace(workspaceRegisterForm.value)">
-            <div class="form-group" [hidden]="stepHidden[0]">
+          <form [formGroup]="field.workspaceRegisterForm" (ngSubmit)="field.registerWorkspace(field.workspaceRegisterForm.value)">
+            <div class="form-group" [hidden]="field.stepHidden[0]">
               <label for="workspaceRegisterType">Workspace</label>
-              <div *ngIf="!disabledType">
-                <ng2-completer #ngCompleter [(ngModel)]="searchStr" [required]=true [autoMatch]=false
-                               [datasource]="dataService" [minSearchLength]="0"
+              <div *ngIf="!field.disabledType">
+                <ng2-completer #ngCompleter [(ngModel)]="field.searchStr" [required]=true [autoMatch]=false
+                               [datasource]="field.dataService" [minSearchLength]="0"
                                [ngModelOptions]="{standalone: true}"
-                               [inputClass]="'form-control'" (selected)="onSelect($event)"
+                               [inputClass]="'form-control'" (selected)="field.onSelect($event)"
                                [inputId]="'workspaceRegisterType'"
                                [textNoResults]="'Workspace not listed'"
-                               [openOnClick]=true [clearSelected]="clearSelected">
+                               [openOnClick]=true [clearSelected]="field.clearSelected">
                 </ng2-completer>
                 <small id="workspaceRegisterTypeHelp" class="form-text text-muted">The type of your
                   workspace</small>
               </div>
             </div>
-            <div class="row" [hidden]="stepHidden[1]">
+            <div class="row" [hidden]="field.stepHidden[1]">
               <div class="col-sm-6">
-                <div *ngIf="disabledType">
+                <div *ngIf="field.disabledType">
                   <div class="card service col-lg-4 col-md-5 col-sm-6 col-xs-12"
                        style="display: flex; flex-direction: column;width: 30rem;">
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h5 class="panel-title card-title" style="margin-top: 1px">
-                          <span>{{ workspaceType.label }}</span>
+                          <span>{{ field.workspaceType.label }}</span>
                         </h5>
                       </div>
                       <div class="panel-body workspaces-panel-body">
                         <img class="card-img-top" style="max-height:100px;"
-                             src="{{ workspaceType.image }}"
-                             alt="{{ workspaceType.label }}">
+                             src="{{ field.workspaceType.image }}"
+                             alt="{{ field.workspaceType.label }}">
                         <div class="card-body" style="margin-bottom: auto;">
                           <h5 class="card-title"
-                              style="margin-top: 2px">{{ workspaceType.label }}</h5>
-                          <p class="card-text">{{ workspaceType.description }}</p>
+                              style="margin-top: 2px">{{ field.workspaceType.label }}</h5>
+                          <p class="card-text">{{ field.workspaceType.description }}</p>
                         </div>
                       </div>
                       <div class="card-footer" style="margin-top: auto;">
                         <a class="btn btn-block btn-secondary"
-                           (click)="clearWorkspaceSelected()">Change Workspace
+                           (click)="field.clearWorkspaceSelected()">Change Workspace
                         </a>
                       </div>
                     </div>
@@ -75,9 +75,9 @@
                   <input type="text" class="form-control" id="name"
                          aria-describedby="nameHelp" required=""
                          formControlName="name" placeholder="Type a name"
-                         [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
-                  <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                    <div *ngIf="f.name.errors.required">Name is required</div>
+                         [ngClass]="{ 'is-invalid': field.submitted && field.f.name.errors }">
+                  <div *ngIf="field.submitted && field.f.name.errors" class="invalid-feedback">
+                    <div *ngIf="field.f.name.errors.required">Name is required</div>
                   </div>
                   <small id="nameHelp" class="form-text text-muted">The name of your
                     workspace</small>
@@ -87,9 +87,9 @@
                   <input type="text" class="form-control" id="location"
                          aria-describedby="locationHelp" placeholder="Type a location"
                          formControlName="location" required=""
-                         [ngClass]="{ 'is-invalid': submitted && f.location.errors }">
-                  <div *ngIf="submitted && f.location.errors" class="invalid-feedback">
-                    <div *ngIf="f.location.errors.required">Location is required</div>
+                         [ngClass]="{ 'is-invalid': field.submitted && field.f.location.errors }">
+                  <div *ngIf="field.submitted && field.f.location.errors" class="invalid-feedback">
+                    <div *ngIf="field.f.location.errors.required">Location is required</div>
                   </div>
                   <small id="locationHelp" class="form-text text-muted">The location or url of
                     your
@@ -100,9 +100,9 @@
                   <textarea rows="4" cols="50" class="form-control" id="details"
                             aria-describedby="detailsHelp" placeholder="Type details"
                             formControlName="details" required=""
-                            [ngClass]="{ 'is-invalid': submitted && f.details.errors }"></textarea>
-                  <div *ngIf="submitted && f.details.errors" class="invalid-feedback">
-                    <div *ngIf="f.details.errors.required">Details is required</div>
+                            [ngClass]="{ 'is-invalid': field.submitted && field.f.details.errors }"></textarea>
+                  <div *ngIf="field.submitted && field.f.details.errors" class="invalid-feedback">
+                    <div *ngIf="field.f.details.errors.required">Details is required</div>
                   </div>
                   <small id="detailsHelp" class="form-text text-muted">
                     Input short details of your workspace
@@ -110,7 +110,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-group" [hidden]="stepHidden[1]">
+            <div class="form-group" [hidden]="field.stepHidden[1]">
               <div class="row row-no-gutters">
                 <small id="workspaceRegisterConfirmHelp" class="form-text text-muted">Click confirm to register
                   workspace</small><br/>
