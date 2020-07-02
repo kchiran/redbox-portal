@@ -129,7 +129,8 @@
           </form>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary"
-                    [disabled]="field.isCreating" data-dismiss="modal">Close
+                    [disabled]="field.isCreating"
+                    (click)="field.close()">Close
             </button>
           </div>
         </div>

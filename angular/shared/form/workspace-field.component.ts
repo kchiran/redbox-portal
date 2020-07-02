@@ -342,6 +342,14 @@ export class WorkspaceRegisterField extends FieldBase<any> {
       this.isCreating = false;
     }
   }
+
+  close() {
+    jQuery('#workspaceRegisterModal').modal('hide');
+    if(this.created) {
+      // cop-out till we can send updates to the rdmp without reloading
+      window.location.href = `${this.appConfig.baseUrl}/${this.appConfig.branding}/${this.appConfig.portal}/record/edit/${this.rdmp}?focusTabId=workspaces`;
+    }
+  }
 }
 
 class WorkspaceType {
