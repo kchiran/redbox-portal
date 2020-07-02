@@ -3042,6 +3042,10 @@ module.exports = {
                         "link": "absolute"
                       },
                       {
+                        "label": "Workspace",
+                        "property": "subtype"
+                      },
+                      {
                         "label": "Type",
                         "property": "type"
                       }

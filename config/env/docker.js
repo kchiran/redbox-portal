@@ -77,7 +77,7 @@ module.exports = {
   },
   workspaces: {
      portal:{
-       authorization: 'Bearer bf4d5d6e-326e-43d4-b997-9271e882167a'
+       authorization: 'Bearer ca6e8f0d-5917-475c-a35e-0c60295419d8'
      },
      provisionerUser: 'admin',
      parentRecord: 'rdmp',

@@ -44,9 +44,9 @@ export module Controllers {
         }
 
         public createWorkspace(req, res) {
-            let redboxHeaders = '';
+            let redboxHeaders = {};
             try {
-                redboxHeaders = sails.config.workspaces.portal.authorization;
+                redboxHeaders = sails.config.workspaces.portal;
             } catch (error) {
                 const errorMessage = `redboxHeaders (sails.config.workspaces.portal.authorization) was not found ${sails.config.workspaces.portal.authorization}`;
                 sails.log.error(errorMessage);
@@ -55,22 +55,22 @@ export module Controllers {
             let recordMetadata = {};
             let rdmpTitle = '';
             const rdmp = req.param('rdmp');
-            const username = req.user.username;
+            const username = req.user.username
             const workspaceInfo = req.param('workspaceInfo');
             const workspaceType = req.param('workspaceType');
-            const workspaceTitle = workspaceInfo['workspaceTitle'];
-            const workspaceLocation = workspaceInfo['workspaceLocation'];
-            const workspaceDescription = workspaceInfo['workspaceDescription'];
+            const workspaceTitle = workspaceInfo['name'];
+            const workspaceLocation = workspaceInfo['location'];
+            const workspaceDescription = workspaceInfo['details'];
             let emailPermissions = [];
             const config = {
-                workflowStage: workspaceType,
-                recordType: workspaceType,
+                workflowStage: 'draft',
+                recordType: 'genericWorkspace',
                 brandingAndPortalUrl: BrandingService.getFullPath(req),
                 redboxHeaders: redboxHeaders
             };
             return WorkspaceService.getRecordMeta(config, rdmp)
                 .flatMap(response => {
-                    sails.log.debug('get recordMetadata');
+                    sails.log.debug('getRecordMetadata');
                     recordMetadata = response;
                     rdmpTitle = recordMetadata['title'];
                     const record = {
@@ -79,10 +79,20 @@ export module Controllers {
                         title: workspaceTitle,
                         location: workspaceLocation,
                         description: workspaceDescription,
-                        type: workspaceType
+                        type: config.recordType,
+                        subtype: workspaceType
                     };
+                    if (sails.config.workspaces.permissions && Array.isArray(sails.config.workspaces.permissions)) {
+                        _.each(sails.config.workspaces.permissions, (o) => {
+                            const email = _.get(recordMetadata, o, undefined);
+                            if (email) {
+                                emailPermissions.push(email);
+                            }
+                        });
+                    }
+                    sails.log.debug(`username ${username}`);
                     return WorkspaceService.createWorkspaceRecord(
-                        config, username, record, workspaceType, config.workflowStage, emailPermissions
+                        config, username, record, config.recordType, config.workflowStage, emailPermissions
                     );
                 }).flatMap(workspace => {
                     sails.log.debug('create WorkspaceRecord');
@@ -97,7 +107,6 @@ export module Controllers {
                 .subscribe(response => {
                     sails.log.debug('createWorkspace, linkWorkspace');
                     const workspace = response;
-                    sails.log.debug(workspace);
                     this.ajaxOk(req, res, null, {
                         status: true,
                         workspace: workspace

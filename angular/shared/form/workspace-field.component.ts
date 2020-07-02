@@ -1,11 +1,21 @@
-import { Component, Input, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ApplicationRef, ElementRef } from '@angular/core';
-import { FieldBase } from './field-base';
-import { FormControl, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { SimpleComponent } from './field-simple.component';
+import {
+  Component,
+  Input,
+  Inject,
+  ViewChild,
+  ViewContainerRef,
+  ComponentFactoryResolver,
+  ComponentRef,
+  ApplicationRef,
+  ElementRef
+} from '@angular/core';
+import {FieldBase} from './field-base';
+import {FormControl, FormGroup, FormArray, FormBuilder, Validators} from '@angular/forms';
+import {SimpleComponent} from './field-simple.component';
 import * as _ from "lodash";
-import { WorkspaceTypeService } from '../workspace-service';
+import {WorkspaceTypeService} from '../workspace-service';
 import {} from "../workspace-service";
-import { CompleterService, CompleterData } from 'ng2-completer';
+import {CompleterService, CompleterData} from 'ng2-completer';
 
 declare var jQuery: any;
 declare var $: any;
@@ -41,7 +51,7 @@ export class WorkspaceFieldComponent {
   /**
    * The DOM node for this field.
    */
-  @ViewChild('field', { read: ViewContainerRef }) fieldAnchor: ViewContainerRef;
+  @ViewChild('field', {read: ViewContainerRef}) fieldAnchor: ViewContainerRef;
 
   /**
    * The parentId of this field
@@ -53,11 +63,9 @@ export class WorkspaceFieldComponent {
   @ViewChild('field') fieldElement;
 
 
-
-
   /**
-  * Elements that were already disabled before we ran isDisabled (so they can be restored disabled)
-  */
+   * Elements that were already disabled before we ran isDisabled (so they can be restored disabled)
+   */
   private disabledElements: any;
 
   /**
@@ -66,6 +74,7 @@ export class WorkspaceFieldComponent {
   constructor(@Inject(ComponentFactoryResolver) private componentFactoryResolver: ComponentFactoryResolver, protected app: ApplicationRef) {
     this.disabledElements = [];
   }
+
   /**
    * If the form is valid.
    */
@@ -127,7 +136,7 @@ export class WorkspaceFieldComponent {
   }
 }
 
-export class WorkspaceSelectorField extends FieldBase<any>  {
+export class WorkspaceSelectorField extends FieldBase<any> {
   workspaceApps: any[] = [];
   open: string;
   saveFirst: string;
@@ -191,7 +200,7 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
       this.workspaceApp = null
     } else {
       this.workspaceApp = _.find(this.workspaceApps,
-        function(w) {
+        function (w) {
           return w['name'] == value;
         }
       );
@@ -223,7 +232,7 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
   }
 }
 
-export class WorkspaceRegisterField extends FieldBase<any>  {
+export class WorkspaceRegisterField extends FieldBase<any> {
   workspaceApps: any[] = [];
   open: string;
   saveFirst: string;
@@ -236,13 +245,17 @@ export class WorkspaceRegisterField extends FieldBase<any>  {
   submitted = false;
   workspaceType: WorkspaceType;
   disabledType: boolean = false;
-  stepHidden = [false,true];
+  stepHidden = [false, true];
   clearSelected: boolean = false;
   searchStr: string;
   dataService: CompleterData;
   vstate = 0;
   completerService: CompleterService;
   formBuilder: FormBuilder;
+  isCreating: boolean = false;
+  createdError: string;
+  created: boolean = false;
+  workspaceCreated: any = {};
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -282,10 +295,14 @@ export class WorkspaceRegisterField extends FieldBase<any>  {
     this.fieldMap._rootComp.onSubmit().subscribe(response => {
       this.disabledType = false;
       this.vstate = 0;
-      this.stepHidden = [false,true];
+      this.stepHidden = [false, true];
       this.workspaceRegisterForm.reset();
       this.clearSelected = true;
       this.submitted = false;
+      this.isCreating = false;
+      this.createdError = undefined;
+      this.created = false;
+      this.workspaceCreated = {};
       jQuery('#workspaceRegisterModal').modal({backdrop: 'static', keyboard: false, show: true});
     });
   }
@@ -293,32 +310,41 @@ export class WorkspaceRegisterField extends FieldBase<any>  {
   onSelect(event) {
     this.disabledType = true;
     this.workspaceType = event['originalObject'];
-    this.stepHidden = [true,false];
+    this.stepHidden = [true, false];
   }
 
   clearWorkspaceSelected() {
     this.clearSelected = true;
     this.disabledType = false;
-    this.stepHidden = [false,true];
+    this.stepHidden = [false, true];
   }
 
-  get f() { return this.workspaceRegisterForm.controls; }
+  get f() {
+    return this.workspaceRegisterForm.controls;
+  }
 
-  registerWorkspace(value) {
+  async registerWorkspace(value) {
     console.log(`registerWorkspace ${value}`);
+    this.createdError = '';
     this.workspaceRegisterForm.patchValue({workspaceType: this.workspaceType.value});
     this.submitted = true;
     // stop here if form is invalid
-    if (this.workspaceRegisterForm.invalid) {
-      return;
-    } else {
+    if (!this.workspaceRegisterForm.invalid) {
+      this.isCreating = true;
       const workspaceType = this.workspaceType.value;
-      this.workspaceTypeService.createWorkspace(this.rdmp, value, workspaceType);
+      const res = await this.workspaceTypeService.createWorkspace(this.rdmp, value, workspaceType);
+      if (!res.status) {
+        this.createdError = res.message;
+      } else {
+        this.workspaceCreated = res.workspace;
+        this.created = true;
+      }
+      this.isCreating = false;
     }
   }
 }
 
-class WorkspaceType{
+class WorkspaceType {
   label: string = '';
   description: string = '';
   image: string = '';
