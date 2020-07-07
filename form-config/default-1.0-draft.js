@@ -3028,18 +3028,22 @@ module.exports = {
                   showHeader: true,
                   definition: {
                     name: 'workspaces',
+                    isEditable: true,
                     columns: [{
                         "label": "Name",
-                        "property": "title"
+                        "property": "title",
+                        "isEditable": true
                       },
                       {
                         "label": "Description",
-                        "property": "description"
+                        "property": "description",
+                        "isEditable": true
                       },
                       {
                         "label": "Location",
                         "property": "location",
-                        "link": "absolute"
+                        "link": "absolute",
+                        "isEditable": true
                       },
                       {
                         "label": "Workspace",
