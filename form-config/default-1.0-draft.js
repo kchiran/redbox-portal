@@ -3020,7 +3020,8 @@ module.exports = {
                   compClass: 'TextBlockComponent',
                   definition: {
                     value: '@dmpt-workspaces-associated-heading',
-                    type: 'h4'
+                    type: 'h4',
+                    help: 'This table represents the workspaces associated with this data management plan. Click the <i aria-hidden="true" class="fa fa-lock fa-lock"></i>&nbsp;lock button to edit or remove them from your plan',
                   }
                 },
                 {
@@ -3028,30 +3029,37 @@ module.exports = {
                   showHeader: true,
                   definition: {
                     name: 'workspaces',
+                    arhiveConfirmMessage: 'will be removed from the data management plan',
+                    confirmArchiveTitle: 'Confirm Archive',
                     isEditable: true,
                     columns: [{
                         "label": "Name",
                         "property": "title",
-                        "isEditable": true
+                        "isEditable": true,
+                        "cssClasses": "col-md-3"
                       },
                       {
                         "label": "Description",
                         "property": "description",
-                        "isEditable": true
+                        "isEditable": true,
+                        "cssClasses": "col-md-3"
                       },
                       {
                         "label": "Location",
                         "property": "location",
                         "link": "absolute",
-                        "isEditable": true
+                        "isEditable": true,
+                        "cssClasses": "col-md-3"
                       },
                       {
                         "label": "Workspace",
-                        "property": "subtype"
+                        "property": "subtype",
+                        "cssClasses": "col-md-1"
                       },
                       {
                         "label": "Type",
-                        "property": "type"
+                        "property": "type",
+                        "cssClasses": "col-md-1"
                       }
                     ]
                   }

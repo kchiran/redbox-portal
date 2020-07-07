@@ -53,6 +53,9 @@ export class RelatedObjectDataField extends FieldBase<any> {
   formBuilder: FormBuilder;
   formGroup = {};
   archiveCurrentItem = {};
+  currentItemEditing;
+  arhiveConfirmMessage: string;
+  confirmArchiveTitle: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -61,12 +64,15 @@ export class RelatedObjectDataField extends FieldBase<any> {
     this.failedObjects = [];
     this.columns = options['columns'] || [];
     this.isEditable = options['isEditable'] || false;
+    this.arhiveConfirmMessage = options['arhiveConfirmMessage'] || 'Confirm archiving your workspace from the plan';
+    this.confirmArchiveTitle = options['confirmArchiveTitle'] || 'Confirm Archive';
 
     var relatedObjects = this.relatedObjects;
     this.value = options['value'] || this.setEmptyValue();
     this.recordsService = this.getFromInjector(RecordsService);
     this.formBuilder = this.getFromInjector(FormBuilder);
     this.currentItemForm = this.formBuilder.group({});
+    this.setEmptyArchive();
   }
 
   /**
@@ -120,51 +126,57 @@ export class RelatedObjectDataField extends FieldBase<any> {
     return this.value;
   }
 
+  lockItem() {
+    this.currentItemEditing = -1;
+  }
+
+  isUnLocked(itemIndex) {
+    return this.currentItemEditing == itemIndex;
+  }
+
   editRelatedObject(item, itemIndex) {
+    this.currentItemEditing = itemIndex;
     this.currentItemForm.reset();
     for (let name in item) {
       this.formGroup[name] = new FormControl(item[name]);
     }
     this.currentItemForm = this.formBuilder.group(this.formGroup);
-    this.toggleEditRelatedObject(itemIndex);
-  }
-
-  toggleEditRelatedObject(index) {
-    this.relatedObjects.map((rO, i) => {
-      if (index === i) {
-        rO['_isEditing'] = !rO['_isEditing'];
-      } else {
-        rO['_isEditing'] = false;
-      }
-    });
   }
 
   archiveItem(item, itemIndex) {
     jQuery('#relatedObjectConfirmArchiveModal').modal({backdrop: 'static', keyboard: false, show: true});
     this.archiveCurrentItem = {
       item: item,
-      itemIndex: itemIndex
+      itemIndex: itemIndex,
+      title: item['title'] || 'workspace'
     }
   }
 
   confirmArchive(confirmArchiveRecord) {
     if (confirmArchiveRecord) {
       this.archiveCurrentItem['item']['archive'] = true;
-      this.saveItem(this.archiveCurrentItem['item'], this.archiveCurrentItem['itemIndex']);
+      this.saveItem(this.archiveCurrentItem['item']);
     }
     this.archiveCurrentItem = {};
     jQuery('#relatedObjectConfirmArchiveModal').modal('hide');
   }
 
-  saveItem(value, itemIndex) {
-    const object = this.value[itemIndex];
-    console.log(`id: ${object['id']}, ${value}`);
+  setEmptyArchive() {
+    this.archiveCurrentItem = {
+      item: {},
+      itemIndex: undefined,
+      title: ''
+    }
+  }
+
+  saveItem(value) {
+    const object = this.value[this.currentItemEditing];
     this.recordsService.update(object['id'], value, 'draft')
       .subscribe(res => {
         if (res.success) {
-          this.relatedObjects[itemIndex] = value;
-          this.relatedObjects[itemIndex]['_isEditing'] = true;
-          this.toggleEditRelatedObject(itemIndex);
+          this.relatedObjects[this.currentItemEditing] = value;
+          this.lockItem();
+          this.setEmptyArchive();
         } else {
           console.log(res.success);
         }
