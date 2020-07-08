@@ -38,11 +38,11 @@
             <td>
               <button type="button" *ngIf="field.editMode && field.isEditable && field.isUnLocked(i)"
                       class="btn btn-block" (click)="field.lockItem()">
-                <i aria-hidden="true" class="fa fa-lock fa-unlock"></i>
+                <i aria-hidden="true" class="fa fa-pencil-square-o"></i>
               </button>
-              <button type="button" *ngIf="field.editMode && field.isEditable && !field.isUnLocked(i)"
+              <button type="button" *ngIf="field.editMode &&   field.isEditable && !field.isUnLocked(i)"
                       class="btn btn-block" (click)="field.editRelatedObject(item, i)">
-                <i aria-hidden="true" class="fa fa-lock"></i>
+                <i aria-hidden="true" class="fa fa-pencil"></i>
               </button>
               <button type="submit" *ngIf="field.editMode && field.isEditable && field.isUnLocked(i)"
                       class="btn btn-block btn-success">
