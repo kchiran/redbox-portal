@@ -3021,7 +3021,7 @@ module.exports = {
                   definition: {
                     value: '@dmpt-workspaces-associated-heading',
                     type: 'h4',
-                    help: 'This table represents the workspaces associated with this data management plan. Click the <i aria-hidden="true" class="fa fa-lock fa-lock"></i>&nbsp;lock button to edit or remove them from your plan',
+                    help: 'This table represents the workspaces associated with this data management plan. Click the <i aria-hidden="true" class="fa fa-pencil"></i>&nbsp;edit button to edit or remove them from your plan',
                   }
                 },
                 {
