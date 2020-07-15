@@ -369,7 +369,7 @@
   "@dmpt-ethics:human_participant_data:severity_risk:help": "Risks can include physical, psychological, emotional, financial, or reputational harm that could occur to individuals if their personal information were accessed or used by an unauthorised person.",
   "@dmpt-ethics:human_participant_data:individual": "Will the data that you collect from or about individuals include",
   "@dmpt-ethics:human_participant_data:individual:help": "Guidance on what is considered personal and sensitive personal information can be found <a target='_blank' noreferrer class='underline' href='https://www.oaic.gov.au/privacy/your-privacy-rights/your-personal-information/what-is-personal-information'>here</a>. The definition of health information in NSW can be found <a target='_blank' noreferrer class='underline' href='https://www.legislation.nsw.gov.au/#/view/act/2002/71/part1/sec6'>here</a>",
-  "@dmpt-ethics:human_participant_data:personal": "Personal information",
+  "@dmpt-ethics:human_participant_data:personal": "Personal information excluding health information",
   "@dmpt-ethics:human_participant_data:sensitive_personal": "Sensitive personal information other than health information",
   "@dmpt-ethics:human_participant_data:health": "Health information",
   "@dmpt-ethics:human_participant_data:none": "None of the above",
