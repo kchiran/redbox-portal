@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/node_modules/uppy/dist/uppy.min.css">
 <div class='padding-bottom-10'>
   <span class="label-font">
-    {{field.label}} {{ getRequiredLabelStr()}}
+    {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
   </span><br/>
   <div>
       <div class="table-responsive" *ngIf="getDatalocations() && getDatalocations().length > 0">

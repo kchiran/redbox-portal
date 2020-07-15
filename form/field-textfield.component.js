@@ -1,101 +1,70 @@
-// Copyright (c) 2017 Queensland Cyber Infrastructure Foundation (http://www.qcif.edu.au/)
-//
-// GNU GENERAL PUBLIC LICENSE
-//    Version 2, June 1991
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License along
-// with this program; if not, write to the Free Software Foundation, Inc.,
-// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-import { Input, Component, ViewChild, ViewContainerRef, OnInit } from '@angular/core';
-import * as _ from "lodash";
-import { FieldBase } from './field-base';
-import { EmbeddableComponent, RepeatableComponent } from './field-repeatable.component';
-
-declare var jQuery: any;
-
-/**
- * Text Field Model
- *
- * Author: <a href='https://github.com/shilob' target='_blank'>Shilo Banihit</a>
-
- */
-export class TextField extends FieldBase<string> {
-  type: string;
-
-  constructor(options: any, injector: any) {
-    super(options, injector);
-    this.type = options['type'] || '';
-    this.controlType = 'textbox';
-    this.cssClasses = _.isEmpty(this.cssClasses) ? 'form-control' : this.cssClasses;
-  }
-
-  postInit(value:any) {
-    if (_.isEmpty(value)) {
-      this.value = this.defaultValue ? this.defaultValue : '';
-    } else {
-      this.value = value;
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@angular/core");
+const _ = require("lodash");
+const field_base_1 = require("./field-base");
+const field_repeatable_component_1 = require("./field-repeatable.component");
+class TextField extends field_base_1.FieldBase {
+    constructor(options, injector) {
+        super(options, injector);
+        this.type = options['type'] || '';
+        this.controlType = 'textbox';
+        this.cssClasses = _.isEmpty(this.cssClasses) ? 'form-control' : this.cssClasses;
     }
-  }
-}
-
-export class MarkdownTextArea extends FieldBase<string> {
-  rows: number;
-  cols: number;
-
-  lines: string[];
-
-  constructor(options: any, injector: any) {
-    super(options, injector);
-    this.rows = options['rows'] || 5;
-    this.cols = options['cols'] || null;
-    this.controlType = 'textarea';
-    if (_.isUndefined(this.value)) {
-      this.value = "";
+    postInit(value) {
+        if (_.isEmpty(value)) {
+            this.value = this.defaultValue ? this.defaultValue : '';
+        }
+        else {
+            this.value = value;
+        }
     }
-  }
-
-  formatValueForDisplay() {
-    this.lines = this.value ? this.value.split("\n") : [];
-  }
 }
-
-export class TextArea extends FieldBase<string> {
-  rows: number;
-  cols: number;
-
-  lines: string[];
-
-  constructor(options: any, injector: any) {
-    super(options, injector);
-    this.rows = options['rows'] || 5;
-    this.cols = options['cols'] || null;
-    this.controlType = 'textarea';
-    this.cssClasses = _.isEmpty(this.cssClasses) ? 'form-control' : this.cssClasses;
-  }
-
-  formatValueForDisplay() {
-    this.lines = this.value ? this.value.split("\n") : [];
-  }
+exports.TextField = TextField;
+class MarkdownTextArea extends field_base_1.FieldBase {
+    constructor(options, injector) {
+        super(options, injector);
+        this.rows = options['rows'] || 5;
+        this.cols = options['cols'] || null;
+        this.controlType = 'textarea';
+        if (_.isUndefined(this.value)) {
+            this.value = "";
+        }
+    }
+    formatValueForDisplay() {
+        this.lines = this.value ? this.value.split("\n") : [];
+    }
 }
-
-@Component({
-  selector: 'textfield',
-  template: `
+exports.MarkdownTextArea = MarkdownTextArea;
+class TextArea extends field_base_1.FieldBase {
+    constructor(options, injector) {
+        super(options, injector);
+        this.rows = options['rows'] || 5;
+        this.cols = options['cols'] || null;
+        this.controlType = 'textarea';
+        this.cssClasses = _.isEmpty(this.cssClasses) ? 'form-control' : this.cssClasses;
+    }
+    formatValueForDisplay() {
+        this.lines = this.value ? this.value.split("\n") : [];
+    }
+}
+exports.TextArea = TextArea;
+let TextFieldComponent = class TextFieldComponent extends field_repeatable_component_1.EmbeddableComponent {
+};
+TextFieldComponent = __decorate([
+    core_1.Component({
+        selector: 'textfield',
+        template: `
   <div *ngIf="field.editMode && field.visible" [ngClass]="getGroupClass()">
     <div *ngIf="!isEmbedded" >
       <label [attr.for]="field.name">
-        {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
+        {{field.label}} {{ getRequiredLabelStr() }}
         <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
         <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
       </label>
@@ -118,19 +87,29 @@ export class TextArea extends FieldBase<string> {
     <span class="value">{{field.value}}</span>
   </div>
   `,
-})
-export class TextFieldComponent extends EmbeddableComponent {
-
-}
-
-@Component({
-  selector: 'repeatable-textfield',
-  template: `
+    })
+], TextFieldComponent);
+exports.TextFieldComponent = TextFieldComponent;
+let RepeatableTextfieldComponent = class RepeatableTextfieldComponent extends field_repeatable_component_1.RepeatableComponent {
+    ngOnInit() {
+    }
+    addElem(event) {
+        const newElem = this.field.addElem();
+    }
+    removeElem(event, i) {
+        this.field.removeElem(i);
+    }
+};
+RepeatableTextfieldComponent.clName = 'RepeatableTextfieldComponent';
+RepeatableTextfieldComponent = __decorate([
+    core_1.Component({
+        selector: 'repeatable-textfield',
+        template: `
   <div *ngIf="field.editMode">
     <div class="row">
       <div class="col-xs-12">
       <span class="label-font" [id]="field.name">
-        {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
+        {{field.label}} {{ getRequiredLabelStr() }}
         <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
       </span>
       <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -163,33 +142,23 @@ export class TextFieldComponent extends EmbeddableComponent {
     </span>
   </li>
   `,
-})
-export class RepeatableTextfieldComponent extends RepeatableComponent {
-  static clName = 'RepeatableTextfieldComponent';
-
-
-  ngOnInit() {
-  }
-
-  addElem(event: any) {
-    const newElem = this.field.addElem();
-  }
-
-  removeElem(event: any, i: number) {
-    this.field.removeElem(i);
-  }
-}
-
-/**
- * Component
- * Author: <a href='https://github.com/shilob' target='_blank'>Shilo Banihit</a>
- */
-@Component({
-  selector: 'text-area',
-  template: `
+    })
+], RepeatableTextfieldComponent);
+exports.RepeatableTextfieldComponent = RepeatableTextfieldComponent;
+let TextAreaComponent = class TextAreaComponent extends field_repeatable_component_1.EmbeddableComponent {
+    ngOnInit() {
+        if (!this.field.editMode) {
+            this.field.formatValueForDisplay();
+        }
+    }
+};
+TextAreaComponent = __decorate([
+    core_1.Component({
+        selector: 'text-area',
+        template: `
   <div *ngIf="field.editMode" [formGroup]='form' [ngClass]="getGroupClass()">
     <label [attr.for]="field.name">
-      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
+      {{field.label}} {{ getRequiredLabelStr()}}
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </label>
     <!-- Normal version -->
@@ -219,23 +188,23 @@ export class RepeatableTextfieldComponent extends RepeatableComponent {
 
   </li>
   `
-})
-export class TextAreaComponent extends EmbeddableComponent implements OnInit {
-  field: TextArea;
-
-  ngOnInit() {
-    if (!this.field.editMode) {
-      this.field.formatValueForDisplay();
+    })
+], TextAreaComponent);
+exports.TextAreaComponent = TextAreaComponent;
+let MarkdownTextAreaComponent = class MarkdownTextAreaComponent extends field_repeatable_component_1.EmbeddableComponent {
+    ngOnInit() {
+        if (!this.field.editMode) {
+            this.field.formatValueForDisplay();
+        }
     }
-  }
-}
-
-@Component({
-  selector: 'markdown-text-area',
-  template: `
+};
+MarkdownTextAreaComponent = __decorate([
+    core_1.Component({
+        selector: 'markdown-text-area',
+        template: `
   <div *ngIf="field.editMode" [formGroup]='form' class="form-group">
     <label [attr.for]="field.name">
-      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
+      {{field.label}} {{ getRequiredLabelStr()}}
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </label><br/>
     <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -251,13 +220,6 @@ export class TextAreaComponent extends EmbeddableComponent implements OnInit {
     <br/>
   </li>
   `
-})
-export class MarkdownTextAreaComponent extends EmbeddableComponent implements OnInit {
-  field: MarkdownTextArea;
-
-  ngOnInit() {
-    if (!this.field.editMode) {
-      this.field.formatValueForDisplay();
-    }
-  }
-}
+    })
+], MarkdownTextAreaComponent);
+exports.MarkdownTextAreaComponent = MarkdownTextAreaComponent;
