@@ -1,35 +1,68 @@
-import { Component } from '@angular/core';
-import { SimpleComponent } from './field-simple.component';
-import { FieldBase } from './field-base';
-import { WorkspaceSelectorField } from './workspace-field.component';
-
-import * as _ from "lodash";
-@Component({
-  selector: 'workspace-select-parent',
-  template: ''
-})
-export class WorkspaceSelectComponent extends SimpleComponent {
-  static clName = 'WorkspaceSelectComponent';
-
-  getLabel(val: any): string {
-    const opt = _.find(this.field.options, (opt) => {
-      return opt.value == val;
-    });
-    if (opt) {
-      return opt.label;
-    } else {
-      return '';
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@angular/core");
+const field_simple_component_1 = require("./field-simple.component");
+const _ = require("lodash");
+let WorkspaceSelectComponent = class WorkspaceSelectComponent extends field_simple_component_1.SimpleComponent {
+    getLabel(val) {
+        const opt = _.find(this.field.options, (opt) => {
+            return opt.value == val;
+        });
+        if (opt) {
+            return opt.label;
+        }
+        else {
+            return '';
+        }
     }
-  }
-
-}
-
-@Component({
-  selector: 'workspace-select',
-  template: `
+};
+WorkspaceSelectComponent.clName = 'WorkspaceSelectComponent';
+WorkspaceSelectComponent = __decorate([
+    core_1.Component({
+        selector: 'workspace-select-parent',
+        template: ''
+    })
+], WorkspaceSelectComponent);
+exports.WorkspaceSelectComponent = WorkspaceSelectComponent;
+let WorkspaceSelectFieldComponent = class WorkspaceSelectFieldComponent extends WorkspaceSelectComponent {
+    ngOnInit() {
+        this.field.init();
+        this.field.registerEvents();
+    }
+    saveAndOpenWorkspace(app) {
+        this.fieldMap._rootComp.onSubmit().subscribe(response => {
+            let href = '';
+            if (app && app.id) {
+                let type = '';
+                if (app.type) {
+                    type = `&appType=${app.type}`;
+                    href = `${this.field.appLink}${app.id}/edit?rdmp=${this.field.rdmp}${type}`;
+                }
+                else {
+                    href = `${this.field.appLink}${app.id}/edit?rdmp=${this.field.rdmp}`;
+                }
+                window.location.href = href;
+            }
+            else {
+                console.error('No App with app id was found, please check config/workspaces.js');
+            }
+        });
+    }
+};
+WorkspaceSelectFieldComponent.clName = 'WorkspaceSelectFieldComponent';
+WorkspaceSelectFieldComponent = __decorate([
+    core_1.Component({
+        selector: 'workspace-select',
+        template: `
   <div [formGroup]='form' *ngIf="field.editMode" [ngClass]="getGroupClass()">
   <label [attr.for]="field.name">
-    {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
+    {{field.label}} {{ getRequiredLabelStr()}}
     <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span
       class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
   </label>
@@ -94,32 +127,6 @@ export class WorkspaceSelectComponent extends SimpleComponent {
   </div>
 </div>
   `,
-})
-export class WorkspaceSelectFieldComponent extends WorkspaceSelectComponent {
-  field: WorkspaceSelectorField
-  static clName = 'WorkspaceSelectFieldComponent';
-
-  ngOnInit() {
-    this.field.init();
-    this.field.registerEvents();
-  }
-
-  saveAndOpenWorkspace(app) {
-    this.fieldMap._rootComp.onSubmit().subscribe(response => {
-      let href = '';
-      if (app && app.id) {
-        let type = '';
-        if (app.type) {
-          type = `&appType=${app.type}`;
-          href = `${this.field.appLink}${app.id}/edit?rdmp=${this.field.rdmp}${type}`;
-        } else {
-          href = `${this.field.appLink}${app.id}/edit?rdmp=${this.field.rdmp}`;
-        }
-        window.location.href = href;
-      } else {
-        console.error('No App with app id was found, please check config/workspaces.js');
-      }
-    });
-  }
-
-}
+    })
+], WorkspaceSelectFieldComponent);
+exports.WorkspaceSelectFieldComponent = WorkspaceSelectFieldComponent;
