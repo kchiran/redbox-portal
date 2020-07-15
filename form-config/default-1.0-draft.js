@@ -1583,7 +1583,7 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_storage',
                     label: '@dmpt-ethics:identifiable:storage',
-                    help: '@dmpt-ethics:identifiable:storage:help'
+                    help: '@dmpt-ethics:identifiable:storage:help',
                     hasValueLabel: '@select-confirm-changes-multivalues',
                     confirmChangesLabel: '@select-confirm-changes',
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
@@ -2914,7 +2914,7 @@ module.exports = {
                     maxFileSize: 1073741824, // <- Configure web server to match this
                     maxNumberOfFiles: 50,
                     notesEnabled: true,
-                    locationHeader: 'Files asociated with this plan',
+                    locationHeader: 'Files associated with this plan',
                     notesHeader: '@dataLocations-notes',
                     uppyDashboardNote: '@dataLocations-uploader-note',
                     attachmentText: 'Add attachment(s)',
