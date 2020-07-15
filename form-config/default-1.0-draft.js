@@ -1583,6 +1583,7 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_storage',
                     label: '@dmpt-ethics:identifiable:storage',
+                    help: '@dmpt-ethics:identifiable:storage:help'
                     hasValueLabel: '@select-confirm-changes-multivalues',
                     confirmChangesLabel: '@select-confirm-changes',
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
@@ -2016,6 +2017,7 @@ module.exports = {
                     },
                     name: 'ethics_identifiable_deidentify_yes_where',
                     label: '@dmpt-ethics:identifiable:deidentify:yes:where',
+                    help: '@dmpt-ethics:identifiable:deidentify:yes:where:help',
                     type: 'text',
                     subscribe: {
                       'ethics_identifiable_deidentify': {
@@ -2901,7 +2903,7 @@ module.exports = {
                   editOnly: true,
                   definition: {
                     name: "attach-licences-prefix",
-                    value: '<h5>Please attach ethics approvals, licences or agreements if applicable</h5>'
+                    value: '<h5>Please attach ethics approvals, licences or agreements if applicable after you have saved your plan</h5>'
                   }
                 },
                 {
@@ -2916,8 +2918,8 @@ module.exports = {
                     notesHeader: '@dataLocations-notes',
                     uppyDashboardNote: '@dataLocations-uploader-note',
                     attachmentText: 'Add attachment(s)',
-                    attachmentTextDisabled: 'Save your plan to attach files',
-                    help: 'Upload your licence or agreements here. You can only upload after you save your plan.',
+                    attachmentTextDisabled: 'Attach files',
+                    help: 'Upload your licence or agreements here by clicking the button. You can only upload after you save your plan.',
                     label: 'Licences or Agreements:'
                   }
                 }
