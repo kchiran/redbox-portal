@@ -866,15 +866,6 @@ module.exports = {
                 }
               },
                 {
-                  class: 'Container',
-                  compClass: 'TextBlockComponent',
-                  visible: true,
-                  definition: {
-                    value: '@dmpt-ethics:iscs:initial',
-                    type: 'h5'
-                  }
-                },
-                {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
@@ -983,52 +974,29 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'TextField',
+                  class: 'SelectionField',
+                  compClass: 'DropdownFieldComponent',
                   definition: {
-                    editable: false,
-                    readOnly: true,
                     visible: true,
                     visibilityCriteria: true,
                     name: 'dmpt_ethics_iscs',
                     label: '@dmpt-ethics:iscs',
                     help: '@dmpt-ethics:iscs:help',
-                    publishTag: 'dmpt_ethics_iscs',
-                    type: 'text',
-                    value: '@dmpt-ethics:iscs:internal',
-                    publish: {
-                      onValueUpdate: {
-                        modelEventSource: 'valueChanges'
-                      }
-                    },
-                    subscribe: {
-                      'ethics_describe': {
-                        onItemSelect: [{
-                          debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          valueCase: [
-                            {val: 'human_participant_data', set: '@dmpt-ethics:iscs:confidential'},
-                            // {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
-                            // {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
-                            // {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'commercially_sensitive_data', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'clinical_trials', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'policed_data', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'other_sensitive', set: '@dmpt-ethics:iscs:confidential'},
-                          ]
-                        }]
+                    value: 'iscs_internal',
+                    options: [
+                      {
+                        value: "iscs_internal",
+                        label: "@dmpt-ethics:iscs:internal"
                       },
-                      'ethics_human_participant_data_individual': {
-                        onItemSelect: [{
-                          debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          valueCase: [
-                            {val: 'personal', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'sensitive_personal', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'health', set: '@dmpt-ethics:iscs:confidential'},
-                          ]
-                        }]
+                      {
+                        value: "iscs_sensitive",
+                        label: "@dmpt-ethics:iscs:sensitive"
+                      },
+                      {
+                        value: "iscs_confidential",
+                        label: "@dmpt-ethics:iscs:confidential"
                       }
-                    }
+                    ]
                   }
                 },
                 {
@@ -1049,10 +1017,10 @@ module.exports = {
                     help: '@dmpt-ethics:human_participant_data:individual:help',
                     controlType: 'radio',
                     options: [{
-                      value: "personal",
-                      label: "@dmpt-ethics:human_participant_data:personal",
-                      publishTag: "personal"
-                    },
+                        value: "personal",
+                        label: "@dmpt-ethics:human_participant_data:personal",
+                        publishTag: "personal"
+                      },
                       {
                         value: "sensitive_personal",
                         label: "@dmpt-ethics:human_participant_data:sensitive_personal",
@@ -1062,6 +1030,11 @@ module.exports = {
                         value: "health",
                         label: "@dmpt-ethics:human_participant_data:health",
                         publishTag: "health"
+                      },
+                      {
+                        value: "none",
+                        label: "@dmpt-ethics:human_participant_data:none",
+                        publishTag: "none"
                       }
                     ],
                     publish: {
@@ -1106,10 +1079,10 @@ module.exports = {
                     confirmChangesParagraphLabel: '@select-confirm-changes-paragraph',
                     controlType: 'radio',
                     options: [{
-                      value: "yes",
-                      label: "Yes",
-                      publishTag: "ethics_identifiable"
-                    },
+                        value: "yes",
+                        label: "Yes",
+                        publishTag: "ethics_identifiable"
+                      },
                       {
                         value: "no",
                         label: "No",
@@ -2529,10 +2502,10 @@ module.exports = {
                           debug: 'dmpt_ethics_dc_access_rights_not_available',
                           action: 'setProp',
                           valueTest: ['dc_access_rights_not_available'],
-                          valueFalse: ['mediated, by permission from the data manager','open access under license'],
+                          valueFalse: ['Mediated, by permission from the data manager','Open access under license'],
                           props: [
-                            {key: 'value', val: '', val2: ''},
-                            {key: 'visible', val: true, val2: false}
+                            {key: 'value', val: ''},
+                            {key: 'visible', val: true}
                           ]
                         }]
                       }
