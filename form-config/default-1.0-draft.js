@@ -2674,12 +2674,12 @@ module.exports = {
                     help: '@dmpt-ethics:data:secondary_third_party:ownership_type:help',
                     controlType: 'radio',
                     options: [{
-                      value: "open_license",
-                      label: "Open license"
+                      value: "open_licence",
+                      label: "Open licence"
                     },
                       {
-                        value: "commercial_license",
-                        label: "Commercial license"
+                        value: "commercial_licence",
+                        label: "Commercial licence"
                       },
                       {
                         value: "purchase",
@@ -2687,7 +2687,7 @@ module.exports = {
                       },
                       {
                         value: "research_project_agreement_contract",
-                        label: "research project agreement/contract"
+                        label: "Research project agreement/ contract"
                       },
                       {
                         value: "other",
