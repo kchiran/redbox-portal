@@ -885,18 +885,31 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'TextField',
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
                   definition: {
-                    editable: false,
-                    readOnly: true,
-                    visible: true,
-                    visibilityCriteria: true,
+                    required: true,
                     name: 'dmpt_ethics_iscs',
                     label: '@dmpt-ethics:iscs',
                     help: '@dmpt-ethics:iscs:help',
                     publishTag: 'dmpt_ethics_iscs',
-                    type: 'text',
-                    value: '@dmpt-ethics:iscs:sensitive',
+                    controlType: 'radio',
+                    options: [{
+                        value: "iscs_public",
+                        label: "@dmpt-ethics:iscs:public"
+                      },
+                      {
+                        value: "iscs_internal",
+                        label: "@dmpt-ethics:iscs:internal"
+                      },
+                      {
+                      value: "iscs_sensitive",
+                      label: "@dmpt-ethics:iscs:sensitive"
+                      },
+                      {
+                      value: "iscs_confidential",
+                      label: "@dmpt-ethics:iscs:confidential"
+                      }],
                     publish: {
                       onValueUpdate: {
                         modelEventSource: 'valueChanges'
@@ -908,25 +921,10 @@ module.exports = {
                           debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
                           action: 'setProp',
                           valueCase: [
-                            {val: 'human_participant_data', set: '@dmpt-ethics:iscs:confidential'},
-                            // {val: 'indigenous_cultural_intelectual_property', set: '@dmpt-ethics:iscs:sensitive'},
-                            // {val: 'other_sensitive', set: '@dmpt-ethics:iscs:sensitive'},
-                            // {val: 'none', set: '@dmpt-ethics:iscs:sensitive'},
-                            {val: 'commercially_sensitive_data', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'clinical_trials', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'policed_data', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'other_sensitive', set: '@dmpt-ethics:iscs:confidential'},
-                          ]
-                        }]
-                      },
-                      'ethics_human_participant_data_individual': {
-                        onItemSelect: [{
-                          debug: 'dmpt_ethics_iscs:subscribedto:ethics_describe',
-                          action: 'setProp',
-                          valueCase: [
-                            {val: 'personal', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'sensitive_personal', set: '@dmpt-ethics:iscs:confidential'},
-                            {val: 'health', set: '@dmpt-ethics:iscs:confidential'},
+                            {val: 'human_participant_data', set: 'iscs_confidential'},
+                            {val: 'commercially_sensitive_data', set: 'iscs_confidential'},
+                            {val: 'clinical_trials', set: 'iscs_confidential'},
+                            {val: 'policed_data', set: 'iscs_confidential'},
                           ]
                         }]
                       }
@@ -951,7 +949,9 @@ module.exports = {
                         publishTag: "human_participant_data",
                         revert: '',
                         modifies: [
-                          'ethics_human_participant_data_individual',
+                          'ethics_human_participant_data_personal',
+                          'ethics_human_participant_data_sensitive_personal',
+                          'ethics_human_participant_data_health',
                           'ethics_identifiable',
                           'ethics_human_participant_data_severity_risk',
                           'ethics_identifiable_other_countries',
@@ -1011,14 +1011,10 @@ module.exports = {
                         ]
                       },
                       {
-                        value: "other_sensitive",
-                        label: "@dmpt-ethics:describe:other_sensitive",
-                        publishTag: "other_sensitive"
-                      },
-                      {
-                        value: "none",
-                        label: "@dmpt-ethics:describe:none",
-                        publishTag: "none"
+                        value: "other",
+                        label: "@dmpt-ethics:describe:other",
+                        publishTag: "other",
+                        modifies: ['ethics_describe_other']
                       }
                     ],
                     publish: {
@@ -1032,6 +1028,38 @@ module.exports = {
                   }
                 },
                 {
+                  class: 'TextField',
+                  definition: {
+                    visible: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_describe_other',
+                      field: 'ethics_describe',
+                      fieldValue : 'other'
+                    },
+                    name: 'ethics_describe_other',
+                    label: '@dmpt-ethics:describe:other:text',
+                    help: '@dmpt-ethics:describe:other:help',
+                    type: 'text',
+                    subscribe: {
+                      'ethics_describe': {
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_describe_other:subscribedto:ethics_describe',
+                          action: 'setProp',
+                          defer: false,
+                          valueTest: ['other'],
+                          valueFalse: [''],
+                          props: [
+                            {key: 'value', val: '', clear: true},
+                            {key: 'visible', val: true},
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
                   class: 'SelectionField',
                   compClass: 'SelectionFieldComponent',
                   definition: {
@@ -1040,28 +1068,21 @@ module.exports = {
                     visibilityCriteria: {
                       type: 'function',
                       action: 'updateVisibility',
-                      debug: 'ethics_human_participant_data_individual',
+                      debug: 'ethics_human_participant_data_personal',
                       field: 'human_participant_data',
                       fieldValue : 'human_participant_data'
                     },
-                    name: 'ethics_human_participant_data_individual',
-                    label: '@dmpt-ethics:human_participant_data:individual',
+                    name: 'ethics_human_participant_data_personal',
+                    label: '@dmpt-ethics:human_participant_data:personal',
                     help: '@dmpt-ethics:human_participant_data:individual:help',
                     controlType: 'radio',
                     options: [{
-                        value: "personal",
-                        label: "@dmpt-ethics:human_participant_data:personal",
-                        publishTag: "personal"
-                      },
+                      value: "yes",
+                      label: "Yes"
+                    },
                       {
-                        value: "sensitive_personal",
-                        label: "@dmpt-ethics:human_participant_data:sensitive_personal",
-                        publishTag: "sensitive_personal"
-                      },
-                      {
-                        value: "health",
-                        label: "@dmpt-ethics:human_participant_data:health",
-                        publishTag: "health"
+                        value: "no",
+                        label: "No"
                       }
                     ],
                     publish: {
@@ -1072,7 +1093,103 @@ module.exports = {
                     subscribe: {
                       'human_participant_data': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_human_participant_data_individuals:subscribedto:human_participant_data',
+                          debug: 'onValueUpdate:ethics_human_participant_data_individual_personal:subscribedto:human_participant_data',
+                          action: 'setProp',
+                          valueTest: ['human_participant_data'],
+                          valueFalse: '',
+                          props: [
+                            {key: 'visible', val: true},
+                            {key: 'required', val: true},
+                            {key: 'value', val: ''}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    required: false,
+                    visible: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_human_participant_data_sensitive_personal',
+                      field: 'human_participant_data',
+                      fieldValue : 'human_participant_data'
+                    },
+                    name: 'ethics_human_participant_data_sensitive_personal',
+                    label: '@dmpt-ethics:human_participant_data:sensitive_personal',
+                    help: '@dmpt-ethics:human_participant_data:individual:help',
+                    controlType: 'radio',
+                    options: [{
+                      value: "yes",
+                      label: "Yes"
+                    },
+                      {
+                        value: "no",
+                        label: "No"
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'human_participant_data': {
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_human_participant_data_sensitive_personal:subscribedto:human_participant_data',
+                          action: 'setProp',
+                          valueTest: ['human_participant_data'],
+                          valueFalse: '',
+                          props: [
+                            {key: 'visible', val: true},
+                            {key: 'required', val: true},
+                            {key: 'value', val: ''}
+                          ]
+                        }]
+                      }
+                    }
+                  }
+                },
+                {
+                  class: 'SelectionField',
+                  compClass: 'SelectionFieldComponent',
+                  definition: {
+                    required: false,
+                    visible: false,
+                    visibilityCriteria: {
+                      type: 'function',
+                      action: 'updateVisibility',
+                      debug: 'ethics_human_participant_data_health',
+                      field: 'human_participant_data',
+                      fieldValue : 'human_participant_data'
+                    },
+                    name: 'ethics_human_participant_data_health',
+                    label: '@dmpt-ethics:human_participant_data:health',
+                    help: '@dmpt-ethics:human_participant_data:individual:help',
+                    controlType: 'radio',
+                    options: [{
+                      value: "yes",
+                      label: "Yes"
+                    },
+                      {
+                        value: "no",
+                        label: "No"
+                      }
+                    ],
+                    publish: {
+                      onItemSelect: {
+                        modelEventSource: 'valueChanges'
+                      }
+                    },
+                    subscribe: {
+                      'human_participant_data': {
+                        onValueUpdate: [{
+                          debug: 'onValueUpdate:ethics_human_participant_data_health:subscribedto:human_participant_data',
                           action: 'setProp',
                           valueTest: ['human_participant_data'],
                           valueFalse: '',
@@ -1191,6 +1308,7 @@ module.exports = {
                           valueFalse: ['no', 'ethics_identifiable_no'],
                           props: [
                             {key: 'value', val: '', clear: true},
+                            {key: 'required', val: true},
                             {key: 'visible', val: true},
                           ]
                         }]
@@ -1480,6 +1598,7 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
+                            {key: 'required', val: true}
                           ]
                         }]
                       }
@@ -1757,6 +1876,7 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
+                            {key: 'required', val: true}
                           ]
                         }]
                       }
@@ -1794,14 +1914,15 @@ module.exports = {
                       }
                     ],
                     subscribe: {
-                      'human_participant_data_identifiable_consent': {
+                      'ethics_identifiable': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:ethics_identifiable_additional_security:subscribedto:human_participant_data_identifiable_consent',
+                          debug: 'onItemSelect:ethics_identifiable_additional_security:subscribedto:ethics_identifiable',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable_informed_consent'],
-                          valueFalse: 'yes',
+                          defer: true,
+                          valueTest: ['yes', 'ethics_identifiable'],
+                          valueFalse: ['no', 'ethics_identifiable_no'],
                           props: [
-                            {key: 'value', val: ''},
+                            {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
                           ]
                         }]
@@ -1870,6 +1991,7 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
+                            {key: 'required', val: true}
                           ]
                         }]
                       }
@@ -1962,6 +2084,7 @@ module.exports = {
                           props: [
                             {key: 'value', val: '', clear: true},
                             {key: 'visible', val: true},
+                            {key: 'required', val: true}
                           ]
                         }]
                       }
