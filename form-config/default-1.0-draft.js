@@ -894,6 +894,7 @@ module.exports = {
                     help: '@dmpt-ethics:iscs:help',
                     publishTag: 'dmpt_ethics_iscs',
                     controlType: 'radio',
+                    defaultValue: 'iscs_sensitive',
                     options: [{
                         value: "iscs_public",
                         label: "@dmpt-ethics:iscs:public"
