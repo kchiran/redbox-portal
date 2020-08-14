@@ -1244,7 +1244,8 @@ module.exports = {
                           'ethics_identifiable_transfered_out',
                           'ethics_identifiable_transfered_out_yes_text',
                           'ethics_identifiable_deidentify',
-                          'ethics_identifiable_deidentify_no_text'
+                          'ethics_identifiable_deidentify_no_text',
+                          'dmpt_ethics_dc_access_rights_data_retained_secondary'
                         ]
                       }
                     ],
@@ -2499,11 +2500,11 @@ module.exports = {
                       }
                     ],
                     subscribe: {
-                      'human_participant_data_identifiable_consent': {
+                      'human_participant_data_identifiable': {
                         onValueUpdate: [{
-                          debug: 'onValueUpdate:human_participant_data_identifiable_consent:subscribedto:dmpt_ethics_dc_access_rights_share_data',
+                          debug: 'onValueUpdate:human_participant_data_identifiable:subscribedto:dmpt_ethics_dc_access_rights_share_data',
                           action: 'setProp',
-                          valueTest: ['human_participant_data_identifiable_informed_consent'],
+                          valueTest: ['human_participant_data_identifiable'],
                           valueFalse: '',
                           props: [
                             {key: 'value', val: ''},
