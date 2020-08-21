@@ -1864,6 +1864,7 @@ module.exports = {
                     name: 'ethics_identifiable_transfered_out_yes_text',
                     label: '@dmpt-ethics:identifiable:transfered_out:yes',
                     type: 'text',
+                    help: '@dmpt-ethics:identifiable:transfered_out:yes:help',
                     subscribe: {
                       'ethics_identifiable_transfered_out': {
                         onItemSelect: [{
