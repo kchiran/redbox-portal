@@ -1245,8 +1245,7 @@ module.exports = {
                           'ethics_identifiable_transfered_out',
                           'ethics_identifiable_transfered_out_yes_text',
                           'ethics_identifiable_deidentify',
-                          'ethics_identifiable_deidentify_no_text',
-                          'dmpt_ethics_dc_access_rights_data_retained_secondary'
+                          'ethics_identifiable_deidentify_no_text'
                         ]
                       }
                     ],
