@@ -346,7 +346,7 @@ export class RepeatableContributor extends RepeatableContainer {
     <div class="row" *ngIf="field.fields[0].label">
       <div class="col-xs-12">
         <span class="label-font">
-          {field.fields[0].label}} <span [innerHTML]="getRequiredLabelStr()"></span>
+          {{field.fields[0].label}} <span [innerHTML]="getRequiredLabelStr()"></span>
           <button type="button" class="btn btn-default" *ngIf="field.fields[0].help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
         </span>
       </div>
