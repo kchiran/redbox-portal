@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/node_modules/uppy/dist/uppy.min.css">
 <div>
   <span class="label-font">
-    {{field.label}} {{ getRequiredLabelStr()}} <button type="button" class="btn btn-default" *ngIf="field.help && field.editMode" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
+    {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span> <button type="button" class="btn btn-default" *ngIf="field.help && field.editMode" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
   </span>
   </div>
   <div *ngIf="this.helpShow">
