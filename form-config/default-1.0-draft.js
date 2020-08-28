@@ -894,7 +894,7 @@ module.exports = {
                     help: '@dmpt-ethics:iscs:help',
                     publishTag: 'dmpt_ethics_iscs',
                     controlType: 'radio',
-                    defaultValue: 'iscs_sensitive',
+                    defaultValue: 'iscs_internal',
                     options: [{
                         value: "iscs_public",
                         label: "@dmpt-ethics:iscs:public"
@@ -3117,7 +3117,7 @@ module.exports = {
                     notesHeader: '@dataLocations-notes',
                     uppyDashboardNote: '@dataLocations-uploader-note',
                     attachmentText: 'Attach files',
-                    attachmentTextDisabled: 'Save your plan to attach files',
+                    attachmentTextDisabled: 'Click here after saving to attach files',
                     help: 'Upload your licence or agreements here by clicking the button. You can only upload after you save your plan.',
                     label: 'Licences or Agreements:'
                   }
