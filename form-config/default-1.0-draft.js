@@ -2656,7 +2656,7 @@ module.exports = {
                           debug: 'dmpt_ethics_dc_access_rights_not_available',
                           action: 'setProp',
                           valueTest: ['dc_access_rights_not_available'],
-                          valueFalse: ['mediated, by permission from the data manager','open access under license'],
+                          valueFalse: ['mediated, by permission from the data manager','Open access under licence'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false}
