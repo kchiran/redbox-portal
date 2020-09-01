@@ -1454,38 +1454,36 @@ module.exports = {
                 },
                 {
                   class: 'SelectionField',
-                  compClass: 'DropdownFieldComponent',
+                  compClass: 'SelectionFieldComponent',
                   definition: {
                     name: 'vivo:Dataset_dc:location_rdf:PlainLiteral',
                     label: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral',
                     help: '@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-help',
-                    options: [{
-                        value: "",
-                        label: "@dmpt-select:Empty"
-                      },
+                    controlType: 'checkbox',
+                    options: [
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-platforms"
+                        value: "eresearch-platforms"
                       },
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-eresearch-store"
+                        value: "eresearch-store"
                       },
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-share-drive"
+                        value: "share-drive"
                       },
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-survey-platform"
+                        value: "survey-platform"
                       },
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-collab-space"
+                        value: "collab-space"
                       },
                       {
                         label: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other",
-                        value: "@dmpt-vivo:Dataset_dc:location_rdf:PlainLiteral-other"
+                        value: "other"
                       }
                     ],
                     required: false,
@@ -2251,10 +2249,6 @@ module.exports = {
                         label: "@dmpt-redbox:retentionPeriod_dc:date-15years"
                       },
                       {
-                        value: "25years",
-                        label: "@dmpt-redbox:retentionPeriod_dc:date-25years"
-                      },
-                      {
                         value: "permanent",
                         label: "@dmpt-redbox:retentionPeriod_dc:date-permanent"
                       }
@@ -2614,18 +2608,18 @@ module.exports = {
                     help: '@dmpt-dc:accessRights-help',
                     controlType: 'radio',
                     options: [{
-                        value: "@dmpt-dc:accessRights-manager",
                         label: "@dmpt-dc:accessRights-manager",
+                        value: "manager",
                         publishTag: 'dc_access_rights_available'
                       },
                       {
-                        value: "@dmpt-dc:accessRights-open",
                         label: "@dmpt-dc:accessRights-open",
+                        value: "open",
                         publishTag: 'dc_access_rights_available'
                       },
                       {
-                        value: "@dmpt-dc:accessRights-none-val",
                         label: "@dmpt-dc:accessRights-none",
+                        value: "none",
                         publishTag: 'dc_access_rights_not_available',
                       }
                     ],
