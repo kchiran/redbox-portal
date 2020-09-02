@@ -70,6 +70,9 @@ export class FieldBase<T> {
   requiredIfHasValue: any[];
   selectFor: string;
   defaultSelect: string;
+  hasValueLabel: string;
+  confirmChangesLabel: string;
+  confirmChangesParagraphLabel: string;
 
   @Output() public onValueUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() public onValueLoaded: EventEmitter<any> = new EventEmitter<any>();
@@ -130,6 +133,9 @@ export class FieldBase<T> {
     this.visible = _.isUndefined(options['visible']) ? true : options['visible'];
     this.visibilityCriteria = options['visibilityCriteria'];
     this.requiredIfHasValue = options['requiredIfHasValue'] || [];
+    this.hasValueLabel = this.getTranslated(options['hasValueLabel'], 'Multiple Values');
+    this.confirmChangesLabel = this.getTranslated(options['confirmChangesLabel'], 'Confirm Changes');
+    this.confirmChangesParagraphLabel = this.getTranslated(options['confirmChangesParagraphLabel'], 'The following values will be cleared');
 
     if (this.groupName) {
       this.hasGroup = true;
@@ -269,8 +275,8 @@ export class FieldBase<T> {
                   }
                 }
               }
-              console.log(`Emitting data:`);
-              console.log(emitData);
+              //console.log(`Emitting data:`);
+              //console.log(`eventName: ${eventName} emitData: ${emitData} value: ${value}`);
               this.emitEvent(eventName, emitData, value);
             }
           });
@@ -280,7 +286,6 @@ export class FieldBase<T> {
     }
 
     if (!_.isEmpty(subscribeConfig)) {
-
       _.forOwn(subscribeConfig, (subConfig, srcName) => {
         _.forOwn(subConfig, (eventConfArr, eventName) => {
           const eventEmitter = this.getEventEmitter(eventName, srcName);
@@ -384,8 +389,12 @@ export class FieldBase<T> {
   }
 
   public setVisibility(data) {
+    let newVisible = this.visible;
     if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria.type == 'function') {
       const fn:any = _.get(this, this.visibilityCriteria.action);
+      if(this.visibilityCriteria.debug) {
+        console.log(`visibilityCriteria: ${this.visibilityCriteria.debug}`);
+      }
       if (fn) {
         let boundFunction = fn;
         if(this.visibilityCriteria.action.indexOf(".") == -1) {
@@ -394,10 +403,42 @@ export class FieldBase<T> {
           var objectName = this.visibilityCriteria.action.substring(0,this.visibilityCriteria.action.indexOf("."));
           boundFunction = fn.bind(this[objectName]);
         }
-        this.visible = boundFunction(data);
+        //console.log(`visibilityCriteria: ${this.visibilityCriteria.name}`);
+        newVisible = boundFunction(data, this.visibilityCriteria);
       }
     } else {
-      this.visible = _.isEqual(data, this.visibilityCriteria);
+      newVisible = _.isEqual(data, this.visibilityCriteria);
+    }
+    this.updateVisible(newVisible);
+  }
+
+  updateVisible(newVisible) {
+    const that = this;
+    setTimeout(() => {
+      if (!newVisible) {
+        if (that.visible) {
+          // remove validators
+          if (that.formModel) {
+            that.formModel.clearValidators();
+            that.formModel.updateValueAndValidity();
+          }
+        }
+      } else {
+        if (!that.visible) {
+          // restore validators
+          if (that.formModel) {
+            that.formModel.setValidators(that.validators);
+            that.formModel.updateValueAndValidity();
+          }
+        }
+      }
+      that.visible = newVisible;
+    });
+  }
+
+  public checkIfVisible() {
+    if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria.type == 'function') {
+      this.setVisibility(this.visibilityCriteria);
     }
   }
 
@@ -469,5 +510,129 @@ export class FieldBase<T> {
   //Default asyncLoadData function. No async load required so return empty Observable.
   asyncLoadData() {
     return Observable.of(null);
+  }
+
+  setProp(change: any, config: any) {
+    let defered = false;
+    let value;
+    let checked;
+    if (_.isObject(change)) {
+      value = change.value;
+      defered = _.isUndefined(change.defered) ? false : change.defered;
+      checked = _.isUndefined(change.checked) ? false : change.checked;
+    } else {
+      value = change;
+      checked = true;
+    }
+    if(config['defer'] && !defered) {
+      return;
+    }
+    if(config['valueCase']) {
+      let caseSet;
+      _.each(config['valueCase'], (cases) => {
+        if(cases['val'] === value) {
+          value = cases['set'];
+          caseSet = checked;
+          return false;
+        }
+      });
+      if(caseSet) {
+        this.setValue(this.getTranslated(value, undefined));
+      }
+    } else if(config['valueSet']) {
+      if(this.formModel) {
+        this.setValue(this.getTranslated(value, undefined));
+      } else {
+        this.value = this.getTranslated(value, undefined);
+      }
+    } else if(config['valueTest']) {
+      if(_.includes(config['valueTest'], value)) {
+        _.each(config['props'], (prop) => {
+          this.setPropValue(prop, checked, config['debug']);
+        });
+      }
+      else if(_.includes(config['valueFalse'], value)) {
+        _.each(config['props'], (prop) => {
+          this.setPropValue(prop, false, config['debug']);
+        });
+      }
+    }
+  }
+
+  setPropValue(prop, checked, debug) {
+    if(debug) {
+      console.log(debug);
+    }
+    if (prop.key === 'required') {
+      if(checked) {
+        this.setRequired(prop.val);
+      } else {
+        this.setRequired(!prop.val);
+      }
+    } else if (prop.key === 'value') {
+      if(prop.clear && !checked) {
+        if(this.formModel) {
+          this.setValue('');
+        } else {
+          if(Array.isArray(this.value)) {
+            // Since there is no formArray.clear(); in this version of angular:
+            this.getControl().controls = [];
+            this.getControl().setValue([]);
+          } else {
+            this.value = null;
+          }
+        }
+      } else if(checked){
+        if(this.formModel) {
+          this.setValue(this.getTranslated(prop.val, undefined));
+        } else {
+          this.value = this.getTranslated(prop.val, undefined);
+        }
+      }
+    } else if (prop.key === 'visible') {
+      if(checked) {
+        //this.setVisibility(prop.val);
+        this.updateVisible(prop.val);
+      } else if(!checked) {
+        this.updateVisible(!prop.val);
+        //this.setVisibility(!prop.val);
+      }
+    }
+  }
+
+  updateVisibility(visible, config) {
+    if(config['debug']){
+      console.log(config['debug']);
+    }
+    const fieldName = config['field'];
+    const fieldValue = config['fieldValue'];
+    let field;
+    if(this.fieldMap && this.fieldMap[fieldName]) {
+      field = this.fieldMap[fieldName]['field'];
+      if(field && _.includes(field['value'], fieldValue)) {
+        console.log(`updateVisibility to true: ${config['debug']}`);
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  }
+
+  getFieldDisplay(f) {
+    let valueLabel = f.control.value;
+    const options = f.field.options.options;
+    if(options) {
+      if(Array.isArray(valueLabel)){
+        valueLabel = this.hasValueLabel;
+      }else {
+        valueLabel = options.find(o=>f.control.value===o.value).label;
+      }
+    }
+    return {
+      valueLabel: valueLabel === true ? '' : valueLabel,
+      label: f.field.label
+    }
   }
 }

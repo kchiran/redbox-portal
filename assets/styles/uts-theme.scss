@@ -1344,3 +1344,18 @@ tree-internal > ul.rootless > li > tree-internal > ul {
   height: 250px;
   max-height: 250px;
 }
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+    max-width:1200px;
+  }
+  .modal-lg {
+    width: 80%;
+    max-width:800px;
+  }
+}
+
+.underline {
+   text-decoration: underline;
+ }

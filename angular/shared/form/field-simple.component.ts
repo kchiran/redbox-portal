@@ -131,7 +131,7 @@ export class SimpleComponent {
    * @return {string}
    */
   getRequiredLabelStr():string {
-    return this.field.required ? '(*)' : '';
+    return this.field.required ? '<span class="text-danger">(*)</span>' : '';
   }
   /**
    * Returns the NG2 root injector
@@ -168,7 +168,7 @@ export class SelectionComponent extends SimpleComponent {
   template: `
   <div [formGroup]='form' *ngIf="field.editMode" [ngClass]="getGroupClass()">
      <label [attr.for]="field.name">
-      {{field.label}} {{ getRequiredLabelStr()}}
+       {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
      </label><br/>
      <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -214,7 +214,7 @@ export class DropdownFieldComponent extends SelectionComponent {
   template: `
   <div [formGroup]='form' *ngIf="field.editMode && field.visible" class="form-group">
      <span class="label-font">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
      </span><br/>
      <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -222,7 +222,7 @@ export class DropdownFieldComponent extends SelectionComponent {
       <legend [hidden]="true"><span></span></legend>
         <span *ngFor="let opt of field.selectOptions">
           <!-- radio type hard-coded otherwise accessor directive will not work! -->
-          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null ">
+          <input *ngIf="isRadio()" type="radio" name="{{field.name}}" [id]="field.name + '_' + opt.value" [formControl]="getFormControl()" [value]="opt.value" [attr.disabled]="field.readOnly ? '' : null " (change)="onChange(opt, $event)" [attr.checked]="getControlFromOption(opt)">
           <input *ngIf="!isRadio()" type="{{field.controlType}}" name="{{field.name}}" [id]="field.name + '_' + opt.value" [value]="opt.value" (change)="onChange(opt, $event)" [attr.selected]="getControlFromOption(opt)" [attr.checked]="getControlFromOption(opt)" [attr.disabled]="field.readOnly ? '' : null ">
           <label for="{{field.name + '_' + opt.value}}" class="radio-label">{{ opt.label }}</label>
           <br/>
@@ -247,10 +247,31 @@ export class DropdownFieldComponent extends SelectionComponent {
     </ng-container>
 
   </div>
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="selectionComponent" aria-hidden="true" id="{{ 'modal_' + field.name }}">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{field.confirmChangesLabel}}</h4>
+          <p>{{field.confirmChangesParagraphLabel}}</p>
+          <p *ngFor="let f of defer.fields">
+            <strong>{{f.label}}</strong><br/>
+            {{f.valueLabel}}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" (click)="confirmChange(true)">Yes</button>
+          <button type="button" class="btn btn-primary" (click)="confirmChange(false)">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
   `,
 })
 export class SelectionFieldComponent extends SelectionComponent {
   static clName = 'SelectionFieldComponent';
+  defer: any = {};
+  defered: boolean = false;
+  confirmChanges: boolean = true;
 
   isValArray() {
     return _.isArray(this.field.value);
@@ -267,21 +288,87 @@ export class SelectionFieldComponent extends SelectionComponent {
     return control;
   }
 
-  onChange(opt:any, event:any) {
-    let formcontrol:any = this.getFormControl();
-    if (event.target.checked) {
-      formcontrol.push(new FormControl(opt.value));
-    } else {
-      let idx = null;
-      _.forEach(formcontrol.controls, (ctrl, i) => {
-        if (ctrl.value == opt.value) {
-          idx = i;
-          return false;
-        }
-      });
-      formcontrol.removeAt(idx);
+  modifies(opt, event, defered) {
+    this.confirmChanges = true;
+    const fieldName = this.field['name'];
+    let fields = this.fieldMap;
+    this.defer['fields'] = new Array();
+    _.each(opt['modifies'], e => {
+      const contval = this.fieldMap[e].control.value;
+      //this.fieldMap[e].control.getRawValue();
+      if(!_.isEmpty(contval) || contval === true) {
+        jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
+        this.defer['opt'] = opt;
+        this.defer['event'] = event;
+        this.defer['fields'].push(this.field.getFieldDisplay(this.fieldMap[e]));
+        this.confirmChanges = false;
+      }
+    });
+    if(this.confirmChanges) {
+      this.defer = {};
+      this.onChange(opt, event, true);
     }
   }
+
+  confirmChange(doConfirm) {
+    const fieldName = this.field['name'];
+    jQuery(`#modal_${fieldName}`).modal('hide');
+    this.confirmChanges = doConfirm;
+    const defer = this.defer;
+    if(this.isRadio()) {
+      // modifies is not available for radio
+      defer.event.target.checked = doConfirm;
+      if(!doConfirm) {
+        const revert = this.defer['opt']['revert']
+        this.field.setValue(revert);
+        defer.opt = _.find(this.field.options.options, {value: revert});
+      }
+    } else {
+      defer.event.target.checked = !doConfirm;
+    }
+    this.defer = {};
+    this.onChange(defer.opt, defer.event, true);
+  }
+
+  onChange(opt:any, event:any, defered) {
+    defered = defered || !_.isUndefined(defered);
+    let formcontrol:any = this.getFormControl();
+    if (event.target.checked) {
+      if(_.isObject(formcontrol.push)) {
+        formcontrol.push(new FormControl(opt.value));
+      } else if(this.isRadio()) {
+        // modifies defers the changes on radio
+        if(opt['modifies'] && !defered) {
+          this.modifies(opt, event, defered);
+        } else {
+          defered = true;
+        }
+      }
+    } else {
+      if(opt['modifies'] && !defered) {
+        this.modifies(opt, event, defered);
+      }
+      if(!defered) {
+        let idx = null;
+        _.forEach(formcontrol.controls, (ctrl, i) => {
+          if (ctrl.value == opt.value) {
+            idx = i;
+            return false;
+          }
+        });
+        formcontrol.removeAt(idx);
+      }
+  }
+  if(this.field.publish && this.confirmChanges) {
+      if(this.field.publish.onItemSelect) {
+        this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked, defered: defered});
+      }
+      if(this.field.publish.onValueUpdate) {
+        this.field.onValueUpdate.emit({value: opt['publishTag'], checked: event.target.checked, defered: defered});
+      }
+    }
+  }
+
 }
 
 
@@ -344,20 +431,21 @@ export class TabOrAccordionContainerComponent extends SimpleComponent {
 
   ngAfterViewInit() {
     let that = this;
-    _.each(this.field.fields, tab => {
-        tab['expandedChar'] = '+';
-        jQuery(`#${tab.id}`).on('shown.bs.collapse', ()=> {
-          tab["expandedChar"] = '-';
-          that.changeRef.detectChanges();
-          that.field.onAccordionCollapseExpand.emit({shown:true, tabId: tab.id});
-        });
-        jQuery(`#${tab.id}`).on('hidden.bs.collapse', ()=> {
-          tab["expandedChar"] = '+';
-          that.changeRef.detectChanges();
-          that.field.onAccordionCollapseExpand.emit({shown:false, tabId: tab.id});
-        });
+    setTimeout(() => {
+      _.each(this.field.fields, tab => {
+          tab['expandedChar'] = '+';
+          jQuery(`#${tab.id}`).on('shown.bs.collapse', ()=> {
+            tab["expandedChar"] = '-';
+            that.changeRef.detectChanges();
+            that.field.onAccordionCollapseExpand.emit({shown:true, tabId: tab.id});
+          });
+          jQuery(`#${tab.id}`).on('hidden.bs.collapse', ()=> {
+            tab["expandedChar"] = '+';
+            that.changeRef.detectChanges();
+            that.field.onAccordionCollapseExpand.emit({shown:false, tabId: tab.id});
+          });
+      });
     });
-
     if(!this.field.editMode && this.field.expandAccordionsOnOpen) {
       this.field.allExpanded = false;
       this.expandCollapseAll();
@@ -418,6 +506,16 @@ export class HtmlRawComponent extends SimpleComponent {
     <hr *ngSwitchCase="'hr'" [ngClass]="field.cssClasses">
     <span *ngSwitchCase="'span'" [ngClass]="field.cssClasses">{{field.value}}</span>
     <p *ngSwitchDefault [ngClass]="field.cssClasses">{{field.value}}</p>
+    <span *ngIf="field.editMode">
+      <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()"
+              [attr.aria-label]="'help' | translate ">
+        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+      </button>
+    </span>
+    <p>
+      <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow"
+             [innerHtml]="field.help"></span>
+    </p>
   </div>
   `,
 })
@@ -670,9 +768,9 @@ Based on: https://bootstrap-datepicker.readthedocs.io/en/stable/
 @Component({
   selector: 'date-time',
   template: `
-  <div *ngIf="field.editMode" [formGroup]='form' class="form-group">
+  <div *ngIf="field.editMode && field.visible" [formGroup]='form' class="form-group">
     <span class="label-font">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </span><br/>
     <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -682,7 +780,7 @@ Based on: https://bootstrap-datepicker.readthedocs.io/en/stable/
       <div class="text-danger" *ngIf="field.validationMessages?.required">{{field.validationMessages.required}}</div>
     </div>
   </div>
-  <li *ngIf="!field.editMode" class="key-value-pair">
+  <li *ngIf="!field.editMode && field.visible" class="key-value-pair">
     <span class="key" *ngIf="field.label">{{field.label}}</span>
     <span class="value">{{field.formatValueForDisplay()}}</span>
   </li>
@@ -697,7 +795,7 @@ export class DateTimeComponent extends SimpleComponent {
   @ViewChild('dateTime') public dateTime: any;
 
   ngAfterViewInit() {
-    if (this.field.editMode) {
+    if (this.field.editMode && this.field.visible) {
       jQuery(`#${this.dateTime.idDatePicker}`).attr('aria-label', this.field.label);
     }
   }
@@ -758,14 +856,69 @@ export class SpacerComponent extends SimpleComponent {
 @Component({
   selector: 'toggle',
   template: `
-    <div *ngIf="field.type == 'checkbox'" [formGroup]='form'>
-      <input type="checkbox" [checked]="field.value" name="{{field.name}}" [id]="field.name" [formControl]="getFormControl()" [attr.disabled]="field.editMode ? null : ''" >
+    <div *ngIf="field.type == 'checkbox' && field.visible" [formGroup]='form'>
+      <input type="checkbox" [checked]="field.value" name="{{field.name}}" [id]="field.name" [formControl]="getFormControl()" [attr.disabled]="field.editMode ? null : ''" (change)="onChange(field.options, $event)">
       <label for="{{ field.name }}" class="radio-label">{{ field.label }} <button *ngIf="field.editMode && field.help" type="button" class="btn btn-default" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button></label>
       <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="toggleComponent" aria-hidden="true" id="{{ 'modal_' + field.name }}">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{ field.confirmChangesLabel }}</h4>
+            <p>{{ field.confirmChangesParagraphLabel }}</p>
+            <p *ngFor="let f of defer.fields">
+              <strong>{{f.label}}</strong><br/>
+              {{f.valueLabel}}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" (click)="confirmChange(true)">Yes</button>
+            <button type="button" class="btn btn-primary" (click)="confirmChange(false)">No</button>
+          </div>
+        </div>
+      </div>
     </div>
   `
 })
 export class ToggleComponent extends SimpleComponent {
   field: Toggle;
+  defer: any = {};
+  confirmChanges: boolean = true;
 
+  onChange(opt:any, event:any, defered) {
+    defered = defered || !_.isUndefined(defered);
+    console.log(`ToggleComponent, onChanged Checked: ${event.target.checked}`);
+    if(opt['modifies'] && !defered) {
+      const fieldName = this.field['name'];
+      let fields = this.fieldMap;
+      this.defer['fields'] = new Array();
+      opt['modifies'].some(e => {
+        const contval = this.fieldMap[e].control.value;
+        //this.fieldMap[e].control.getRawValue();
+        if(!_.isEmpty(contval) || contval === true) {
+          jQuery(`#modal_${fieldName}`).modal({backdrop: 'static', keyboard: false, show: true});
+          this.defer['opt'] = opt;
+          this.defer['event'] = event;
+          this.defer['fields'].push(this.field.getFieldDisplay(this.fieldMap[e]));
+          this.confirmChanges = false;
+        }
+      });
+    }
+    if(this.field.publish && this.confirmChanges) {
+      setTimeout(() => {
+        this.field.onItemSelect.emit({value: opt['publishTag'], checked: event.target.checked});
+      });
+    }
+  }
+
+  confirmChange(doConfirm) {
+    const fieldName = this.field['name'];
+    jQuery(`#modal_${fieldName}`).modal('hide');
+    this.confirmChanges = doConfirm;
+    const defer = this.defer;
+    this.defer = {};
+    defer.event.target.checked = !doConfirm;
+    this.onChange(defer.opt, defer.event, true);
+  }
 }
