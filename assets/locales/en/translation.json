@@ -791,7 +791,7 @@
   "search-by-name": "Search by name",
   "change-text": "Change",
   "workspaces": "Research Workspaces",
-  "create-workspace": "Find a plan to request/create a research workspace",
+  "create-workspace": "Find a plan to request/create a Research Workspace",
   "workspaces-dashboard": "View workspaces",
   "@dataLocations-help": "Data can include raw or processed data in any form and can also include research records relating to data. Examples include (but are not limited to), third party data management or custodial agreements, eNotebooks, survey instruments, ReadMe files which explain the data's structure, provenance and significance, etc. To get help classifying your research data according to the information security classification standard, <a class='underline' href='https://staff.uts.edu.au/topichub/itdlibrary/documents/InformationSecurityClassifierResearchData.pdf' target='_blank' rel='noopener noreferrer'>click here</a>",
   "@dataLocations-label": "Data Locations",
