@@ -2331,7 +2331,9 @@ module.exports = {
                   }
                 },
                 {
-                  class: 'TextField',
+                  //class: 'TextField',
+                  class: 'HiddenValue',
+                  compClass: 'HiddenValueComponent',
                   definition: {
                     name: 'dataLicensingAccess_manager',
                     label: '@dmpt-dataLicensingAccess_manager',
