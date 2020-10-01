@@ -2651,8 +2651,8 @@ module.exports = {
                         onItemSelect: [{
                           debug: 'dmpt_ethics_dc_access_rights_not_available',
                           action: 'setProp',
-                          valueTest: ['dc_access_rights_not_available'],
-                          valueFalse: ['Mediated, by permission from the data manager','Open access under licence'],
+                          valueTest: ['none'],
+                          valueFalse: ['manager','open'],
                           props: [
                             {key: 'value', val: '', val2: ''},
                             {key: 'visible', val: true, val2: false}
