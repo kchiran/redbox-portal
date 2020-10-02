@@ -38,6 +38,7 @@ import * as path from "path";
 import controller = require('../../core/CoreController.js');
 
 const UUIDGenerator = require('uuid/v4');
+const got = require('got');
 export module Controllers {
   /**
    * Responsible for all things related to the Dashboard
@@ -356,10 +357,23 @@ export module Controllers {
             res.set('Content-Type', 'application/octet-stream');
             res.set('Content-Disposition', `attachment; filename="${fileName}"`);
             sails.log.info(`Returning datastream observable of ${oid}: ${fileName}, datastreamId: ${datastreamId}`);
-            return RecordsService.getDatastream(oid, datastreamId).flatMap((response) => {
-              res.end(Buffer.from(response.body), 'binary');
-              return Observable.of(oid);
+            const apiConfig = sails.config.record.api.getDatastream;
+            let url = `${sails.config.record.baseUrl.redbox}${apiConfig.url}`
+            url = url.replace('$oid', oid);
+            sails.log.verbose(url);
+            const instance = got.default.extend({
+              prefixUrl: url,
+              headers: {
+                'Authorization': `Bearer ${sails.config.redbox.apiKey}`
+              }
             });
+            const stream = instance.stream(`?datastreamId=${datastreamId}`);
+            stream.pipe(res);
+            return Observable.of(oid);
+            // return RecordsService.getDatastream(oid, datastreamId).flatMap((response) => {
+            //   res.end(Buffer.from(response.body), 'binary');
+            //   return Observable.of(oid);
+            // });
       }).subscribe(whatever => {
         // ignore...
           sails.log.verbose(`Done with updating streams and returning response...`);
