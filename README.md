@@ -14,21 +14,33 @@ The [Queensland Cyber Infrastructure Foundation](http://www.qcif.edu.au) (QCIF) 
 ## Development
 Requirements:
 
-- Docker
-
-Run `./runForDev.sh install jit`
-
-It will 
-   - Pull qcifengineering/redbox-portal from docker hub (If a local copy does not exist)
-   - Compile backend
-   - Compile frontend
-   - Then start docker-compose
-   
-Open http://localhost:1500 to start browsing
+- Docker (Tested in docker for Mac)
 
 ### Build local docker image
 
 Run `./dockerlocal_dev.sh`
 
 It will
-   - Build a local docker image of qcifengineering/redbox-portal:latest
+- Build a local docker image of qcifengineering/redbox-portal:latest
+
+Run `./runForDev.sh install jit`
+
+It will 
+   - If a local copy does not exist -- Pull qcifengineering/redbox-portal from docker hub 
+   - Compile backend
+   - Compile frontend
+   - Then start docker-compose
+   
+Open http://localhost:1500 to start browsing
+
+### UTS Improvements
+
+*config/models.js*
+
+- use migrate: safe as default. This way Sails will no try to automigrate the models.
+
+*WorkspaceSelect Component*
+
+- Display a box to show the workspaces
+- Allow for a workspace to open a type of workspace
+   - Used in sails-hook-redbox-catalog, this will open a specific item of the catalog

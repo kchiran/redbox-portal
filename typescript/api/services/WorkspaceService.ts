@@ -104,10 +104,13 @@ export module Services {
       return workspaces;
     }
 
-    createWorkspaceRecord(config: any, username: string, project: any, recordType: string, workflowStage: string) {
+    createWorkspaceRecord(config: any, username: string, project: any, recordType: string, workflowStage: string, emailPendingUsers: Array<string>) {
       // TODO: how to get the workflowStage??
       // TODO: Get the project metadata from the form, move this logic to the controller
       sails.log.debug(config);
+      if(!emailPendingUsers) {
+        emailPendingUsers = [];
+      }
       const post = request({
         uri: config.brandingAndPortalUrl + `/api/records/metadata/${recordType}`,
         method: 'POST',
@@ -115,8 +118,8 @@ export module Services {
           authorization: {
             edit: [username],
             view: [username],
-            editPending:[],
-            viewPending:[]
+            editPending: [...emailPendingUsers],
+            viewPending: [...emailPendingUsers]
           },
           metadata: project,
           workflowStage: workflowStage

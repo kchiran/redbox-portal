@@ -136,7 +136,7 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
   // will show up as list
   displayAsList: boolean;
   shouldSaveForm: boolean;
-
+  services: any = [];
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -175,6 +175,15 @@ export class WorkspaceSelectorField extends FieldBase<any>  {
       }
     }).catch(error => {
       console.log(error);
+    });
+    this.workspaceTypeService.getAvailableWorkspaces().then(response => {
+      if (response['status']) {
+        this.services = _.concat(this.services, response['workspaces']);
+      } else {
+        throw new Error('cannot get workspaces');
+      }
+    }).catch(error => {
+      console.error(error);
     });
   }
 
