@@ -5,7 +5,7 @@
 <div class="panel panel-primary" *ngIf="field.editMode">
   <div class="panel-body">
     <span class="label-font">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </span><br/>
     <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>

@@ -99,7 +99,7 @@ export class TextArea extends FieldBase<string> {
   <div *ngIf="field.editMode && field.visible" [ngClass]="getGroupClass()">
     <div *ngIf="!isEmbedded" >
       <label [attr.for]="field.name">
-        {{field.label}} {{ getRequiredLabelStr() }}
+        {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
         <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
       </label>
         <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -134,7 +134,7 @@ export class TextFieldComponent extends EmbeddableComponent {
     <div class="row">
       <div class="col-xs-12">
       <span class="label-font" [id]="field.name">
-        {{field.label}} {{ getRequiredLabelStr() }}
+        {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
         <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
       </span>
       <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -193,7 +193,7 @@ export class RepeatableTextfieldComponent extends RepeatableComponent {
   template: `
   <div *ngIf="field.editMode && field.visible" [formGroup]='form' [ngClass]="getGroupClass()">
     <label [attr.for]="field.name">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </label>
     <!-- Normal version -->
@@ -239,7 +239,7 @@ export class TextAreaComponent extends EmbeddableComponent implements OnInit {
   template: `
   <div *ngIf="field.editMode" [formGroup]='form' class="form-group">
     <label [attr.for]="field.name">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </label><br/>
     <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>

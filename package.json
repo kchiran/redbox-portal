@@ -80,7 +80,9 @@
     "dev": "./runForDev.sh",
     "stop": "docker-compose down",
     "restart": "docker-compose restart redboxportal",
-    "logs": "docker-compose logs -f redboxportal"
+    "logs": "docker-compose logs -f redboxportal",
+    "buildNg": "./buildNgAppX.sh",
+    "grunt": "./buildGrunt.sh"
   },
   "main": "app.js",
   "repository": {

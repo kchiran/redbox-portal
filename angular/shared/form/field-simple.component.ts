@@ -130,7 +130,7 @@ export class SimpleComponent {
    * @return {string}
    */
   getRequiredLabelStr():string {
-    return this.field.required ? '(*)' : '';
+    return this.field.required ? '<span class="text-danger">(*)</span>' : '';
   }
   /**
    * Returns the NG2 root injector
@@ -167,7 +167,7 @@ export class SelectionComponent extends SimpleComponent {
   template: `
   <div [formGroup]='form' *ngIf="field.editMode && field.visible" [ngClass]="getGroupClass()">
      <label [attr.for]="field.name">
-      {{field.label}} {{ getRequiredLabelStr()}}
+       {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
      </label><br/>
      <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -214,7 +214,7 @@ export class DropdownFieldComponent extends SelectionComponent {
   template: `
   <div [formGroup]='form' *ngIf="field.editMode && field.visible" class="form-group">
      <span class="label-font">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
      </span><br/>
      <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>
@@ -720,7 +720,7 @@ Based on: https://bootstrap-datepicker.readthedocs.io/en/stable/
   template: `
   <div *ngIf="field.editMode" [formGroup]='form' class="form-group">
     <span class="label-font">
-      {{field.label}} {{ getRequiredLabelStr()}}
+      {{field.label}} <span [innerHTML]="getRequiredLabelStr()"></span>
       <button type="button" class="btn btn-default" *ngIf="field.help" (click)="toggleHelp()" [attr.aria-label]="'help' | translate "><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
     </span><br/>
     <span id="{{ 'helpBlock_' + field.name }}" class="help-block" *ngIf="this.helpShow" [innerHtml]="field.help"></span>

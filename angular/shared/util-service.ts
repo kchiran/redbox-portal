@@ -205,6 +205,7 @@ export class UtilityService {
    * @return {array}
    */
   public convertToDateFormat(data:any, config:any) {
+    let delim = config.delim;
     let field = config.field;
     let formatOrigin = config.formatOrigin || 'DD-MMM-YY';
     let formatTarget = config.formatTarget || 'YYYY-MM-DD';
@@ -233,5 +234,10 @@ export class UtilityService {
       return JSON.parse(templateRes);
     }
     return templateRes;
+  }
+
+  public todaysDate(data:any, config:any) {
+    let format = config.format || 'YYYY-MM-DD';
+    return moment().local().format(format);
   }
 }
