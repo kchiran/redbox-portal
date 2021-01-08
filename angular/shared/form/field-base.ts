@@ -17,14 +17,13 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import {EventEmitter, Injector, Output} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {TranslationService} from '../translation-service';
-import {UtilityService} from '../util-service';
-import {Observable} from 'rxjs/Observable';
+import { EventEmitter, Injector, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TranslationService } from '../translation-service';
+import { UtilityService } from '../util-service';
+import { Observable } from 'rxjs/Observable';
 
 import * as _ from "lodash";
-
 /**
  * Base class for dynamic form models...
  *
@@ -71,12 +70,13 @@ export class FieldBase<T> {
   requiredIfHasValue: any[];
   selectFor: string;
   defaultSelect: string;
+  hasValueLabel: string;
+  confirmChangesLabel: string;
+  confirmChangesParagraphLabel: string;
 
   @Output() public onValueUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() public onValueLoaded: EventEmitter<any> = new EventEmitter<any>();
 
-
-  subscriptionData:any = {};
 
   constructor(options = {}, injector) {
     this.injector = injector;
@@ -85,7 +85,7 @@ export class FieldBase<T> {
     this.validators = null;
   }
 
-  getFromInjector(token: any) {
+  getFromInjector(token:any) {
     return this.injector.get(token);
   }
 
@@ -99,7 +99,7 @@ export class FieldBase<T> {
     controlType?: string,
     cssClasses?: any,
     groupName?: string,
-    editMode?: boolean,
+    editMode? : boolean,
     readOnly?: boolean,
     help?: any,
     defaultValue?: any,
@@ -110,8 +110,8 @@ export class FieldBase<T> {
     this.name = options.name || '';
     this.id = options.id || '';
     this.label = this.getTranslated(options.label, '');
-    if (options.selectFor && options.defaultSelect) {
-      if (_.isArray(options.help)) {
+    if(options.selectFor && options.defaultSelect) {
+      if(_.isArray(options.help)) {
         const newHelp = _.defaultTo(
           _.find(options.help, f => f.key === options.selectFor),
           _.find(options.help, f => f.key === options.defaultSelect)
@@ -133,6 +133,9 @@ export class FieldBase<T> {
     this.visible = _.isUndefined(options['visible']) ? true : options['visible'];
     this.visibilityCriteria = options['visibilityCriteria'];
     this.requiredIfHasValue = options['requiredIfHasValue'] || [];
+    this.hasValueLabel = this.getTranslated(options['hasValueLabel'], 'Multiple Values');
+    this.confirmChangesLabel = this.getTranslated(options['confirmChangesLabel'], 'Confirm Changes');
+    this.confirmChangesParagraphLabel = this.getTranslated(options['confirmChangesParagraphLabel'], 'The following values will be cleared');
 
     if (this.groupName) {
       this.hasGroup = true;
@@ -168,7 +171,7 @@ export class FieldBase<T> {
     return false;
   }
 
-  public createFormModel(valueElem: any = null): any {
+  public createFormModel(valueElem:any = null): any {
     if (valueElem) {
       this.value = valueElem;
     }
@@ -190,7 +193,7 @@ export class FieldBase<T> {
    * @param  {any} fieldMap
    * @return {any}
    */
-  public getGroup(group: any, fieldMap: any): any {
+  public getGroup(group: any, fieldMap: any) : any {
     this.fieldMap = fieldMap;
     let retval = null;
     _.set(fieldMap, `${this.getFullFieldName()}.field`, this);
@@ -222,7 +225,7 @@ export class FieldBase<T> {
   }
 
   valueNotNull(data) {
-    return !_.isNull(data) && (_.isArray(data) ? (!_.isNull(data[0])) : true);
+    return !_.isNull(data) && (_.isArray(data) ? (!_.isNull(data[0])): true );
   }
 
   public setupEventHandlers() {
@@ -244,16 +247,16 @@ export class FieldBase<T> {
               this[eventSource] = new EventEmitter<any>();
             }
           }
-          eventSource.subscribe((value: any) => {
+          eventSource.subscribe((value:any) => {
             if (this.valueNotNull(value)) {
               let emitData = value;
               if (!_.isEmpty(eventConfig.fields)) {
                 if (_.isArray(value)) {
                   emitData = [];
-                  _.each(value, (v: any) => {
+                  _.each(value, (v:any) => {
                     if (!_.isEmpty(v)) {
                       const item = {};
-                      _.each(eventConfig.fields, (f: any) => {
+                      _.each(eventConfig.fields, (f:any)=> {
                         _.forOwn(f, (src, tgt) => {
                           item[tgt] = _.get(v, src);
                         });
@@ -264,7 +267,7 @@ export class FieldBase<T> {
                 } else {
                   emitData = {};
                   if (!_.isEmpty(value)) {
-                    _.each(eventConfig.fields, (f: any) => {
+                    _.each(eventConfig.fields, (f:any)=> {
                       _.forOwn(f, (src, tgt) => {
                         emitData[tgt] = _.get(value, src);
                       });
@@ -272,8 +275,8 @@ export class FieldBase<T> {
                   }
                 }
               }
-              console.log(`Emitting data:`);
-              console.log(emitData);
+              //console.log(`Emitting data:`);
+              //console.log(`eventName: ${eventName} emitData: ${emitData} value: ${value}`);
               this.emitEvent(eventName, emitData, value);
             }
           });
@@ -283,34 +286,23 @@ export class FieldBase<T> {
     }
 
     if (!_.isEmpty(subscribeConfig)) {
-
       _.forOwn(subscribeConfig, (subConfig, srcName) => {
         _.forOwn(subConfig, (eventConfArr, eventName) => {
           const eventEmitter = this.getEventEmitter(eventName, srcName);
-          eventEmitter.subscribe((value: any) => {
+          eventEmitter.subscribe((value:any) => {
             let curValue = value;
-            let dataAsArray = false;
-            _.each(eventConfArr, (eventConf: any) => {
-              if (eventConf.dataAsArray) {
-                // process the data as an array, setting one action will set all for this source component
-                dataAsArray = true;
-                return false;
-              }
-            });
-            if (_.isArray(value) && !dataAsArray) {
+            if (_.isArray(value)) {
               curValue = [];
               _.each(value, (v: any) => {
                 let entryVal = v;
                 _.each(eventConfArr, (eventConf: any) => {
-                  // adding source of the event
-                  eventConf.srcName = srcName;
-                  const fn: any = _.get(this, eventConf.action);
+                  const fn:any = _.get(this, eventConf.action);
                   if (fn) {
                     let boundFunction = fn;
-                    if (eventConf.action.indexOf(".") == -1) {
+                    if(eventConf.action.indexOf(".") == -1) {
                       boundFunction = fn.bind(this);
                     } else {
-                      var objectName = eventConf.action.substring(0, eventConf.action.indexOf("."));
+                      var objectName = eventConf.action.substring(0,eventConf.action.indexOf("."));
                       boundFunction = fn.bind(this[objectName]);
                     }
                     entryVal = boundFunction(entryVal, eventConf);
@@ -388,57 +380,40 @@ export class FieldBase<T> {
     return _.get(fieldMap ? fieldMap : this.fieldMap, `${this.getFullFieldName(name)}.control`);
   }
 
-  public setValue(value: any, emitEvent: boolean = true) {
+  public setValue(value:any, emitEvent:boolean=true) {
     this.value = value;
-    this.formModel.setValue(value, {onlySelf: true, emitEvent: emitEvent});
+    this.formModel.setValue(value, { onlySelf: true, emitEvent: emitEvent });
   }
 
   public toggleVisibility() {
     this.visible = !this.visible;
   }
 
-  private execVisibilityFn(data, visibilityCriteria) {
+  public setVisibility(data) {
     let newVisible = this.visible;
-    const fn: any = _.get(this, _.get(visibilityCriteria, 'action'));
-    if (fn) {
-      let boundFunction = fn;
-      if (_.get(visibilityCriteria, 'action', '').indexOf(".") == -1) {
-        boundFunction = fn.bind(this);
-      } else {
-        var objectName = _.get(visibilityCriteria, 'action', '').substring(0, _.get(visibilityCriteria, 'action', '').indexOf("."));
-        boundFunction = fn.bind(this[objectName]);
+    if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria['type'] == 'function') {
+      const fn:any = _.get(this, this.visibilityCriteria['action']);
+      if(this.visibilityCriteria['debug']) {
+        console.log(`visibilityCriteria: ${this.visibilityCriteria['debug']}`);
       }
-      if (_.get(visibilityCriteria, 'passCriteria') == true) {
-        newVisible = boundFunction(data, visibilityCriteria) == "true";
-      } else {
-        newVisible = boundFunction(data) == "true";
+      if (fn) {
+        let boundFunction = fn;
+        if(this.visibilityCriteria['action'].indexOf(".") == -1) {
+          boundFunction = fn.bind(this);
+        } else {
+          var objectName = this.visibilityCriteria['action'].substring(0,this.visibilityCriteria['action'].indexOf("."));
+          boundFunction = fn.bind(this[objectName]);
+        }
+        //console.log(`visibilityCriteria: ${this.visibilityCriteria.name}`);
+        newVisible = boundFunction(data, this.visibilityCriteria);
       }
-    }
-    return newVisible;
-  }
-
-  public setVisibility(data, eventConf:any = {}) {
-    let newVisible = this.visible;
-    if (_.isArray(this.visibilityCriteria)) {
-      // save the value of this data in a map, so we can run complex conditional logic that depends on one or more fields
-      if (!_.isEmpty(eventConf) && !_.isEmpty(eventConf.srcName)) {
-        this.subscriptionData[eventConf.srcName] = data;
-      }
-      // only run the function set if we have all the data...
-      if (_.size(this.subscriptionData) == _.size(this.visibilityCriteria)) {
-        newVisible = true;
-        _.each(this.visibilityCriteria, (visibilityCriteria) => {
-          const dataEntry = this.subscriptionData[visibilityCriteria.fieldName];
-          newVisible = newVisible && this.execVisibilityFn(dataEntry, visibilityCriteria);
-        });
-
-      }
-    } else
-    if (_.isObject(this.visibilityCriteria) && _.get(this.visibilityCriteria, 'type') == 'function') {
-      newVisible = this.execVisibilityFn(data, this.visibilityCriteria);
     } else {
       newVisible = _.isEqual(data, this.visibilityCriteria);
     }
+    this.updateVisible(newVisible);
+  }
+
+  updateVisible(newVisible) {
     const that = this;
     setTimeout(() => {
       if (!newVisible) {
@@ -460,6 +435,12 @@ export class FieldBase<T> {
       }
       that.visible = newVisible;
     });
+  }
+
+  public checkIfVisible() {
+    if (_.isObject(this.visibilityCriteria) && this.visibilityCriteria['type'] == 'function') {
+      this.setVisibility(this.visibilityCriteria);
+    }
   }
 
   public replaceValWithConfig(val) {
@@ -530,5 +511,132 @@ export class FieldBase<T> {
   //Default asyncLoadData function. No async load required so return empty Observable.
   asyncLoadData() {
     return Observable.of(null);
+  }
+
+  setProp(change: any, config: any) {
+    if(config['debug']) {
+      console.log('setProp: '+ config['debug']);
+    }
+    let defered = false;
+    let value;
+    let checked;
+    if (_.isObject(change)) {
+      value = change['value'];
+      defered = _.isUndefined(change['defered']) ? false : change['defered'];
+      checked = _.isUndefined(change['checked']) ? false : change['checked'];
+    } else {
+      value = change;
+      checked = true;
+    }
+    if(config['defer'] && !defered) {
+      return;
+    }
+    if(config['valueCase']) {
+      let caseSet;
+      _.each(config['valueCase'], (cases) => {
+        if(cases['val'] === value) {
+          value = cases['set'];
+          caseSet = checked;
+          return false;
+        }
+      });
+      if(caseSet) {
+        this.setValue(this.getTranslated(value, undefined));
+      }
+    } else if(config['valueSet']) {
+      if(this.formModel) {
+        this.setValue(this.getTranslated(value, undefined));
+      } else {
+        this.value = this.getTranslated(value, undefined);
+      }
+    } else if(config['valueTest']) {
+      if(_.includes(config['valueTest'], value)) {
+        _.each(config['props'], (prop) => {
+          this.setPropValue(prop, checked, config['debug']);
+        });
+      }
+      else if(_.includes(config['valueFalse'], value)) {
+        _.each(config['props'], (prop) => {
+          this.setPropValue(prop, false, config['debug']);
+        });
+      }
+    }
+  }
+
+  setPropValue(prop, checked, debug) {
+    if(debug) {
+      console.log('setPropValue: '+ debug);
+    }
+    if (prop.key === 'required') {
+      if(checked) {
+        this.setRequired(prop.val);
+      } else {
+        this.setRequired(!prop.val);
+      }
+    } else if (prop.key === 'value') {
+      if(prop.clear && !checked) {
+        if(this.formModel) {
+          this.setValue('');
+        } else {
+          if(Array.isArray(this.value)) {
+            // Since there is no formArray.clear(); in this version of angular:
+            this.getControl().controls = [];
+            this.getControl().setValue([]);
+          } else {
+            this.value = null;
+          }
+        }
+      } else if(checked){
+        if(this.formModel) {
+          this.setValue(this.getTranslated(prop.val, undefined));
+        } else {
+          this.value = this.getTranslated(prop.val, undefined);
+        }
+      }
+    } else if (prop.key === 'visible') {
+      if(checked) {
+        //this.setVisibility(prop.val);
+        this.updateVisible(prop.val);
+      } else if(!checked) {
+        this.updateVisible(!prop.val);
+        //this.setVisibility(!prop.val);
+      }
+    }
+  }
+
+  updateVisibility(visible, config) {
+    if(config['debug']){
+      console.log(config['debug']);
+    }
+    const fieldName = config['field'];
+    const fieldValue = config['fieldValue'];
+    let field;
+    if(this.fieldMap && this.fieldMap[fieldName]) {
+      field = this.fieldMap[fieldName]['field'];
+      if(field && _.includes(field['value'], fieldValue)) {
+        console.log(`updateVisibility to true: ${config['debug']}`);
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  }
+
+  getFieldDisplay(f) {
+    let valueLabel = f.control.value;
+    const options = f.field.options.options;
+    if(options) {
+      if(Array.isArray(valueLabel)){
+        valueLabel = this.hasValueLabel;
+      }else {
+        valueLabel = options.find(o=>f.control.value===o.value).label;
+      }
+    }
+    return {
+      valueLabel: valueLabel === true ? '' : valueLabel,
+      label: f.field.label
+    }
   }
 }

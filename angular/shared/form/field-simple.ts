@@ -43,12 +43,12 @@ export class NotInFormField extends FieldBase<any> {
 export class SelectionField extends FieldBase<any>  {
   selectOptions: any[] = [];
   storeValueAndLabel:boolean = false;
-  valueIsLink: boolean;
+  @Output() onItemSelect: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(options: any, injector: any) {
     super(options, injector);
 
-    this.valueIsLink = options.valueIsLink? options.valueIsLink: false;
+
     // this.options = options['options'] || [];
     if(options.selectFor && options.defaultSelect) {
       const newOptions = _.defaultTo(
@@ -69,9 +69,9 @@ export class SelectionField extends FieldBase<any>  {
         let emptyOptions = _.find(this.selectOptions, selectOption => {
           return selectOption.value == "";
         });
-          if(emptyOptions != null) {
-            this.value = emptyOptions;
-          }
+        if(emptyOptions != null) {
+          this.value = emptyOptions;
+        }
       }
     }
   }
@@ -81,7 +81,7 @@ export class SelectionField extends FieldBase<any>  {
     if (this.controlType == 'checkbox') {
       const fgDef = [];
 
-      _.each(this.selectOptions, (opt)=>{
+      _.map(this.selectOptions, (opt)=>{
         const hasValue = _.find(this.value, (val) => {
           return val == opt.value;
         });
@@ -91,11 +91,7 @@ export class SelectionField extends FieldBase<any>  {
       });
       // const fg = new FormArray(fgDef);
       // return fg;
-      if (this.required) {
-        this.validators = Validators.required;
-      }
-      this.formModel = new FormArray(fgDef, this.validators);
-      return this.formModel;
+      return new FormArray(fgDef);
     } else {
       // const model = super.createFormModel();
       // console.log(`Created form model:`);
@@ -122,42 +118,6 @@ export class SelectionField extends FieldBase<any>  {
       this.setValue(value);
     }
     return this.value;
-  }
-
-  public reactEvent(eventName: string, eventData: any, origData: any) {
-    if (this.controlType == "checkbox") {
-      this.setValue(eventData, false);
-      _.each(this.componentReactors, (compReact) => {
-        compReact.reactEvent(eventName, eventData, origData, this);
-      });
-    } else {
-      super.reactEvent(eventName, eventData, origData);
-    }
-  }
-
-  public setValue(value: any, emitEvent: boolean = true) {
-    if (this.controlType == "checkbox") {
-      if (!_.isArray(value) || value.length > this.selectOptions.length) {
-        console.error(`The value is not an array or the array exceeds the available options.`);
-        return;
-      }
-      this.value = value;
-      _.each(this.value, (val, idx) => {
-        if (_.toNumber(idx) > this.formModel.length - 1) {
-          this.formModel.push(new FormControl(val));
-        } else {
-          this.formModel.controls[_.toNumber(idx)].setValue(val);
-        }
-      });
-      if (this.value.length < this.formModel.length) {
-        const diff = this.formModel.length - this.value.length;
-        for (let i=0; i < diff; i++) {
-          this.formModel.removeAt(this.formModel.length-1);
-        }
-      }
-    } else {
-      super.setValue(value, emitEvent);
-    }
   }
 }
 
@@ -207,18 +167,13 @@ export class Container extends FieldBase<any> {
 
   public setValue(value:any, emitEvent:boolean=true) {
     this.value = value;
-    let key;
-    for(key in value) {
-      if(value.hasOwnProperty(key)) {
-        let val = value[key]
-        let fld = _.find(this.fields, (fldItem) => {
-          return fldItem.name == key;
-        });
-        // TODO: Not sure why this is required to get the parent form model updated
-        fld.formModel.setValue(val, {onlySelf: false, emitEvent: false});
-        fld.setValue(val, emitEvent);
-      }
-    }
+    _.forOwn(value, (val, key) => {
+      const fld = _.find(this.fields, (fldItem) => {
+        return fldItem.name == key;
+      });
+      fld.setValue(val, emitEvent);
+    });
+    // this.formModel.setValue(value, { onlySelf: true, emitEvent: emitEvent });
   }
 
 }
@@ -268,7 +223,6 @@ export class DateTime extends FieldBase<any> {
 
   constructor(options: any, injector: any) {
     super(options, injector);
-    this.updatePlaceholderAsFormat(options['datePickerOpts']);
     this.datePickerOpts = options['datePickerOpts'] || false;
     this.timePickerOpts = options['timePickerOpts'] || false;
     this.hasClearButton = options['hasClearButton'] || false;
@@ -279,17 +233,11 @@ export class DateTime extends FieldBase<any> {
     this.adjustStartRange = !_.isUndefined(options['adjustStartRange']) ? options['adjustStartRange'] : false;
   }
 
-  updatePlaceholderAsFormat(options: any, fieldName = 'placeholderAsFormat') {
-    if (_.get(options, fieldName, false) && _.get(options, 'format')) {
-      _.set(options, 'placeholder', _.get(options, 'format'));
-    }
-  }
-
   setValue(value:any) {
-      this.value = value;
-      this.formModel.patchValue(value, {emitEvent: true, emitModelToViewChange:true });
-      this.formModel.markAsTouched();
-    }
+    this.value = value;
+    this.formModel.patchValue(value, {emitEvent: true, emitModelToViewChange:true });
+    this.formModel.markAsTouched();
+  }
 
   formatValue(value: any) {
     // assume local date
@@ -337,7 +285,6 @@ export class SaveButton extends NotInFormField {
   cancelButtonMessage: string;
   confirmButtonMessage: string;
   isDelete: boolean;
-  isSubmissionButton: boolean
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -352,7 +299,6 @@ export class SaveButton extends NotInFormField {
     this.cancelButtonMessage = options['cancelButtonMessage'] ? this.getTranslated(options['cancelButtonMessage'], null ) : null;
     this.confirmButtonMessage = options['confirmButtonMessage'] ? this.getTranslated(options['confirmButtonMessage'], null) : null;
     this.isDelete = options['isDelete'];
-    this.isSubmissionButton = options['isSubmissionButton'] || false; // defaults to it is, unless specifically set, for backwards compat
   }
 }
 
@@ -365,10 +311,10 @@ export class CancelButton extends FieldBase<string> {
 
   constructor(options: any, injector: any) {
     super(options, injector);
-    this.label =  this.getTranslated(options['label'], 'Cancel');
+    this.label = this.getTranslated(options['label'], 'Cancel');
     this.confirmationMessage = options['confirmationMessage'] ? this.getTranslated(options['confirmationMessage'], null) : null;
     this.confirmationTitle = options['confirmationTitle'] ? this.getTranslated(options['confirmationTitle'], null) : null;
-    this.cancelButtonMessage = options['cancelButtonMessage'] ? this.getTranslated(options['cancelButtonMessage'], null ) : null;
+    this.cancelButtonMessage = options['cancelButtonMessage'] ? this.getTranslated(options['cancelButtonMessage'], null) : null;
     this.confirmButtonMessage = options['confirmButtonMessage'] ? this.getTranslated(options['confirmButtonMessage'], null) : null;
   }
 }
@@ -491,6 +437,7 @@ export class Spacer extends NotInFormField {
 
 export class Toggle extends FieldBase<boolean> {
   type: string;
+  @Output() onItemSelect: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -499,32 +446,22 @@ export class Toggle extends FieldBase<boolean> {
   }
 
   setToggle() {
-    if(this.options.valueCheck && this.options['checkedWhen'] && this.editMode) {
-      return this.options.valueCheck === this.options['checkedWhen'];
-    } else {
-      return this.options['value'] || false;
+    if(_.isUndefined(this.options['value'])) {
+      if(this.options.valueCheck && this.options['checkedWhen'] && this.editMode) {
+        return this.options.valueCheck === this.options['checkedWhen'];
+      } else {
+        return false;
+      }
+    } {
+      return this.options['value'];
     }
   }
 }
 
 export class HtmlRaw extends NotInFormField {
-  template: string;
-
-  constructor(options: any, injector: any) {
-    super(options, injector);
-    this.template = options['template'];
-    if (!_.isEmpty(this.template)) {
-      const imports = _.extend({moment: moment}, this);
-      const templateData = {imports: imports};
-      const template = _.template(this.template, templateData);
-      this.value = template();
-    }
-  }
 
   public getGroup(group: any, fieldMap: any) : any {
     super.getGroup(group, fieldMap);
-    if (_.isString(this.value)) {
-      this.value = this.replaceValWithConfig(this.value);
-    }
+    this.value = this.replaceValWithConfig(this.value);
   }
 }
