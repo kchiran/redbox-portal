@@ -63,6 +63,7 @@ export class FieldControlService {
     let group: any = {};
     this.populateFormGroup(fields, group, fieldMap);
     this.setupEventHandlers(fieldMap);
+    this.setupVisibility(fieldMap);
     return new FormGroup(group);
   }
 
@@ -70,6 +71,14 @@ export class FieldControlService {
     _.forOwn(fieldMap, (fMap:any) => {
       if (fMap.field) {
         fMap.field.setupEventHandlers();
+      }
+    });
+  }
+
+  setupVisibility(fieldMap: any) {
+    _.forOwn(fieldMap, (fMap:any) => {
+      if (fMap.field) {
+        fMap.field.checkIfVisible();
       }
     });
   }

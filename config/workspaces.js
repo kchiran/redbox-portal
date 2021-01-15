@@ -2,7 +2,7 @@
 
 module.exports.workspaces = {
     available: [{
-        logo: '/assets/images/logo.png',
+        logo: '/default/rdmp/images/logo',
         name: 'appnameexample',
         displayName: 'EXAMPLE',
         title: 'Example',

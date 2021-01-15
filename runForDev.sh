@@ -9,6 +9,7 @@ watch="false"
 # Not really needed but I'm putting this in a for loop in case we want to add more arguments later
 WATCH_COUNT=0
 DAEMONIZE_FLAG="-d"
+DOCKER_COMPOSE_FILE="docker-compose.yml"
 for var in "$@"
 do
     if [ $var = "install" ]; then
@@ -52,11 +53,17 @@ do
     if [ $var == "interactive" ]; then
       DAEMONIZE_FLAG=""
     fi
+    if [ $var == "docker_env" ]; then
+      DOCKER_COMPOSE_FILE="docker-compose.docker.yml"
+    fi
+    if [ $var == "prod_env" ]; then
+      DOCKER_COMPOSE_FILE="docker-compose.prod.yml"
+    fi
 done
 
 if [ $watch == "true" ]; then
     echo "${WATCH_COUNT} watches are running."
 else
     echo "${WATCH_COUNT} watches. No watches should be running."
-    docker-compose up $DAEMONIZE_FLAG
+    docker-compose -f $DOCKER_COMPOSE_FILE up $DAEMONIZE_FLAG
 fi
