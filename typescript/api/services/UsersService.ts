@@ -19,6 +19,7 @@
 
 import { Observable } from 'rxjs/Rx';
 import services = require('../core/CoreService.js');
+import SearchService from '../core/SearchService.js';
 import { Sails, Model } from "sails";
 import * as request from "request-promise";
 import * as crypto from 'crypto';
@@ -55,6 +56,8 @@ export module Services {
       'getUsers',
     ];
 
+    searchService: SearchService;
+
     protected localAuthInit = () => {
       // users the default brand's configuration on startup
       // TODO: consider moving late initializing this if possible
@@ -67,10 +70,10 @@ export module Services {
       var LocalStrategy = require('passport-local').Strategy;
       var bcrypt;
       try {
-      bcrypt = require('bcrypt');
-    }catch(err) {
-      bcrypt = require('bcryptjs');
-    }
+        bcrypt = require('bcrypt');
+      }catch(err) {
+        bcrypt = require('bcryptjs');
+      }
       sails.config.passport.serializeUser(function(user, done) {
         done(null, user.id);
       });
@@ -83,37 +86,37 @@ export module Services {
       //  Local Strategy
       //
       sails.config.passport.use(new LocalStrategy({
-        usernameField: usernameField,
-        passwordField: passwordField
-      },
-        function(username, password, done) {
+            usernameField: usernameField,
+            passwordField: passwordField
+          },
+          function(username, password, done) {
 
-          User.findOne({ username: username }).populate('roles').exec(function(err, foundUser) {
-            if (err) { return done(err); }
-            if (!foundUser) {
-              return done(null, false, { message: 'Incorrect username/password' });
-            }
-
-            bcrypt.compare(password, foundUser.password, function(err, res) {
-
-              if (!res) {
-                return done(null, false, {
-                  message: 'Incorrect username/password'
-                });
+            User.findOne({ username: username }).populate('roles').exec(function(err, foundUser) {
+              if (err) { return done(err); }
+              if (!foundUser) {
+                return done(null, false, { message: 'Incorrect username/password' });
               }
 
-              foundUser.lastLogin = new Date();
+              bcrypt.compare(password, foundUser.password, function(err, res) {
 
-              User.update({ username: foundUser.username }, { lastLogin: foundUser.lastLogin });
+                if (!res) {
+                  return done(null, false, {
+                    message: 'Incorrect username/password'
+                  });
+                }
 
-              return done(null, foundUser, {
-                message: 'Logged In Successfully'
+                foundUser.lastLogin = new Date();
+
+                User.update({ username: foundUser.username }, { lastLogin: foundUser.lastLogin });
+
+                return done(null, foundUser, {
+                  message: 'Logged In Successfully'
+                });
+
+
               });
-
-
             });
-          });
-        }
+          }
       ));
     }
 
@@ -125,7 +128,7 @@ export module Services {
       // JWT/AAF Strategy
       //
       var JwtStrategy = require('passport-jwt').Strategy,
-        ExtractJwt = require('passport-jwt').ExtractJwt;
+          ExtractJwt = require('passport-jwt').ExtractJwt;
       const aafOpts = defAuthConfig.aaf.opts;
       aafOpts.jwtFromRequest = ExtractJwt.fromBodyField('assertion');
       sails.config.passport.use('aaf-jwt', new JwtStrategy(aafOpts, function(req, jwt_payload, done) {
@@ -252,24 +255,24 @@ export module Services {
     protected bearerTokenAuthInit = () => {
       var BearerStrategy = require('passport-http-bearer').Strategy;
       sails.config.passport.use('bearer', new BearerStrategy(
-        function(token, done) {
-          if (!_.isEmpty(token) && !_.isUndefined(token)) {
-            const tokenHash = crypto.createHash('sha256').update(token).digest('base64');
-            User.findOne({ token: tokenHash }).populate('roles').exec(function(err, user) {
-              if (err) {
-                return done(err);
-              }
-              if (!user) {
+          function(token, done) {
+            if (!_.isEmpty(token) && !_.isUndefined(token)) {
+              const tokenHash = crypto.createHash('sha256').update(token).digest('base64');
+              User.findOne({ token: tokenHash }).populate('roles').exec(function(err, user) {
+                if (err) {
+                  return done(err);
+                }
+                if (!user) {
 
-                return done(null, false);
-              }
-              return done(null, user, { scope: 'all' });
-            });
-          } else {
-            // empty token, deny
-            return done(null, false);
+                  return done(null, false);
+                }
+                return done(null, user, { scope: 'all' });
+              });
+            } else {
+              // empty token, deny
+              return done(null, false);
+            }
           }
-        }
       ));
     }
 
@@ -288,30 +291,30 @@ export module Services {
         }
         sails.log.verbose("Default user missing, creating...");
         return super.getObservable(User.create(defaultUser))
-          .flatMap(defUser => {
-            // START Sails 1.0 upgrade
-            const defRoleIds = _.map(defRoles, (o) => {
-              return o.id;
-            });
-            let q = User.addToCollection(defUser.id, 'roles').members(defRoleIds);
-            // END Sails 1.0 upgrade
-            return super.getObservable(q, 'exec', 'simplecb')
-              .flatMap(dUser => {
-                return Observable.from(defRoles)
-                  .map(roleObserved => {
-                    let role: any = roleObserved;
-                    // START Sails 1.0 upgrade
-                    // role.users.add(defUser.id)
-                    q = Role.addToCollection(role.id, 'users').members([defUser.id]);
-                    // END Sails 1.0 upgrade
-                    return super.getObservable(q, 'exec', 'simplecb');
-                  });
-              })
-              .last()
-              .flatMap(lastRole => {
-                return Observable.of({ defUser: defUser, defRoles: defRoles });
+            .flatMap(defUser => {
+              // START Sails 1.0 upgrade
+              const defRoleIds = _.map(defRoles, (o) => {
+                return o.id;
               });
-          });
+              let q = User.addToCollection(defUser.id, 'roles').members(defRoleIds);
+              // END Sails 1.0 upgrade
+              return super.getObservable(q, 'exec', 'simplecb')
+                  .flatMap(dUser => {
+                    return Observable.from(defRoles)
+                        .map(roleObserved => {
+                          let role: any = roleObserved;
+                          // START Sails 1.0 upgrade
+                          // role.users.add(defUser.id)
+                          q = Role.addToCollection(role.id, 'users').members([defUser.id]);
+                          // END Sails 1.0 upgrade
+                          return super.getObservable(q, 'exec', 'simplecb');
+                        });
+                  })
+                  .last()
+                  .flatMap(lastRole => {
+                    return Observable.of({ defUser: defUser, defRoles: defRoles });
+                  });
+            });
       } else {
         return Observable.of({ defUser: defaultUser, defRoles: defRoles });
       }
@@ -348,26 +351,30 @@ export module Services {
     }
 
     /**
-    @return Object {
+     @return Object {
           defUser: the default admin user
           defRoles: the default brand's roles
         }
-    */
+     */
     public bootstrap = (defRoles) => {
+      let that = this;
+      sails.on('ready', function () {
+        that.searchService = sails.services[sails.config.search.serviceName];
+      });
       const defAuthConfig = ConfigService.getBrand(BrandingService.getDefault().name, 'auth');
       sails.log.verbose("Bootstrapping users....");
 
       var usernameField = defAuthConfig.local.usernameField,
-        passwordField = defAuthConfig.local.passwordField;
+          passwordField = defAuthConfig.local.passwordField;
       var defAdminRole = RolesService.getAdminFromRoles(defRoles);
       return Observable.of(defAdminRole)
-        .flatMap(defAdminRole => {
-          this.localAuthInit();
-          this.aafAuthInit();
-          this.openIdConnectAuth();
-          this.bearerTokenAuthInit();
-          return this.initDefAdmin(defRoles, defAdminRole);
-        });
+          .flatMap(defAdminRole => {
+            this.localAuthInit();
+            this.aafAuthInit();
+            this.openIdConnectAuth();
+            this.bearerTokenAuthInit();
+            return this.initDefAdmin(defRoles, defAdminRole);
+          });
     }
 
     public getUserWithUsername = (username) => {
@@ -464,32 +471,35 @@ export module Services {
         query['type'] = source;
       }
       return this.getObservable(User.find(query).populate('roles'))
-        .flatMap(users => {
-          if (brandId) {
-            _.remove(users, (user) => {
-              const isInBrand = _.find(user.roles, (role) => {
-                return role.branding == brandId;
+          .flatMap(users => {
+            if (brandId) {
+              _.remove(users, (user) => {
+                const isInBrand = _.find(user.roles, (role) => {
+                  return role.branding == brandId;
+                });
+                return !isInBrand;
               });
-              return !isInBrand;
-            });
-          }
-          return Observable.of(users);
-        });
+            }
+            return Observable.of(users);
+          });
     }
 
     /**
-    *
-    * Find all records that the user is intended to have access to and assign actual access using their userId.
-    * This is used as users or services may want to provide access for a user to a record but due to single sign-on solutions,
-    * we're not able to reliably determine the username before they login to the system for the first time.
-    *
-    **/
+     *
+     * Find all records that the user is intended to have access to and assign actual access using their userId.
+     * This is used as users or services may want to provide access for a user to a record but due to single sign-on solutions,
+     * we're not able to reliably determine the username before they login to the system for the first time.
+     *
+     **/
     public findAndAssignAccessToRecords(pendingValue, userid) {
-      var url = `${sails.config.record.baseUrl.redbox}${sails.config.record.api.search.url}?q=authorization_editPending:${pendingValue}%20OR%20authorization_viewPending:${pendingValue}&sort=date_object_modified desc&version=2.2&wt=json&rows=10000`;
-      var options = { url: url, json: true, headers: { 'Authorization': `Bearer ${sails.config.redbox.apiKey}`, 'Content-Type': 'application/json; charset=utf-8' } };
-      var response = Observable.fromPromise(request[sails.config.record.api.search.method](options)).catch(error => Observable.of(`Error: ${error}`));
       var oid = null;
-      response.subscribe(results => {
+      const query = `authorization_editPending:${pendingValue}%20OR%20authorization_viewPending:${pendingValue}&sort=date_object_modified desc&version=2.2&wt=json&rows=10000`;
+      this.searchService.searchAdvanced(query).then(results => {
+        if (_.isEmpty(results) || _.isEmpty(results['response'])) {
+          sails.log.verbose(`UsersService::findAndAssignAccessToRecords() -> No pending records: ${pendingValue}`);
+          return;
+        }
+        sails.log.verbose(JSON.stringify(results));
         if (results["response"] != null) {
           var docs = results["response"]["docs"];
           for (var i = 0; i < docs.length; i++) {
@@ -499,12 +509,11 @@ export module Services {
             RecordsService.provideUserAccessAndRemovePendingAccess(oid, userid, pendingValue);
           }
         }
-      }, (error: any) => {
+      }).catch((error: any) => {
         // swallow !!!!
         sails.log.warn(`Failed to assign access to OID: ${oid}`);
         sails.log.warn(error);
       });
-
     }
 
   }

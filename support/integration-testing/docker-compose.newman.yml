@@ -5,12 +5,12 @@ services:
   redboxportal:
     image: qcifengineering/redbox-portal:latest
     ports:
-       - "1500:1500"
+      - "1500:1500"
     volumes:
-       - "../../:/opt/redbox-portal"
-       - "./.tmp/attachments:/attachments"
+      - "../../:/opt/redbox-portal"
+      - "./.tmp/attachments:/attachments"
     expose:
-       - "1500"
+      - "1500"
     environment:
       - NODE_ENV=docker
       - PORT=1500
@@ -21,9 +21,9 @@ services:
       - sails_auth__default__local__default__token=d077835a-696b-4728-85cf-3ffd57152b1e
       - sails_security__csrf=false
     networks:
-     main:
-       aliases:
-         - rbportal
+      main:
+        aliases:
+          - rbportal
     entrypoint: /bin/bash -c "cd /opt/redbox-portal && npm i nyc -g && npm i newman && nyc --exclude-after-remap=false --reporter=lcov npm run api-test "
   mongodb:
     image: mvertes/alpine-mongo:latest
@@ -32,7 +32,7 @@ services:
         aliases:
           - mongodb
     ports:
-       - "27017:27017"
+      - "27017:27017"
   solr:
     image: solr:8.6.3
     expose:
@@ -41,8 +41,8 @@ services:
       - "8983:8983"
     networks:
       main:
-       aliases:
-         - solr
+        aliases:
+          - solr
     entrypoint:
       - docker-entrypoint.sh
       - solr-precreate
