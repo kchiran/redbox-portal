@@ -28,7 +28,7 @@ declare var RecordType, Counter: Model;
 declare var _this;
 declare var User;
 declare var _;
-declare var TranslationService;
+declare var TranslationService, WorkspaceService;
 
 export module Services {
   /**
@@ -44,7 +44,8 @@ export module Services {
       'processRecordCounters',
       'stripUserBasedPermissions',
       'restoreUserBasedPermissions',
-      'runTemplates'
+      'runTemplates',
+      'addWorkspaceToRecord'
     ];
 
     /**
@@ -91,19 +92,19 @@ export module Services {
         return Observable.of(record);
       } else {
         return Observable.zip(...obs)
-          .flatMap(counterVals => {
-            const updateObs = [];
-            _.each(counterVals, (counterVal, idx) => {
-              let counter = options.counters[idx];
-              let newVal = counterVal[0].value + 1;
-              this.incrementCounter(record, counter, newVal);
-              updateObs.push(this.getObservable(Counter.updateOne({ id: counterVal[0].id }, { value: newVal })));
+            .flatMap(counterVals => {
+              const updateObs = [];
+              _.each(counterVals, (counterVal, idx) => {
+                let counter = options.counters[idx];
+                let newVal = counterVal[0].value + 1;
+                this.incrementCounter(record, counter, newVal);
+                updateObs.push(this.getObservable(Counter.updateOne({ id: counterVal[0].id }, { value: newVal })));
+              });
+              return Observable.zip(...updateObs);
+            })
+            .flatMap(updateVals => {
+              return Observable.of(record);
             });
-            return Observable.zip(...updateObs);
-          })
-          .flatMap(updateVals => {
-            return Observable.of(record);
-          });
       }
     }
 
@@ -210,16 +211,16 @@ export module Services {
         zippedViewContributorUsers = Observable.zip(...viewContributorObs);
       } else {
         zippedViewContributorUsers = Observable.zip(...editContributorObs)
-          .flatMap(editContributorUsers => {
-            let newEditList = [];
-            this.filterPending(editContributorUsers, editContributorEmails, newEditList);
-            if (recordCreatorPermissions == "edit" || recordCreatorPermissions == "view&edit") {
-              newEditList.push(record.metaMetadata.createdBy);
-            }
-            record.authorization.edit = newEditList;
-            record.authorization.editPending = editContributorEmails;
-            return Observable.zip(...viewContributorObs);
-          })
+            .flatMap(editContributorUsers => {
+              let newEditList = [];
+              this.filterPending(editContributorUsers, editContributorEmails, newEditList);
+              if (recordCreatorPermissions == "edit" || recordCreatorPermissions == "view&edit") {
+                newEditList.push(record.metaMetadata.createdBy);
+              }
+              record.authorization.edit = newEditList;
+              record.authorization.editPending = editContributorEmails;
+              return Observable.zip(...viewContributorObs);
+            })
       }
       if (zippedViewContributorUsers.length == 0) {
         return Observable.of(record);
@@ -314,6 +315,13 @@ export module Services {
         return Observable.throw(new Error(errLog));
       }
       return Observable.of(record);
+    }
+
+    public async addWorkspaceToRecord(oid, workspaceData, options, user, response) {
+      const rdmpOid = workspaceData.metadata.rdmpOid;
+      sails.log.verbose(`Generic adding workspace ${oid} to record: ${rdmpOid}`);
+      response = await WorkspaceService.addWorkspaceToRecord(workspaceData.metadata.rdmpOid, oid);
+      return response;
     }
   }
 }

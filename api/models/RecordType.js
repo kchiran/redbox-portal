@@ -29,10 +29,15 @@ module.exports = {
     searchFilters: {
       type: 'json',
       required: false
+    },
+    searchable: {
+      type: 'boolean',
+      required: false,
+      defaultsTo: true
     }
   },
-    beforeCreate: function(recordType, cb) {
-        recordType.key = recordType.branding+'_'+recordType.name;
-        cb();
-    }
+  beforeCreate: function(recordType, cb) {
+    recordType.key = recordType.branding+'_'+recordType.name;
+    cb();
+  }
 }
