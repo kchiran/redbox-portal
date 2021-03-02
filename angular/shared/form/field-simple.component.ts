@@ -440,7 +440,8 @@ export class TabOrAccordionContainerComponent extends SimpleComponent {
 
   ngAfterViewInit() {
     let that = this;
-    _.each(this.field.fields, tab => {
+    setTimeout(() => {
+      _.each(this.field.fields, tab => {
         tab['expandedChar'] = '+';
         jQuery(`#${tab.id}`).on('shown.bs.collapse', ()=> {
           tab["expandedChar"] = '-';
@@ -452,8 +453,8 @@ export class TabOrAccordionContainerComponent extends SimpleComponent {
           that.changeRef.detectChanges();
           that.field.onAccordionCollapseExpand.emit({shown:false, tabId: tab.id});
         });
+      });
     });
-
     if(!this.field.editMode && this.field.expandAccordionsOnOpen) {
       this.field.allExpanded = false;
       this.expandCollapseAll();
