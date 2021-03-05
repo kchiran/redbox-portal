@@ -11,6 +11,8 @@ var dataPublicationPublishingForm = _.cloneDeep(require('../form-config/dataPubl
 var dataPublicationQueuedForm = _.cloneDeep(require('../form-config/dataPublication-1.0-queued.js'));
 var dataPublicationRetiredForm = _.cloneDeep(require('../form-config/dataPublication-1.0-retired.js'));
 var dataPublicationReviewingForm = _.cloneDeep(require('../form-config/dataPublication-1.0-reviewing.js'));
+var genericWorkspaceForm = require('../form-config/genericWorkspace-1.0-draft.js');
+
 module.exports.form = {
   defaultForm: "default-1.0-draft",
   forms: {
@@ -22,6 +24,7 @@ module.exports.form = {
     "dataPublication-1.0-publishing": dataPublicationPublishingForm,
     "dataPublication-1.0-queued": dataPublicationQueuedForm,
     "dataPublication-1.0-retired": dataPublicationRetiredForm,
-    "dataPublication-1.0-reviewing": dataPublicationReviewingForm
+    "dataPublication-1.0-reviewing": dataPublicationReviewingForm,
+    "genericWorkspace-1.0-draft": genericWorkspaceForm
   }
 };

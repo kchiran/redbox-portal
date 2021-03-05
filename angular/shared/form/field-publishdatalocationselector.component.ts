@@ -76,6 +76,14 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
   typeHeader: string;
   locationHeader: string;
   notesHeader: string;
+  iscHeader: string;
+  iscEnabled: boolean;
+  notesEnabled: boolean;
+  noLocationSelected: boolean;
+  noLocationSelectedText: string;
+  noLocationSelectedHelp: string;
+  publicCheck: string;
+  selectionCriteria: any;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -91,6 +99,13 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
     this.typeHeader =  this.getTranslated(options['typeHeader'], 'Type');
     this.locationHeader =  this.getTranslated(options['locationHeader'], 'Location');
     this.notesHeader =  this.getTranslated(options['notesHeader'], 'Notes');
+    this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
+    this.notesEnabled = !_.isUndefined(options['notesEnabled']) ? options['notesEnabled'] : true;
+    this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
+    this.noLocationSelectedText = !_.isUndefined(options['noLocationSelectedText']) ? this.getTranslated(options['noLocationSelectedText'], options['noLocationSelectedText']) : 'Publish Metadata Only';
+    this.noLocationSelectedHelp = !_.isUndefined(options['noLocationSelectedHelp']) ? this.getTranslated(options['noLocationSelectedHelp'], options['noLocationSelectedHelp']) : 'Publicise only metadata (or description)';
+    this.publicCheck = !_.isUndefined(options['publicCheck']) ? this.getTranslated(options['publicCheck'], options['publicCheck']) : 'public';
+    this.selectionCriteria = !_.isUndefined(options['selectionCriteria']) ? this.getTranslated(options['selectionCriteria'], options['selectionCriteria']) : [{isc:'public', type:'attachment'}];
 
     this.value = options['value'] || this.setEmptyValue();
     this.recordsService = this.getFromInjector(RecordsService);
@@ -139,6 +154,45 @@ export class PublishDataLocationSelectorField extends FieldBase<any> {
     });
     this.setValue(this.value);
   }
+
+  public selectAllPublic() {
+    this.applySelectionCriteria(true);
+    this.checkIfLocationsSelected();
+  }
+
+  public applySelectionCriteria(checked) {
+    _.each(this.value, dL => {
+      _.each(this.selectionCriteria, sC => {
+        const isSelected = _.filter(sC, (val, key) => dL[key] && dL[key] === val);
+        if(isSelected.length === Object.keys(sC).length) {
+          dL.selected = checked;
+        }
+      });
+    });
+  };
+
+  public canBeSelected(dL) {
+    let canBeSelected = false;
+    _.each(this.selectionCriteria, sC => {
+      const isSelected = _.filter(sC, (val, key) => dL[key] && dL[key] === val);
+      if(isSelected.length === Object.keys(sC).length) {
+        canBeSelected = true;
+      }
+    });
+
+    return canBeSelected && this.editMode ? null : '';
+  }
+
+  public checkIfLocationsSelected() {
+    const locationSelected = _.find(this.value, (dataLocation:any) => {
+      return dataLocation.selected
+    });
+    if(locationSelected) {
+      this.noLocationSelected = false;
+    } else {
+      this.noLocationSelected = true;
+    }
+  }
 }
 /**
 * Component to display information from related objects within ReDBox
@@ -156,13 +210,18 @@ export class PublishDataLocationSelectorComponent extends SimpleComponent {
   editingNotes: any = {notes: '', index:-1};
 
   public ngOnInit() {
-
+    this.field.checkIfLocationsSelected();
   }
 
   public selectAllLocations(checked){
-    _.each(this.field.value, (dataLocation:any) => {
-      dataLocation.selected = checked;
-    });
+    if(this.field.iscEnabled) {
+      this.field.applySelectionCriteria(checked);
+    } else {
+      _.each(this.field.value, (dataLocation:any) => {
+        dataLocation.selected = checked;
+      });
+    }
+    this.field.checkIfLocationsSelected();
   }
 
   public getDatalocations() {
