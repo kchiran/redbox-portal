@@ -11,7 +11,6 @@
           <tr>
             <th width="15%">{{ field.typeHeader }}</th>
             <th width="40%">{{ field.locationHeader }}</th>
-            <th width="40%">{{ field.notesHeader }}</th>
             <th *ngIf="field.notesEnabled" width="20%">{{ field.notesHeader }}</th>
             <th *ngIf="field.iscEnabled" width="20%">{{ field.iscHeader }}</th>
             <th width="5%" *ngIf="field.editMode"><span [hidden]="true">Action</span></th>
