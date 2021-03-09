@@ -30,13 +30,14 @@ import ocfl = require('ocfl');
 
 
 import { Index, jsonld } from 'calcyte';
+import DatastreamService from "../core/DatastreamService";
 
 const rb2rocrate = require('redbox-ro-crate').rb2rocrate;
 
 const rocrate = require('ro-crate');
 
 declare var sails: Sails;
-declare var RecordsService, UsersService, BrandingService;
+declare var RecordsService, UsersService, BrandingService, RedboxJavaStorageService;
 declare var _;
 
 const URL_PLACEHOLDER = '{ID_WILL_BE_HERE}'; // config
@@ -57,7 +58,24 @@ export module Services {
 			'exportDataset'
 		];
 
+		datastreamService: DatastreamService = null;
 
+		constructor() {
+			super();
+			this.logHeader = "PublicationService::";
+			let that = this;
+			sails.on('ready', function () {
+				that.getDatastreamService();
+			});
+		}
+
+		getDatastreamService() {
+			if (_.isEmpty(sails.config.record) || _.isEmpty(sails.config.record.datastreamService)) {
+				this.datastreamService = RedboxJavaStorageService;
+			} else {
+				this.datastreamService = sails.services[sails.config.storage.serviceName];
+			}
+		}
 
 		// exportDataset is the main point of entry. It returns an Observable
 		// which writes out the record's attachments, creates a RO-Crate for
@@ -143,7 +161,7 @@ export module Services {
 		private async getRepository(site): Promise<any> {
 			if(! sails.config.datapubs.sites[site] ) {
 				sails.log.error(`unknown site ${site}`);
-				throw(new Error("unknown repostitory site " + site));
+				throw(new Error("unknown repository site " + site));
 			} else {
 				const dir = sails.config.datapubs.sites[site].dir;
 				const repository = new ocfl.Repository();
@@ -187,50 +205,62 @@ export module Services {
 			});
 
 			const obs = attachments.map((a) => {
-				return RecordsService.getDatastream(drid, a['fileId']).
-				flatMap(ds => {
+				return this.datastreamService.getDatastream(drid, a['fileId']).
+				flatMap(response => {
 					const filedir = path.join(dir, a['fileId']);
-					return Observable.fromPromise(this.writeAttachment(ds.body, filedir, a['name']));
+					let dataFile;
+					if (response.readstream) {
+						dataFile = response.readstream
+						return Observable.fromPromise(this.writeDatastream(dataFile, filedir, a['name']));
+					} else {
+						dataFile = Buffer.from(response.body);
+						return Observable.fromPromise(this.writeAttachment(dataFile, filedir, a['name']));
+					}
 				});
 			});
 
-			obs.push(Observable.fromPromise(this.makeROCrate(creator, approver, oid, dir, metadata)));
-			return Observable.merge(...obs).toPromise();
+			obs.unshift(Observable.fromPromise(this.makeROCrate(creator, approver, oid, dir, metadata)));
+			return Observable.concat(...obs).toPromise();
 		}
 
 
-		// This is the first attempt, but it doesn't work - the files it
-		// writes out are always empty. I think it's because the API call
-		// to get the attachment isn't requesting a stream, so it's coming
-		// back as a buffer.
+		// writeDatastream works for new redbox-storage -- using sails-hook-redbox-storage-mongo.
 
-		private writeDatastream(stream: any, fn: string): Promise<boolean> {
+		private async writeDatastream(stream: any, dir: string, fn: string): Promise<boolean> {
 			return new Promise<boolean>( (resolve, reject) => {
-				var wstream = fs.createWriteStream(fn);
-				sails.log.debug("start writeDatastream " + fn);
-				stream.pipe(wstream);
-				stream.end();
-				wstream.on('finish', () => {
-					sails.log.debug("finished writeDatastream " + fn);
-					resolve(true);
-				});
-				wstream.on('error', (e) => {
-					sails.log.error("File write error");
-					reject
-				});
+				try {
+					fse.ensureDir(dir, direrr => {
+						if (direrr) throw(direrr);
+						var wstream = fs.createWriteStream(path.join(dir, fn));
+						sails.log.debug("start writeDatastream " + fn);
+						stream.pipe(wstream);
+						stream.end();
+						wstream.on('close', () => {
+							sails.log.debug("finished writeDatastream " + fn);
+							resolve(true);
+						});
+						wstream.on('error', (e) => {
+							sails.log.error(e.name);
+							sails.log.error(e.message);
+							throw(e);
+						});
+					});
+				} catch (e) {
+					reject(new Error(e));
+				}
 			});
 		}
 
-		// this version works, but I'm worried that it will put the whole of
-		// the buffer in RAM. See writeDatastream for my first attempt, which
-		// doesn't work.
+		// writeAttachment works for java storage version, it will put the whole of
+		// the buffer in RAM.
 
 		private async writeAttachment(buffer: Buffer, dir: string, fn: string): Promise<boolean> {
 			return new Promise<boolean>( ( resolve, reject ) => {
 				try {
 					fse.ensureDir(dir, err => {
 						if( ! err ) {
-							fs.writeFile(path.join(dir, fn), buffer, () => {
+							fs.writeFile(path.join(dir, fn), buffer, (werr) => {
+								if (werr) throw werr;
 								resolve(true)
 							});
 						} else {
@@ -241,7 +271,7 @@ export module Services {
 					sails.log.error("attachment write error");
 					sails.log.error(e.name);
 					sails.log.error(e.message);
-					reject;
+					reject(new Error(e));
 				}
 			});
 		}
