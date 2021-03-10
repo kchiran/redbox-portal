@@ -19,14 +19,14 @@
 import { Input, Component, OnInit, Inject, Injector } from '@angular/core';
 import { SimpleComponent } from './field-simple.component';
 import { FieldBase } from './field-base';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as _ from "lodash";
 import { RecordsService } from './records.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import {DomSanitizer} from '@angular/platform-browser';
 
+declare var jQuery: any;
 
 
 /**
@@ -47,6 +47,15 @@ export class RelatedObjectDataField extends FieldBase<any> {
   hasInit: boolean;
   recordsService: RecordsService;
   columns: object[];
+  isEditable: boolean = false;
+  isEditing: boolean = false;
+  currentItemForm: FormGroup;
+  formBuilder: FormBuilder;
+  formGroup = {};
+  archiveCurrentItem = {};
+  currentItemEditing;
+  arhiveConfirmMessage: string;
+  confirmArchiveTitle: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
@@ -54,16 +63,21 @@ export class RelatedObjectDataField extends FieldBase<any> {
     this.accessDeniedObjects = [];
     this.failedObjects = [];
     this.columns = options['columns'] || [];
+    this.isEditable = options['isEditable'] || false;
+    this.arhiveConfirmMessage = options['arhiveConfirmMessage'] || 'Confirm archiving your workspace from the plan';
+    this.confirmArchiveTitle = options['confirmArchiveTitle'] || 'Confirm Archive';
 
     var relatedObjects = this.relatedObjects;
     this.value = options['value'] || this.setEmptyValue();
     this.recordsService = this.getFromInjector(RecordsService);
-
+    this.formBuilder = this.getFromInjector(FormBuilder);
+    this.currentItemForm = this.formBuilder.group({});
+    this.setEmptyArchive();
   }
 
-/**
-* Loading the metadata for each related object in the array
-*/
+  /**
+   * Loading the metadata for each related object in the array
+   */
   asyncLoadData() {
     let getRecordMetaObs = [];
     var that = this;
@@ -111,6 +125,64 @@ export class RelatedObjectDataField extends FieldBase<any> {
     this.value = [];
     return this.value;
   }
+
+  lockItem() {
+    this.currentItemEditing = -1;
+  }
+
+  isUnLocked(itemIndex) {
+    return this.currentItemEditing == itemIndex;
+  }
+
+  editRelatedObject(item, itemIndex) {
+    this.currentItemEditing = itemIndex;
+    this.currentItemForm.reset();
+    for (let name in item) {
+      this.formGroup[name] = new FormControl(item[name]);
+    }
+    this.currentItemForm = this.formBuilder.group(this.formGroup);
+  }
+
+  archiveItem(item, itemIndex) {
+    jQuery('#relatedObjectConfirmArchiveModal').modal({backdrop: 'static', keyboard: false, show: true});
+    this.archiveCurrentItem = {
+      item: item,
+      itemIndex: itemIndex,
+      title: item['title'] || 'workspace'
+    }
+  }
+
+  confirmArchive(confirmArchiveRecord) {
+    if (confirmArchiveRecord) {
+      this.archiveCurrentItem['item']['archive'] = true;
+      this.saveItem(this.archiveCurrentItem['item']);
+    }
+    this.archiveCurrentItem = {};
+    jQuery('#relatedObjectConfirmArchiveModal').modal('hide');
+  }
+
+  setEmptyArchive() {
+    this.archiveCurrentItem = {
+      item: {},
+      itemIndex: undefined,
+      title: ''
+    }
+  }
+
+  saveItem(value) {
+    const object = this.value[this.currentItemEditing];
+    this.recordsService.update(object['id'], value, 'draft')
+      .subscribe(res => {
+        if (res.success) {
+          this.relatedObjects[this.currentItemEditing] = value;
+          this.lockItem();
+          this.setEmptyArchive();
+        } else {
+          console.log(res.success);
+        }
+      });
+
+  }
 }
 
 declare var aotMode
@@ -121,12 +193,12 @@ if (typeof aotMode == 'undefined') {
 }
 
 /**
-* Component to display information from related objects within ReDBox
-*
-*
-*
-*
-*/
+ * Component to display information from related objects within ReDBox
+ *
+ *
+ *
+ *
+ */
 @Component({
   selector: 'rb-relatedobjectdata',
   templateUrl: './field-relatedobjectdata.html'
@@ -134,11 +206,4 @@ if (typeof aotMode == 'undefined') {
 export class RelatedObjectDataComponent extends SimpleComponent {
   field: RelatedObjectDataField;
 
-  constructor(private sanitizer: DomSanitizer) {
-    super();
-  }
-
-  sanitizeUrl(url:string){
-    return this.sanitizer.bypassSecurityTrustUrl(url);
-  }
 }

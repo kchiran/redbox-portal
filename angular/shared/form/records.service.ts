@@ -60,14 +60,14 @@ export class RecordsService extends BaseService {
 
   addRenderCompleteElement(fieldsMeta){
     var renderCompleteElement = {
-            "class" : "Container",
-            "compClass" : "TextBlockComponent",
-            "definition" : {
-                "value" : "",
-                "type" : "span",
-                "cssClasses" : "form-render-complete"
-            }
-        };
+      "class" : "Container",
+      "compClass" : "TextBlockComponent",
+      "definition" : {
+        "value" : "",
+        "type" : "span",
+        "cssClasses" : "form-render-complete"
+      }
+    };
 
     fieldsMeta.push(renderCompleteElement);
 
@@ -101,12 +101,12 @@ export class RecordsService extends BaseService {
 
   create(record: any, recordType: string, targetStep: string = '') {
     return this.http.post(`${this.brandingAndPortalUrl}/recordmeta/${recordType}${ this.getTargetStepParam(targetStep, '?') }`, record, this.getOptionsClient())
-    .map((res:any) => this.extractData(res) as RecordActionResult);
+      .map((res:any) => this.extractData(res) as RecordActionResult);
   }
 
   update(oid: string, record: any, targetStep: string = '') {
     return this.http.put(`${this.brandingAndPortalUrl}/recordmeta/${oid}${ this.getTargetStepParam(targetStep, '?') }`, record, this.getOptionsClient())
-    .map((res:any) => this.extractData(res));
+      .map((res:any) => this.extractData(res));
   }
 
   protected getTargetStepParam(targetStep, delim) {
@@ -115,7 +115,7 @@ export class RecordsService extends BaseService {
 
   stepTo(oid: string, record: any, targetStep: string) {
     return this.http.post(`${this.brandingAndPortalUrl}/record/workflow/step/${targetStep}/${oid}`, record, this.getOptionsClient())
-    .map((res:any) => this.extractData(res) as RecordActionResult);
+      .map((res:any) => this.extractData(res) as RecordActionResult);
   }
 
   getDashboardUrl(recType:string='rdmp') {
@@ -124,25 +124,25 @@ export class RecordsService extends BaseService {
 
   getAttachments(oid: string) {
     return this.http.get(`${this.brandingAndPortalUrl}/record/${oid}/attachments`, this.getOptionsClient()).toPromise()
-    .then((res:any) => this.extractData(res));
+      .then((res:any) => this.extractData(res));
   }
 
   modifyEditors(records, username, email) {
     return this.http.post(`${this.brandingAndPortalUrl}/record/editors/modify`, {records:records, username:username, email:email}, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res) as RecordActionResult);
+      .toPromise()
+      .then((res:any) => this.extractData(res) as RecordActionResult);
   }
 
   updateResponsibilities(records, role, updateData) {
     return this.http.post(`${this.brandingAndPortalUrl}/record/responsibility/update`, {records:records, role:role, updateData:updateData}, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res) as RecordActionResult);
+      .toPromise()
+      .then((res:any) => this.extractData(res) as RecordActionResult);
   }
 
   getTransferResponsibility(recordType) {
     return this.http.get(`${this.brandingAndPortalUrl}/transferconfig/${recordType}`, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res) as Object);
+      .toPromise()
+      .then((res:any) => this.extractData(res) as Object);
   }
 
   search(params: RecordSearchParams) {
@@ -169,27 +169,32 @@ export class RecordsService extends BaseService {
       });
       refinedSearchStr = `${exactSearchNames}${exactSearchValues}${facetSearchNames}${facetSearchValues}`;
     }
-    return this.http.get(`${this.brandingAndPortalUrl}/record/search/${params.recordType}/?searchStr=${params.basicSearch}${refinedSearchStr}`, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res) as RecordActionResult);
+    return this.http.get(`${this.brandingAndPortalUrl}/record/search/${params.recordType}/?searchStr=${params.basicSearch}&rows=${params.rows}&page=${params.currentPage}${refinedSearchStr}`, this.getOptionsClient())
+      .toPromise()
+      .then((res:any) => this.extractData(res) as RecordActionResult);
   }
 
   getType(name: string) {
     return this.http.get(`${this.brandingAndPortalUrl}/record/type/${name}`, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res));
+      .toPromise()
+      .then((res:any) => this.extractData(res));
   }
 
   getAllTypes() {
     return this.http.get(`${this.brandingAndPortalUrl}/record/type/`, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res));
+      .toPromise()
+      .then((res:any) => this.extractData(res));
+  }
+
+  async getAllTypesOfPackageType(packageType: string) {
+    const allTypes = await this.getAllTypes();
+    return _.filter(allTypes, (recType:any) => { return recType.packageType == packageType });
   }
 
   getWorkflowSteps(name: string) {
     return this.http.get(`${this.brandingAndPortalUrl}/record/wfSteps/${name}`, this.getOptionsClient())
-    .toPromise()
-    .then((res:any) => this.extractData(res));
+      .toPromise()
+      .then((res:any) => this.extractData(res));
   }
 
   getRecordMeta(oid:string=null) {
@@ -213,8 +218,8 @@ export class RecordsService extends BaseService {
 
   getAsyncProgress(fq:string) {
     return this.http.get(`${this.brandingAndPortalUrl}/asynch?fq=${fq}`, this.options)
-    .toPromise()
-    .then((res: any) => this.extractData(res));
+      .toPromise()
+      .then((res: any) => this.extractData(res));
   }
 
   subscribeToAsyncProgress(oid: string = null, connectCb) {
@@ -223,7 +228,7 @@ export class RecordsService extends BaseService {
 
   delete(oid: string) {
     return this.http.delete(`${this.brandingAndPortalUrl}/record/delete/${oid}`, this.getOptionsClient())
-    .map((res:any) => this.extractData(res));
+      .map((res:any) => this.extractData(res));
   }
 }
 
@@ -265,6 +270,8 @@ export class RecordSearchParams {
   basicSearch: string;
   activeRefiners: any[];
   refinerConfig: RecordSearchRefiner[];
+  rows = 10;
+  currentPage = 1;
 
   constructor(recType: string) {
     this.recordType = recType;
@@ -274,6 +281,7 @@ export class RecordSearchParams {
 
   clear() {
     this.basicSearch = null;
+    this.currentPage = 1;
     _.remove(this.activeRefiners, refiner => {
       refiner.value = null;
       refiner.activeValue = null;
@@ -306,7 +314,7 @@ export class RecordSearchParams {
         refinerValues = `${refinerValues}&refiner|${refiner.name}=${_.isEmpty(refiner.value) ? '' : refiner.value}`;
       }
     });
-    return `${searchUrl}?q=${this.basicSearch}&type=${this.recordType}${refinerValues}`;
+    return `${searchUrl}?q=${this.basicSearch}&type=${this.recordType}${refinerValues}&page=${this.currentPage}`;
   }
 
   getRefinerConfigs() {
@@ -330,11 +338,14 @@ export class RecordSearchParams {
     _.forEach(queryStr.split('&'), (q)=> {
       const qObj = q.split('=');
       if (_.startsWith(qObj[0], "q")) {
-        this.basicSearch = qObj[1];
+        this.basicSearch = _.replace(qObj[1], /\+/gi, ' ');
       }
       if (_.startsWith(qObj[0], "refiner|")) {
         const refinerName = qObj[0].split('|')[1];
         refinerValues[refinerName] = qObj[1];
+      }
+      if (_.startsWith(qObj[0], "page")) {
+        this.currentPage = _.toNumber(qObj[1]);
       }
     });
     _.forOwn(refinerValues, (value, name) => {

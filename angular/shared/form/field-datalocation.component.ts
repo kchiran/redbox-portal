@@ -83,11 +83,16 @@ export class DataLocationField extends FieldBase<any> {
   notesHeader: string;
   uppyDashboardNote: string;
   allowUploadWithoutSave: boolean;
+  securityClassificationOptions: any;
+  notesEnabled: boolean;
+  iscHeader: string;
+  iscEnabled: boolean;
+  defaultSelect: string;
 
   constructor(options: any, injector: any) {
     super(options, injector);
     this.accessDeniedObjects = [];
-    this.locationAddText = this.getTranslated(options['locationAddText'], null);
+    this.locationAddText = this.getTranslated(options['locationAddText'], 'Add Location');
     this.editNotesButtonText = this.getTranslated(options['editNotesButtonText'], 'Edit');
     this.editNotesTitle = this.getTranslated(options['editNotesTitle'], 'Edit Notes');
     this.cancelEditNotesButtonText = this.getTranslated(options['cancelEditNotesButtonText'], 'Cancel');
@@ -95,8 +100,16 @@ export class DataLocationField extends FieldBase<any> {
     this.editNotesCssClasses = options['editNotesCssClasses'] || 'form-control';
     this.typeHeader =  this.getTranslated(options['typeHeader'], 'Type');
     this.locationHeader =  this.getTranslated(options['locationHeader'], 'Location');
-    this.notesHeader =  this.getTranslated(options['notesHeader'], 'Notes');
+    this.notesEnabled = !_.isUndefined(options['notesEnabled']) ? options['notesEnabled'] : true;
+    this.notesHeader = options['notesHeader'] ? this.getTranslated(options['notesHeader'], options['notesHeader']) : null;
+    this.iscHeader = !_.isUndefined(options['iscHeader']) ? this.getTranslated(options['iscHeader'], options['iscHeader']) : 'Information Security Classification';
     this.uppyDashboardNote = this.getTranslated(options['uppyDashboardNote'], 'Maximum upload size: 1 Gb per file');
+    this.iscEnabled = !_.isUndefined(options['iscEnabled']) ? options['iscEnabled'] : false;
+    this.defaultSelect = !_.isUndefined(options['defaultSelect']) ? options['defaultSelect'] : "confidential";
+    if(this.iscEnabled) {
+      this.newLocation['isc'] = this.defaultSelect;
+    }
+    this.securityClassificationOptions = options['securityClassificationOptions'] || [];
     this.columns = options['columns'] || [];
 
     this.maxFileSize = options['maxFileSize'] || null;
@@ -122,7 +135,7 @@ export class DataLocationField extends FieldBase<any> {
   addLocation() {
     this.value.push(this.newLocation);
     this.setValue(this.value);
-    this.newLocation = { type: "url", location: "", notes: "" };
+    this.newLocation = { type: "url", location: "", notes: "", isc: this.defaultSelect };
   }
 
   appendLocation(newLoc: any) {
@@ -276,6 +289,9 @@ export class DataLocationComponent extends SimpleComponent {
       const fileId = urlParts[urlParts.length - 1];
       const choppedUrl = urlParts.slice(6, urlParts.length).join('/');
       const newLoc = { type: "attachment", pending: true, location: choppedUrl, notes: file.meta.notes, mimeType: file.type, name: file.meta.name, fileId: fileId, uploadUrl: uploadURL };
+      if(this.field.iscEnabled) {
+        newLoc['isc'] = this.field.newLocation.isc;
+      }
       console.debug(`Adding new location:`);
       console.debug(newLoc);
       this.field.appendLocation(newLoc);

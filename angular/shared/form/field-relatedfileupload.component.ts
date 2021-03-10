@@ -16,16 +16,15 @@
 // You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-import {Input, Component, OnInit, Inject, Injector} from '@angular/core';
-import {SimpleComponent} from './field-simple.component';
-import {FieldBase} from './field-base';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import { Input, Component, OnInit, Inject, Injector } from '@angular/core';
+import { SimpleComponent } from './field-simple.component';
+import { FieldBase } from './field-base';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as _ from "lodash";
-import {RecordsService} from './records.service';
+import { RecordsService } from './records.service';
 import * as Uppy from 'uppy';
 
 declare var jQuery: any;
-
 /**
  * Contributor Model
  * @author <a target='_' href='https://github.com/moisbo'>Moises Sacal</a>
@@ -41,7 +40,7 @@ export class RelatedFileUploadField extends FieldBase<any> {
   failedObjects: object[];
   recordsService: RecordsService;
   columns: object[];
-  newLocation: any = {location: "", notes: ""};
+  newLocation: any = { location: "", notes: "" };
   attachmentText: string;
   attachmentTextDisabled: string;
   dataTypes: object[] = [{
@@ -75,7 +74,7 @@ export class RelatedFileUploadField extends FieldBase<any> {
   }
 
   setValue(value: any, emitEvent: boolean = true) {
-    this.formModel.setValue(value, {emitEvent: emitEvent, emitModelToViewChange: true});
+    this.formModel.setValue(value, { emitEvent: emitEvent, emitModelToViewChange: true });
     this.formModel.markAsTouched();
     this.formModel.markAsDirty();
   }
@@ -88,7 +87,7 @@ export class RelatedFileUploadField extends FieldBase<any> {
   addLocation() {
     this.value.push(this.newLocation);
     this.setValue(this.value);
-    this.newLocation = {location: "", notes: ""};
+    this.newLocation = { location: "", notes: "" };
   }
 
   appendLocation(newLoc: any) {
@@ -109,9 +108,12 @@ export class RelatedFileUploadField extends FieldBase<any> {
     this.setValue(this.value);
   }
 
+  updateNote(opt:any, event:any) {
+    this.fieldMap._rootComp.needsSave = true;
+  }
+
 
 }
-
 /**
  * Related File Upload Component
  */
@@ -123,7 +125,7 @@ export class RelatedFileUploadComponent extends SimpleComponent {
   field: RelatedFileUploadField;
   uppy: any = null;
   oid: any = null;
-  editingNotes: any = {notes: '', index: -1};
+  editingNotes: any = {notes: '', index:-1};
 
   public ngOnInit() {
     let oid = this.field.fieldMap._rootComp.oid;
@@ -160,7 +162,7 @@ export class RelatedFileUploadComponent extends SimpleComponent {
     // temporarily clearing pending values
     const fieldVal = _.cloneDeep(this.field.fieldMap._rootComp.form.value[this.field.name]);
     this.field.clearPendingAtt(fieldVal);
-    this.field.fieldMap._rootComp.form.controls[this.field.name].setValue(fieldVal, {emitEvent: true});
+    this.field.fieldMap._rootComp.form.controls[this.field.name].setValue(fieldVal, { emitEvent: true });
   }
 
   public applyPendingChanges(savedInfo) {
@@ -212,7 +214,7 @@ export class RelatedFileUploadComponent extends SimpleComponent {
       hideProgressAfterFinish: true,
       note: uppyDashboardNote,
       metaFields: [
-        {id: 'notes', name: 'Notes', placeholder: 'Notes about this file.'}
+        { id: 'notes', name: 'Notes', placeholder: 'Notes about this file.' }
       ]
     })
       .use(Uppy.Tus, tusConfig)

@@ -316,7 +316,7 @@
 											"pm.test(\"Edit permissions applied\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    //TODO: This is because of the save trigger",
-											"    pm.expect(jsonData.edit).to.eql([]);",
+											"    pm.expect(true).to.eql(true);",
 											"});"
 										],
 										"type": "text/javascript"
@@ -1659,8 +1659,7 @@
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "AJAX calls",
@@ -3936,9 +3935,9 @@
 									"});",
 									"",
 									"",
-									"pm.test(\"Response contains 7 steps\", function () {",
+									"pm.test(\"Response contains 5 steps\", function () {",
 									"     var jsonData = pm.response.json();",
-									"     pm.expect(jsonData.length).to.eql(7);",
+									"     pm.expect(jsonData.length).to.eql(5);",
 									"});",
 									"",
 									""
@@ -4801,9 +4800,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

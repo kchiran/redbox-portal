@@ -61,8 +61,16 @@ export module Services {
       }
       const hook_log_header = hookName;
       let origDontMerge = _.clone(dontMergeFields);
-      const concatArrsFn = function (objValue, srcValue, key) {
-        if (_.indexOf(dontMergeFields, key) != -1) {
+      const concatArrsFn = function (objValue, srcValue, key, object, source, stack) {
+        const dontMergeIndex = _.findIndex(dontMergeFields, (o) => { return _.isString(o) ? _.isEqual(o, key) : !_.isEmpty(o[key]) });
+        if (dontMergeIndex != -1) {
+          if (!_.isString(dontMergeFields[dontMergeIndex])) {
+            if (dontMergeFields[key] == "this_file") {
+              return srcValue;
+            } else {
+              return objValue;
+            }
+          }
           return srcValue;
         }
       }
@@ -145,7 +153,7 @@ export module Services {
       });
 
       sails.on('lifted', function() {
-      let apiDirs = ["controllers"];
+        let apiDirs = ["controllers"];
         _.each(apiDirs, (apiType) => {
           const files = that.walkDirSync(`${hook_root_dir}/api/${apiType}`, []);
           sails.log.verbose(`${hook_log_header}::Processing '${apiType}':`);
