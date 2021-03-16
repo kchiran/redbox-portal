@@ -91,22 +91,26 @@ export class DashboardComponent extends LoadableComponent {
     {
       title: 'header-ci',
       variable: 'metadata.contributor_ci.text_full_name',
-      template: '<%= metadata.contributor_ci != undefined ? metadata.contributor_ci.text_full_name : "" %>'
+      template: '<%= metadata.contributor_ci != undefined ? metadata.contributor_ci.text_full_name : "" %>',
+      initialSort: 'desc'
     },
     {
       title: 'header-data-manager',
       variable: 'metadata.contributor_data_manager.text_full_name',
-      template: '<%= metadata.contributor_data_manager != undefined ? metadata.contributor_data_manager.text_full_name : "" %>'
+      template: '<%= metadata.contributor_data_manager != undefined ? metadata.contributor_data_manager.text_full_name : "" %>',
+      initialSort: 'desc'
     },
     {
       title: 'header-created',
       variable: 'metaMetadata.createdOn',
-      template: '<%= dateCreated %>'
+      template: '<%= dateCreated %>',
+      initialSort: 'desc'
     },
     {
       title: 'header-modified',
       variable: 'metaMetadata.lastSaveDate',
-      template: '<%= dateModified %>'
+      template: '<%= dateModified %>',
+      initialSort: 'desc'
     }
   ];
   sortFields = ['metaMetadata.lastSaveDate', 'metaMetadata.createdOn', 'metadata.title', 'metadata.contributor_ci.text_full_name', 'metadata.contributor_data_manager.text_full_name'];
@@ -293,7 +297,7 @@ export class DashboardComponent extends LoadableComponent {
 
     for (let i = 0; i < fields.length; i++) {
       let sortField = fields[i];
-      let sortString = `'${sortField}':`;
+      let sortString = `${sortField}:`;
 
       if (sortDetails[sortField].sort != null) {
         if (sortDetails[sortField].sort == 'desc') {
