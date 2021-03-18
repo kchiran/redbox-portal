@@ -25,21 +25,21 @@ module.exports = {
     roles: { collection: 'role', via: 'users'}
   },
   customToJSON: function() {
-      var obj = {};
-      _.assign(obj, this);
-      _.unset(obj, 'password');
-      return obj;
+    var obj = {};
+    _.assign(obj, this);
+    _.unset(obj, 'password');
+    return obj;
   },
   beforeCreate: function(user, cb) {
     if (user.password) {
       bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(user.password, salt, function(err, hash) {
           if (err) {
-              sails.log.error(err);
-              cb(err);
+            sails.log.error(err);
+            cb(err);
           } else {
-              user.password = hash;
-              cb();
+            user.password = hash;
+            cb();
           }
         });
       });
@@ -57,7 +57,7 @@ module.exports = {
   },
   assignAccessToPendingRecords: function(user) {
     try {
-      if(user.email != null) {
+      if(user.email != null && user.name != 'Local Admin') {
         UsersService.findAndAssignAccessToRecords(user.email, user.username);
       }
     } catch(e) {

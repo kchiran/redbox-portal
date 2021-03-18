@@ -228,7 +228,7 @@ module.exports.routes = {
   /***************************************************************************
    *                                                                          *
    * REST API routes                                                          *
-   *                                                                          *
+   * All disabled CSRF                                                        *
    *                                                                          *
    *                                                                          *
    *                                                                          *
@@ -327,30 +327,101 @@ module.exports.routes = {
     action: 'transitionWorkflow',
     csrf: false
   },
-  'get /:branding/:portal/api/users': 'webservice/UserManagementController.listUsers',
-  'get /:branding/:portal/api/users/find': 'webservice/UserManagementController.getUser',
-  'get /:branding/:portal/api/users/get': 'webservice/UserManagementController.getUser',
-  'put /:branding/:portal/api/users': 'webservice/UserManagementController.createUser',
-  'post /:branding/:portal/api/users': 'webservice/UserManagementController.updateUser',
-  'get /:branding/:portal/api/users/token/generate': 'webservice/UserManagementController.generateAPIToken',
-  'get /:branding/:portal/api/users/token/revoke': 'webservice/UserManagementController.revokeAPIToken',
-  'get /:branding/:portal/api/roles': 'webservice/UserManagementController.listSystemRoles',
-
-
-  'get /:branding/:portal/api/search': 'webservice/SearchController.search',
-  'get /:branding/:portal/api/search/index': 'webservice/SearchController.index',
-
-  'get /:branding/:portal/api/forms/get': 'webservice/FormManagementController.getForm',
-  'get /:branding/:portal/api/forms': 'webservice/FormManagementController.listForms',
-
-  'get /:branding/:portal/api/recordtypes/get': 'webservice/RecordTypeController.getRecordType',
-  'get /:branding/:portal/api/recordtypes': 'webservice/RecordTypeController.listRecordTypes',
+  'get /:branding/:portal/api/users': {
+    controller: 'webservice/UserManagementController',
+    action: 'listUsers',
+    csrf: false
+  },
+  'get /:branding/:portal/api/users/find': {
+    controller: 'webservice/UserManagementController',
+    action: 'getUser',
+    csrf: false
+  },
+  'get /:branding/:portal/api/users/get': {
+    controller: 'webservice/UserManagementController',
+    action: 'getUser',
+    csrf: false
+  },
+  'put /:branding/:portal/api/users': {
+    controller: 'webservice/UserManagementController',
+    action: 'createUser',
+    csrf: false
+  },
+  'post /:branding/:portal/api/users': {
+    controller: 'webservice/UserManagementController',
+    action: 'updateUser',
+    csrf: false
+  },
+  'get /:branding/:portal/api/users/token/generate': {
+    controller: 'webservice/UserManagementController',
+    action: 'generateAPIToken',
+    csrf: false
+  },
+  'get /:branding/:portal/api/users/token/revoke': {
+    controller: 'webservice/UserManagementController',
+    action: 'revokeAPIToken',
+    csrf: false
+  },
+  'get /:branding/:portal/api/roles': {
+    controller: 'webservice/UserManagementController',
+    action: 'listSystemRoles',
+    csrf: false
+  },
+  'get /:branding/:portal/api/search': {
+    controller: 'webservice/SearchController',
+    action: 'search',
+    csrf: false
+  },
+  'get /:branding/:portal/api/search/index': {
+    controller: 'webservice/SearchController',
+    action: 'index',
+    csrf: false
+  },
+  'get /:branding/:portal/api/forms/get': {
+    controller: 'webservice/FormManagementController',
+    action: 'getForm',
+    csrf: false
+  },
+  'get /:branding/:portal/api/forms': {
+    controller: 'webservice/FormManagementController',
+    action: 'listForms',
+    csrf: false
+  },
+  'get /:branding/:portal/api/recordtypes/get': {
+    controller: 'webservice/RecordTypeController',
+    action: 'getRecordType',
+    csrf: false
+  },
+  'get /:branding/:portal/api/recordtypes': {
+    controller: 'webservice/RecordTypeController',
+    action: 'listRecordTypes',
+    csrf: false
+  },
+  /***************************************************************************
+   *                                                                          *
+   * Email Routes                                                             *
+   *                                                                          *
+   *                                                                          *
+   *                                                                          *
+   *                                                                          *
+   *                                                                          *
+   ***************************************************************************/
 
   'post /:branding/:portal/api/sendNotification': {
     controller: 'EmailController',
     action: 'sendNotification',
     csrf: false
   },
+
+  /***************************************************************************
+   *                                                                          *
+   * Workspace Routes                                                         *
+   *                                                                          *
+   *                                                                          *
+   *                                                                          *
+   *                                                                          *
+   *                                                                          *
+   ***************************************************************************/
 
   'get /:branding/:portal/workspaces/types/:name' : 'WorkspaceTypesController.getOne',
   'get /:branding/:portal/workspaces/types' : 'WorkspaceTypesController.get',
