@@ -127,7 +127,7 @@ export module Services {
 
         let url = this.runTemplate(mappings.url,record);
 
-        sails.log.error("DOI url is: " + url);
+        sails.log.debug("DOI url is: " + url);
 
     let createUrl =apiEndpoints.create({baseUrl:options.baseUrl, apiKey:options.apiKey, url: url});
     let acceptedResponseCodes = ['MT001','MT002','MT003','MT004']

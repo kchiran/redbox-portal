@@ -153,7 +153,7 @@ export module Controllers {
           let brand = BrandingService.getBrand(req.session.branding);
           let roleIds = RolesService.getRoleIds(brand.roles, roles);
           UsersService.updateUserRoles(response.id, roleIds).subscribe(user => {
-            sails.log.error(user)
+            sails.log.debug(user)
             let userResponse = new CreateUserAPIResponse();
             userResponse.id = response.id;
             userResponse.username = response.username;
@@ -192,7 +192,7 @@ export module Controllers {
       UsersService.updateUserDetails(userReq.id, userReq.name, userReq.email, userReq.password).subscribe(response => {
         
         let user = response;
-        sails.log.error(user)
+        sails.log.debug(user);
         if (!_.isEmpty(response) && _.isArray(response)) {
           for (let userItem of response) {
             if (!_.isEmpty(response) && _.isArray(userItem)) {

@@ -397,6 +397,11 @@ module.exports.routes = {
     action: 'listRecordTypes',
     csrf: false
   },
+  'get /:branding/:portal/api/admin/refreshCachedResources': {
+    controller: 'webservice/AdminController',
+    action: 'refreshCachedResources',
+    csrf: false
+  },
   /***************************************************************************
    *                                                                          *
    * Email Routes                                                             *

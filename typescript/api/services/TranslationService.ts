@@ -26,47 +26,53 @@ import  * as Backend from 'i18next-node-fs-backend';
 declare var sails: Sails;
 
 export module Services {
-  /**
-   * Translation services...
-   *
-   *
-   * Author: <a href='https://github.com/shilob' target='_blank'>Shilo Banihit</a>
-   *
-   */
-  export class Translation extends services.Services.Core.Service {
+    /**
+     * Translation services...
+     *
+     *
+     * Author: <a href='https://github.com/shilob' target='_blank'>Shilo Banihit</a>
+     *
+     */
+    export class Translation extends services.Services.Core.Service {
 
-    protected _exportedMethods: any = [
-      'bootstrap',
-      't'
-    ];
-    /** Warning this is synch... */
-    public bootstrap() {
-      sails.log.debug("#####################");
-      sails.log.debug(Backend);
-      sails.log.debug("#####################");
+        protected _exportedMethods: any = [
+            'bootstrap',
+            't',
+            'reloadResources'
+        ];
+        /** Warning this is synch... */
+        public bootstrap() {
+            sails.log.debug("#####################");
+            sails.log.debug(Backend);
+            sails.log.debug("#####################");
 
-      //@ts-ignore
-      i18next.use(Backend).init({
-          preload: ['en'],
-          debug: true,
-          lng: 'en',
-          fallbackLng: 'en',
-          initImmediate: false,
-          backend: {
-            loadPath: `${sails.config.appPath}/assets/locales/{{lng}}/{{ns}}.json`
-          }
-        }).then(i18next => {
-          sails.log.debug("**************************");
-          sails.log.debug("i18next initialised");
-          sails.log.debug("**************************");
-          });
+            //@ts-ignore
+            i18next.use(Backend).init({
+                preload: ['en'],
+                debug: true,
+                lng: 'en',
+                fallbackLng: 'en',
+                initImmediate: false,
+                backend: {
+                    loadPath: `${sails.config.appPath}/assets/locales/{{lng}}/{{ns}}.json`
+                }
+            }).then(i18next => {
+                sails.log.debug("**************************");
+                sails.log.debug("i18next initialised");
+                sails.log.debug("**************************");
+            });
+        }
+
+        public t(key, context = null) {
+            //@ts-ignore
+            return i18next.t(key);
+
+        }
+
+        public reloadResources() {
+            //@ts-ignore
+            i18next.reloadResources();
+        }
     }
-
-    public t(key, context = null) {
-      //@ts-ignore
-      return i18next.t(key);
-
-    }
-  }
 }
 module.exports = new Services.Translation().exports();
