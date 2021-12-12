@@ -436,7 +436,7 @@ module.exports = {
                 },
                 //Data manager *******....*****
                 {
-                  class: 'Contianer',//'ContributorField',
+                  class: 'ContributorField',
                   showHeader: true,
                   definition: {
                     name: 'contributor_data_manager',
