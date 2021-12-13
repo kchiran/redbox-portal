@@ -383,6 +383,7 @@ module.exports = {
             definition: {
               id: "people",
               label: "@dmpt-people-tab",
+              readOnly: true,
               fields: [{
                   class: 'ContributorField',
                   showHeader: true,
@@ -434,18 +435,21 @@ module.exports = {
                     }
                   }
                 },
-                //Data manager *******....*****
+                //-----------------------------
+                // Data manager
+                //------------------------------
                 {
                   class: 'ContributorField',
                   showHeader: true,
                   definition: {
                     name: 'contributor_data_manager',
-                    required: true,
+                    required: false,
                     readOnly: true,
                     label: '@dmpt-people-tab-data-manager',
                     help: '@dmpt-people-tab-data-manager-help',
                     role: "@dmpt-people-tab-data-manager-role",
                     freeText: false,
+                    forceLookupOnly: true,
                     vocabId: 'Parties AND repository_name:People',
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
@@ -548,7 +552,9 @@ module.exports = {
                     }]
                   }
                 },
-                //########Supervisor #########
+                // ----------------------------
+                // Supervisor
+                // -----------------------------
                 {
                   class: 'ContributorField',
                   showHeader: true,
