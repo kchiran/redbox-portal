@@ -383,6 +383,7 @@ module.exports = {
             definition: {
               id: "people",
               label: "@dmpt-people-tab",
+              readOnly: true,
               fields: [{
                   class: 'ContributorField',
                   showHeader: true,
@@ -434,16 +435,21 @@ module.exports = {
                     }
                   }
                 },
+                //-----------------------------
+                // Data manager
+                //------------------------------
                 {
                   class: 'ContributorField',
                   showHeader: true,
                   definition: {
                     name: 'contributor_data_manager',
-                    required: true,
+                    required: false,
+                    readOnly: true,
                     label: '@dmpt-people-tab-data-manager',
                     help: '@dmpt-people-tab-data-manager-help',
                     role: "@dmpt-people-tab-data-manager-role",
                     freeText: false,
+                    forceLookupOnly: true,
                     vocabId: 'Parties AND repository_name:People',
                     sourceType: 'mint',
                     disabledExpression: '<%= !_.isEmpty(oid) %>',
@@ -474,6 +480,9 @@ module.exports = {
                     emailColHdr: '@dmpt-people-tab-email-hdr',
                     orcidColHdr: '@dmpt-people-tab-orcid-hdr',
                     showRole: false,
+                    validation_required_name: '@dmpt-people-tab-validation-name-required',
+                    validation_required_email: '@dmpt-people-tab-validation-email-required',
+                    validation_invalid_email: '@dmpt-people-tab-validation-email-invalid',
                     publish: {
                       onValueUpdate: {
                         modelEventSource: 'valueChanges'
@@ -543,6 +552,9 @@ module.exports = {
                     }]
                   }
                 },
+                // ----------------------------
+                // Supervisor
+                // -----------------------------
                 {
                   class: 'ContributorField',
                   showHeader: true,
