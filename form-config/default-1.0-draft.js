@@ -878,7 +878,7 @@ module.exports = {
                   definition: {
                     name: 'redbox:retentionPeriod_dc:date',
                     label: '@dmpt-redbox:retentionPeriod_dc:date',
-                    help: '@dmpt-redbox:retentionPeriod_dc:date-help',
+                    help: '@dmpt-redbox:retentionPeriod_dc:date:help',
                     options: [{
                         value: "",
                         label: "@dmpt-select:Empty"
