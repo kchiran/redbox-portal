@@ -194,6 +194,9 @@ input[type="submit"]:hover, button[type=submit]:hover {background-color: #222}
 }
 .tab-content {
     margin-bottom: 30px;
+    height: 660px;
+    overflow: scroll;
+    padding: 15px;
 }
 
 .col2-set {
