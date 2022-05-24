@@ -43,7 +43,7 @@ import {
 import {
   CreateUserAPIResponse
 } from '../../core/model/api/CreateUserAPIResponse';
-import * as uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 export module Controllers {
   /**

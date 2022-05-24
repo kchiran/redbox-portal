@@ -44,7 +44,7 @@ import {ListAPIResponse } from '../../core/model/ListAPIResponse';
 import {APIErrorResponse } from '../../core/model/APIErrorResponse';
 
 
-const UUIDGenerator = require('uuid/v4');
+const UUIDGenerator = require('uuid');
 export module Controllers {
   /**
    * RecordController API version
